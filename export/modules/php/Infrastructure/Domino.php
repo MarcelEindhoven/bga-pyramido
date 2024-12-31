@@ -13,20 +13,27 @@ declare(strict_types=1);
 
 namespace Bga\Games\PyramidoCannonFodder\Infrastructure;
 
+#[\AllowDynamicProperties]
 class DominoSetup
 {
+    protected array $definitions = [];
+
     static public function create($deck_domino): DominoSetup {
         $object = new DominoSetup();
-        $object->deck_domino = $deck_domino;
+        $object->set_deck($deck_domino);
         return $object;
     }
 
-    public function add($animal_type) {
-        $this->definitions[] = array( 'type' => $animal_type, 'type_arg' => 0, 'nbr' => 1);
+    public function set_deck($deck) {
+        $this->deck = $deck;
+    }
+
+    public function add($first_colour, $second_colour) {
+        $this->definitions[] = array( 'type' => $first_colour, 'type_arg' => $second_colour, 'nbr' => 1);
     }
     public function flush() {
         $this->deck->createCards($this->definitions);
-        $this->deck->shuffle(\NieuwenhovenGames\BGA\FrameworkInterfaces\Deck::STANDARD_DECK);
+        $this->deck->shuffle('deck');
         $this->definitions = [];
     }
 }

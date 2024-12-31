@@ -15,6 +15,9 @@ include_once(__DIR__.'/../../export/modules/php/FrameworkInterfaces/_ide_helper.
 use Bga\Games\FrameworkInterfaces;
 
 class DominoSetupTest extends TestCase{
+    protected ?DominoSetup $sut = null;
+    protected ?FrameworkInterfaces\Deck $mock_cards = null;
+
     // Test creation of Domino tokens
     public function test_Domino_is_created() {
         // Arrange
