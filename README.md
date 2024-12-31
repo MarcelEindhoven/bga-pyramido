@@ -17,16 +17,14 @@ https://studio.boardgamearena.com/studiogame?game=pyramidocannonfodder
 Installing PHP is tricky. For example, you cannot simply install PHP in "Program Files" because that directory name contains a space.
 The messages you get assume you are already an expert in PHP terminology.
 
-PHP version of BGA according to phpversion(): 7.4.3-4ubuntu2.180
+PHP version of BGA according to phpversion(): 8.2.22
 Corresponding PHPunit version: 9
 
 
 First download a PHP package without words like debug, develop or test in the package name. Possibly useful links
 - https://www.sitepoint.com/how-to-install-php-on-windows/
-- https://windows.php.net/downloads/releases/php-7.4.33-Win32-vc15-x64.zip
+- https://windows.php.net/downloads/releases/php-8.2.27-Win32-vs16-x64.zip
 - https://www.ionos.com/digitalguide/server/configuration/php-composer-installation-on-windows-10/
-
-Next version will be 8.2
 
 ### Composer
 When PHP is available in the PATH, installation is straightforward
