@@ -31,7 +31,7 @@ class NewGameTest extends TestCase{
      */
     public function test_integration_domino_creation() {
         // Arrange
-        $this->mock_cards->expects($this->exactly(count(DominoNewGame::DOMINO_SPECIFICATION)))->method('createCards');
+        $this->mock_cards->expects($this->exactly(1))->method('createCards');
         $this->mock_cards->expects($this->exactly(1))->method('shuffle')->with('deck');
         // Act
         $this->sut->setup_domino();
