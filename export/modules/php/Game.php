@@ -20,10 +20,6 @@ namespace Bga\Games\PyramidoCannonFodder;
 
 require_once(APP_GAMEMODULE_PATH . "module/table/table.game.php");
 
-//require_once(APP_GAMEMODULE_PATH . "modules/php/NewGame/NewGame.php");
-//require_once(APP_GAMEMODULE_PATH . "modules/php/Setup/Market.php");
-//use Bga\Games\PyramidoCannonFodder\NewGame;
-
 class Game extends \Table
 {
     protected array $decks = [];
@@ -211,20 +207,11 @@ class Game extends \Table
     {
         $this->trace('getAllDatas');
         $this->trace(phpversion());
-        $result = [];
 
         // WARNING: We must only return information visible by the current player.
         $current_player_id = (int) $this->getCurrentPlayerId();
 
-        // Get information about players.
-        // NOTE: you can retrieve some extra field you added for "player" table in `dbmodel.sql` if you need it.
-        $result["players"] = $this->getCollectionFromDb(
-            "SELECT `player_id` `id`, `player_score` `score` FROM `player`"
-        );
-
-        // TODO: Gather all information about current game situation (visible by player $current_player_id).
-
-        return $result;
+        return UseCases\GetAllDatas::create($this, $this->decks)->get();
     }
 
     /**
