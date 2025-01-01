@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Bga\Games\PyramidoCannonFodder\Infrastructure;
 
 #[\AllowDynamicProperties]
-class DominoSetup
+class DominoFactory
 {
     protected array $definitions = [];
 
-    static public function create($deck_domino): DominoSetup {
-        $object = new DominoSetup();
+    static public function create($deck_domino): DominoFactory {
+        $object = new DominoFactory();
         $object->set_deck($deck_domino);
         return $object;
     }

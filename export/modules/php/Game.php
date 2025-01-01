@@ -20,8 +20,14 @@ namespace Bga\Games\PyramidoCannonFodder;
 
 require_once(APP_GAMEMODULE_PATH . "module/table/table.game.php");
 
+//require_once(APP_GAMEMODULE_PATH . "modules/php/NewGame/NewGame.php");
+//require_once(APP_GAMEMODULE_PATH . "modules/php/Setup/Market.php");
+//use Bga\Games\PyramidoCannonFodder\NewGame;
+
 class Game extends \Table
 {
+    protected array $decks = [];
+
     private static array $CARD_TYPES;
 
     /**
@@ -54,6 +60,9 @@ class Game extends \Table
             ],
             // ...
         ];
+
+        $this->decks['domino'] = self::getNew('module.common.deck');
+        $this->decks['domino']->init('domino');
     }
 
     /**
@@ -200,6 +209,8 @@ class Game extends \Table
      */
     protected function getAllDatas()
     {
+        $this->trace('getAllDatas');
+        $this->trace(phpversion());
         $result = [];
 
         // WARNING: We must only return information visible by the current player.
@@ -232,6 +243,11 @@ class Game extends \Table
      */
     protected function setupNewGame($players, $options = [])
     {
+        $this->trace('setupNewGame');
+        $this->trace(phpversion());
+
+        NewGame\NewGame::create($this->decks)->setup();
+
         // Set the colors of the players with HTML color code. The default below is red/green/blue/orange/brown. The
         // number of colors defined here must correspond to the maximum number of players allowed for the gams.
         $gameinfos = $this->getGameinfos();

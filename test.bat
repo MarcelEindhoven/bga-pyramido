@@ -1,1 +1,1 @@
-php .\vendor\phpunit\phpunit\phpunit .\phpunit\
+php .\vendor\phpunit\phpunit\phpunit  --display-deprecations .\phpunit\

@@ -18,7 +18,7 @@ Installing PHP is tricky. For example, you cannot simply install PHP in "Program
 The messages you get assume you are already an expert in PHP terminology.
 
 PHP version of BGA according to phpversion(): 8.2.22
-Corresponding PHPunit version: 9
+Corresponding PHPunit version: 11
 
 
 First download a PHP package without words like debug, develop or test in the package name. Possibly useful links
@@ -58,3 +58,6 @@ npm test
 
 ### PHP unit testing
 ./test.bat
+
+### BGA
+Copy and adapt file _ide_helper.php to replace the anonymous namespace with a specific namespace to be used in unit testing
