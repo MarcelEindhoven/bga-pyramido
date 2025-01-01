@@ -37,3 +37,34 @@ class DominoFactory
         $this->definitions = [];
     }
 }
+
+#[\AllowDynamicProperties]
+class CurrentMarket
+{
+    static public function create($deck_domino): CurrentMarket {
+        $object = new CurrentMarket();
+        $object->set_deck($deck_domino);
+        return $object;
+    }
+
+    public function set_deck($deck) {
+        $this->deck = $deck;
+    }
+
+    public function get_market() : array {
+        return $this->get_market_entries('market');
+    }
+
+    public function get_next_market() : array {
+        return $this->get_market_entries('next');
+    }
+
+    public function get_market_entries($category) : array {
+        $dominoes = [];
+        $cards = $this->deck->getCardsInLocation($category);
+        foreach ($cards as $card) {
+            $dominoes[] = ['id' => $card['id'], 'tiles' => [['colour' => $card['type']], ['colour' => $card['type_arg']]]];
+        }
+        return $dominoes;
+    }
+}

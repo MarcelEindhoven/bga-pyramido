@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Bga\Games\PyramidoCannonFodder\UseCases;
 
+include_once(__DIR__.'/../Infrastructure/Domino.php');
+use Bga\Games\PyramidoCannonFodder\Infrastructure;
+
 class GetAllDatas {
     protected array $decks = [];
     /**
@@ -49,6 +52,8 @@ class GetAllDatas {
      */
     public function get(): array {
         $results = $this->get_results_from_database();
+        $results['market'] = Infrastructure\CurrentMarket::create($this->decks['domino'])->get_market();
+        $results['next'] = Infrastructure\CurrentMarket::create($this->decks['domino'])->get_next_market();
 
         return $results;
     }
