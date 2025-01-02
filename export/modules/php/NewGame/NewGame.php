@@ -42,6 +42,12 @@ class NewGame
 
     public function setup() : NewGame{
         $this->setup_domino();
+        $this->setup_market();
+        return $this;
+    }
+
+    public function setup_market() : NewGame{
+        Infrastructure\MarketSetup::create($this->decks['domino'])->setup_market()->setup_next();
         return $this;
     }
 

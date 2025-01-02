@@ -39,6 +39,34 @@ class DominoFactory
 }
 
 #[\AllowDynamicProperties]
+class MarketSetup
+{
+    const MARKET_SIZE = 3;
+    static public function create($deck_domino): MarketSetup {
+        $object = new MarketSetup();
+        $object->set_deck($deck_domino);
+        return $object;
+    }
+
+    public function set_deck($deck) : MarketSetup {
+        $this->deck = $deck;
+        return $this;
+    }
+
+    public function setup_market() : MarketSetup {
+        for ($i=0; $i < MarketSetup::MARKET_SIZE; $i++) 
+            $this->deck->pickCardForLocation('deck', 'market', $i);
+        return $this;
+    }
+
+    public function setup_next() : MarketSetup {
+        for ($i=0; $i < MarketSetup::MARKET_SIZE + 1; $i++) 
+            $this->deck->pickCardForLocation('deck', 'next', $i);
+        return $this;
+    }
+}
+
+#[\AllowDynamicProperties]
 class CurrentMarket
 {
     static public function create($deck_domino): CurrentMarket {
