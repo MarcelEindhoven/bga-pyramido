@@ -17,7 +17,32 @@ define(['dojo/_base/declare'], (declare) => {
             }
         },
         setup(gamedatas) {
+            this.setup_market_structure();
             this.setup_original(gamedatas);
+        },
+        setup_market_structure() {
+            this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
+                <div id="market">
+                    <table>
+                        <tr>
+                            <table>
+                                <tr id="next"></tr>
+                            </table>
+                        </tr>
+                        <tr>
+                            <div id="quarry">quarry</div>
+                        </tr>
+                    </table>
+                </div>
+            `);
+            for (let i = 0; i < 4; i++) {
+                this.document.getElementById('next').insertAdjacentHTML('beforeend', `
+                    <td >
+                    <div id = "next-${i}" style="display: inline-block" class=".single_card">${i}</div>
+                    </td>
+                `);
+            }
+
         },
         setup_original(gamedatas) {
             // Example to add a div on the game area
