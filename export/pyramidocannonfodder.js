@@ -19,7 +19,8 @@ define([
     "dojo","dojo/_base/declare",
     g_gamethemeurl + 'modules/javascript/usecase_setup.js',
     "ebg/core/gamegui",
-    "ebg/counter"
+    "ebg/counter",
+    "ebg/stock",
 ],
 function (dojo, declare, usecase_setup) {
     return declare("bgagame.pyramidocannonfodder", ebg.core.gamegui, {
@@ -50,7 +51,7 @@ function (dojo, declare, usecase_setup) {
             console.log( "Starting game setup" );
             console.log(gamedatas);
 
-            this.usecase_setup = new usecase_setup({document: document});
+            this.usecase_setup = new usecase_setup({game: this, stock_class:ebg.stock, gamethemeurl: g_gamethemeurl, document: document});
             this.usecase_setup.setup(gamedatas);
 
             // Setup game notifications to handle (see "setupNotifications" method below)
@@ -58,6 +59,8 @@ function (dojo, declare, usecase_setup) {
 
             console.log( "Ending game setup" );
         },
+        get_element: function(html_id) {return $(html_id);},
+
        
 
         ///////////////////////////////////////////////////

@@ -7,9 +7,17 @@ define(['dojo/_base/declare'], (declare) => {
          * 
          * Dependencies:
          * document
+         * game
+         * stock_class
          */
         constructor(dependencies) {
             this.clone(dependencies);
+
+            this.cardwidth = 100;
+            this.cardheight = 50;
+            this.image_items_per_row = 15;
+
+            this.stocks =[];
         },
         clone(properties){
             for (var property in properties) {
@@ -26,23 +34,49 @@ define(['dojo/_base/declare'], (declare) => {
                     <table>
                         <tr>
                             <table>
+                                <tr><td>.............................</td><td>.............................</td><td>.............................</td><td>.............................</td></tr>
                                 <tr id="next"></tr>
                             </table>
                         </tr>
                         <tr>
-                            <div id="quarry">quarry</div>
+                            <table>
+                                <tr><td>..........................................</td><td>.............................</td><td>.............................................</td></tr>
+                                <tr id="quarry"></tr>
+                            </table>
                         </tr>
                     </table>
                 </div>
             `);
             for (let i = 0; i < 4; i++) {
-                this.document.getElementById('next').insertAdjacentHTML('beforeend', `
-                    <td >
-                    <div id = "next-${i}" style="display: inline-block" class=".single_card">${i}</div>
-                    </td>
-                `);
+                this.setup_market_element('next', i);
+                this.stocks['next-' + i].addToStockWithId(i, i);
+            }
+            for (let i = 0; i < 3; i++) {
+                this.setup_market_element('quarry', i);
+                this.stocks['quarry-' + i].addToStockWithId(10+i, 10+i);
             }
 
+        },
+        setup_market_element(category, index) {
+            let element_id = category + '-'+ index;
+            this.document.getElementById(category).insertAdjacentHTML('beforeend', `
+                <td class=".single_card">
+                <div id = "${category}-${index}" style="display: inline-block" ></div>
+                </td>
+            `);
+            hand = new this.stock_class();
+            hand.create(this.game, this.game.get_element(element_id), this.cardwidth, this.cardheight);
+            hand.image_items_per_row = this.image_items_per_row;
+            for (let row = 0; row < 90/hand.image_items_per_row; row++) {
+                for (let i = 0; i < hand.image_items_per_row; i++) {
+                    let card_type_id = this.get_card_type_id(row, i);
+                    hand.addItemType(card_type_id, card_type_id, this.gamethemeurl+'img/' + 'tiles.png', card_type_id);
+                }
+            }
+            this.stocks[element_id] = hand;
+        },
+        get_card_type_id(row, i) {
+            return row * 90/this.image_items_per_row + i;
         },
         setup_original(gamedatas) {
             // Example to add a div on the game area
