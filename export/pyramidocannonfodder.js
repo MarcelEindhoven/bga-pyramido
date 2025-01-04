@@ -17,10 +17,11 @@
 
 define([
     "dojo","dojo/_base/declare",
+    g_gamethemeurl + 'modules/javascript/usecase_setup.js',
     "ebg/core/gamegui",
     "ebg/counter"
 ],
-function (dojo, declare) {
+function (dojo, declare, usecase_setup) {
     return declare("bgagame.pyramidocannonfodder", ebg.core.gamegui, {
         constructor: function(){
             console.log('pyramidocannonfodder constructor');
@@ -49,30 +50,9 @@ function (dojo, declare) {
             console.log( "Starting game setup" );
             console.log(gamedatas);
 
-            // Example to add a div on the game area
-            document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
-                <div id="player-tables"></div>
-            `);
-            
-            // Setting up player boards
-            Object.values(gamedatas.players).forEach(player => {
-                // example of setting up players boards
-                this.getPlayerPanelElement(player.id).insertAdjacentHTML('beforeend', `
-                    <div id="player-counter-${player.id}">A player counter</div>
-                `);
+            this.usecase_setup = new usecase_setup({document: document});
+            this.usecase_setup.setup(gamedatas);
 
-                // example of adding a div for each player
-                document.getElementById('player-tables').insertAdjacentHTML('beforeend', `
-                    <div id="player-table-${player.id}">
-                        <strong>${player.name}</strong>
-                        <div>Player zone content goes here</div>
-                    </div>
-                `);
-            });
-            
-            // TODO: Set up your game interface here, according to "gamedatas"
-            
- 
             // Setup game notifications to handle (see "setupNotifications" method below)
             this.setupNotifications();
 
