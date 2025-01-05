@@ -36,20 +36,61 @@ describe('Market', function () {
                 quarry_selected: sinon.spy(),
             };
         });
+        function act_default() {
+            sut.subscribe_to_quarry(callback_object, 'quarry_selected');
+        };
         it('makes quarry dominoes selectable when subscribed to quarry', function () {
             // Arrange
             // Act
-            sut.subscribe_to_quarry(callback_object, 'quarry_selected');
+            act_default();
             // Assert
             sinon.assert.callCount(dojo.addClass, 2);
         });
         it('uses the correct arguments for addClass', function () {
             // Arrange
             // Act
-            sut.subscribe_to_quarry(callback_object, 'quarry_selected');
+            act_default();
             // Assert
             assert.equal(dojo.addClass.getCall(1).args[0], 'quarry1');
             assert.equal(dojo.addClass.getCall(1).args[1], 'selectable');
+        });
+    });
+    describe('Domino selected', function () {
+        beforeEach(function() {
+            callback_object = {
+                quarry_selected: sinon.spy(),
+            };
+        });
+        function arrange_default() {
+            sut.subscribe_to_quarry(callback_object, 'quarry_selected');
+        };
+        function act_default() {
+            selected_element_id = 'quarry1';
+            sut.domino_selected(selected_element_id);
+        };
+        it('does nothing when not subscribed', function () {
+            // Arrange
+            //arrange_default({});
+            // Act
+            act_default();
+            // Assert
+            sinon.assert.callCount(callback_object.quarry_selected, 0);
+        });
+        it('calls subscriber when subscribed', function () {
+            // Arrange
+            arrange_default({});
+            // Act
+            act_default();
+            // Assert
+            sinon.assert.callCount(callback_object.quarry_selected, 1);
+        });
+        it('calls subscriber with stock when subscribed', function () {
+            // Arrange
+            arrange_default({});
+            // Act
+            act_default();
+            // Assert
+            assert.equal(callback_object.quarry_selected.getCall(0).args[0], dependencies.stocks['quarry1']);
         });
     });
 });

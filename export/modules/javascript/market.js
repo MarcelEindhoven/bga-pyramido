@@ -17,7 +17,13 @@ define(['dojo/_base/declare'], (declare) => {
             }
         },
         subscribe_to_quarry(callback_object, callback_method) {
+            this.callback_object = callback_object;
+            this.callback_method = callback_method;
             this.get_stock_keys('quarry').forEach(key => this.make_stock_selectable(key));
+        },
+        domino_selected(selected_element_id) {
+            if (this.callback_object)
+                this.callback_object[this.callback_method](this.stocks[selected_element_id]);
         },
         get_stock_keys(prefix) {
             return Object.keys(this.stocks).filter(key => key.startsWith(prefix));
