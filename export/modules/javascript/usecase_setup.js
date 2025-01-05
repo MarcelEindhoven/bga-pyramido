@@ -1,5 +1,5 @@
 define(['dojo/_base/declare'], (declare) => {
-    return declare('cascadia.usecase_setup', null, {
+    return declare('pyramido.usecase_setup', null, {
         /**
          * Use case:
          * u = usecase_setup(dependencies);
@@ -17,7 +17,7 @@ define(['dojo/_base/declare'], (declare) => {
             this.cardheight = 50;
             this.image_items_per_row = 15;
 
-            this.stocks =[];
+            this.stocks = {};
         },
         clone(properties){
             for (var property in properties) {
