@@ -60,6 +60,9 @@ class Game extends \Table
         $this->decks['domino'] = self::getNew('module.common.deck');
         $this->decks['domino']->init('domino');
     }
+    public function action_first_domino_chosen(int $quarry_index): void {
+        $this->gamestate->nextState('');
+    }
 
     /**
      * Player action, example content.

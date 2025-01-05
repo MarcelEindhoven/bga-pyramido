@@ -72,10 +72,9 @@ $machinestates = [
         "args" => "argPlayerTurn",
         "possibleactions" => [
             // these actions are called from the front with bgaPerformAction, and matched to the function on the game.php file
-            "actPlayCard", 
-            "actPass",
+            "action_first_domino_chosen", 
         ],
-        "transitions" => ["playCard" => 3, "pass" => 3]
+        "transitions" => ["" => 3,]
     ],
 
     3 => [

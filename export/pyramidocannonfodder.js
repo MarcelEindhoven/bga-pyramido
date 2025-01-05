@@ -67,7 +67,7 @@ function (dojo, declare, market, usecase_setup, usecase_choose_first_domino) {
 
             this.market = new market({dojo: dojo, stocks:this.usecase_setup.stocks});
             this.usecase_choose_first_domino = new usecase_choose_first_domino({market: this.market});
-            this.usecase_choose_first_domino.subscribe(this, 'first_domino_selected');
+            this.usecase_choose_first_domino.subscribe(this, 'first_domino_chosen');
 
             this.experiment(gamedatas);
 
@@ -75,11 +75,23 @@ function (dojo, declare, market, usecase_setup, usecase_choose_first_domino) {
         },
         experiment: function( gamedatas ) {
         },
-        first_domino_selected(quarry_index) {
-            console.log( "first_domino_selected" );
+        first_domino_chosen(quarry_index) {
+            console.log( "first_domino_chosen" );
             console.log(quarry_index);
+            this.call('first_domino_chosen', {quarry_index});
         },
+        /**
+         * Generic functions
+         */
         get_element: function(html_id) {return $(html_id);},
+        call: function(action, args, handler) {
+            console.log(action);
+            console.log(args);
+            this.bgaPerformAction('action_' + action, args).then(() =>  {                
+                // What to do after the server call if it succeeded
+                // (most of the time, nothing, as the game will react to notifs / change of state instead)
+            });        
+        },
 
        
 
