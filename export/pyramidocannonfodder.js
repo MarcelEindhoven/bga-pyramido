@@ -17,12 +17,13 @@
 
 define([
     "dojo","dojo/_base/declare",
+    g_gamethemeurl + 'modules/javascript/market.js',
     g_gamethemeurl + 'modules/javascript/usecase_setup.js',
     "ebg/core/gamegui",
     "ebg/counter",
     "ebg/stock",
 ],
-function (dojo, declare, usecase_setup) {
+function (dojo, declare, market, usecase_setup) {
     return declare("bgagame.pyramidocannonfodder", ebg.core.gamegui, {
         constructor: function(){
             console.log('pyramidocannonfodder constructor');
@@ -51,13 +52,30 @@ function (dojo, declare, usecase_setup) {
             console.log( "Starting game setup" );
             console.log(gamedatas);
 
-            this.usecase_setup = new usecase_setup({game: this, stock_class:ebg.stock, gamethemeurl: g_gamethemeurl, document: document});
+            this.usecase_setup = new usecase_setup({
+                game: this,
+                stock_class:ebg.stock,
+                gamethemeurl: g_gamethemeurl,
+                document: document,
+                market_class: market,
+            });
             this.usecase_setup.setup(gamedatas);
 
             // Setup game notifications to handle (see "setupNotifications" method below)
             this.setupNotifications();
 
+            this.experiment(gamedatas);
+
             console.log( "Ending game setup" );
+        },
+        experiment: function( gamedatas ) {
+            console.log(this.usecase_setup.stocks);
+            this.m = new market({dojo: dojo, stocks:this.usecase_setup.stocks});
+            this.m.subscribe_to_quarry(this, 'quarry_selected');
+        },
+        quarry_selected(stock) {
+            console.log( "quarry_selected" );
+            console.log(stock);
         },
         get_element: function(html_id) {return $(html_id);},
 

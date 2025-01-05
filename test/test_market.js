@@ -5,7 +5,7 @@ var sut_module = require('../export/modules/javascript/market.js');
 
 describe('Market', function () {
     beforeEach(function() {
-        dojo = {connect:sinon.spy(), addClass:sinon.spy(), };
+        dojo = {connect:sinon.spy(), addClass:sinon.spy(), removeClass:sinon.spy(), };
         dependencies = {dojo: dojo, stocks:{'next0': sinon.spy(), 'quarry0': sinon.spy(), 'quarry1': sinon.spy()}};
         sut = new sut_module(dependencies);
         callback_object = {
@@ -70,15 +70,15 @@ describe('Market', function () {
         };
         it('does nothing when not subscribed', function () {
             // Arrange
-            //arrange_default({});
             // Act
             act_default();
             // Assert
             sinon.assert.callCount(callback_object.quarry_selected, 0);
+            sinon.assert.callCount(dojo.removeClass, 0);
         });
         it('calls subscriber when subscribed', function () {
             // Arrange
-            arrange_default({});
+            arrange_default();
             // Act
             act_default();
             // Assert
@@ -86,11 +86,30 @@ describe('Market', function () {
         });
         it('calls subscriber with stock when subscribed', function () {
             // Arrange
-            arrange_default({});
+            arrange_default();
             // Act
             act_default();
             // Assert
             assert.equal(callback_object.quarry_selected.getCall(0).args[0], dependencies.stocks['quarry1']);
+        });
+        it('makes unselectable when subscriber is called', function () {
+            // Arrange
+            arrange_default();
+            // Act
+            act_default();
+            // Assert
+            sinon.assert.callCount(dojo.removeClass, 2);
+            assert.equal(dojo.removeClass.getCall(1).args[0], 'quarry1');
+            assert.equal(dojo.removeClass.getCall(1).args[1], 'selectable');
+        });
+        it('removes subscription when subscriber is called', function () {
+            // Arrange
+            arrange_default();
+            // Act
+            act_default();
+            act_default();
+            // Assert
+            sinon.assert.callCount(callback_object.quarry_selected, 1);
         });
     });
 });
