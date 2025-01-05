@@ -19,11 +19,12 @@ define([
     "dojo","dojo/_base/declare",
     g_gamethemeurl + 'modules/javascript/market.js',
     g_gamethemeurl + 'modules/javascript/usecase_setup.js',
+    g_gamethemeurl + 'modules/javascript/usecase_choose_first_domino.js',
     "ebg/core/gamegui",
     "ebg/counter",
     "ebg/stock",
 ],
-function (dojo, declare, market, usecase_setup) {
+function (dojo, declare, market, usecase_setup, usecase_choose_first_domino) {
     return declare("bgagame.pyramidocannonfodder", ebg.core.gamegui, {
         constructor: function(){
             console.log('pyramidocannonfodder constructor');
@@ -64,18 +65,19 @@ function (dojo, declare, market, usecase_setup) {
             // Setup game notifications to handle (see "setupNotifications" method below)
             this.setupNotifications();
 
+            this.market = new market({dojo: dojo, stocks:this.usecase_setup.stocks});
+            this.usecase_choose_first_domino = new usecase_choose_first_domino({market: this.market});
+            this.usecase_choose_first_domino.subscribe(this, 'first_domino_selected');
+
             this.experiment(gamedatas);
 
             console.log( "Ending game setup" );
         },
         experiment: function( gamedatas ) {
-            console.log(this.usecase_setup.stocks);
-            this.m = new market({dojo: dojo, stocks:this.usecase_setup.stocks});
-            this.m.subscribe_to_quarry(this, 'quarry_selected');
         },
-        quarry_selected(stock) {
-            console.log( "quarry_selected" );
-            console.log(stock);
+        first_domino_selected(quarry_index) {
+            console.log( "first_domino_selected" );
+            console.log(quarry_index);
         },
         get_element: function(html_id) {return $(html_id);},
 
