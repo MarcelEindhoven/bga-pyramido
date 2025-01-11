@@ -54,13 +54,13 @@ class MarketSetup
     }
 
     public function setup_market() : MarketSetup {
-        for ($i=0; $i < MarketSetup::MARKET_SIZE; $i++) 
+        for ($i=1; $i <= MarketSetup::MARKET_SIZE; $i++) 
             $this->deck->pickCardForLocation('deck', 'market', $i);
         return $this;
     }
 
     public function setup_next() : MarketSetup {
-        for ($i=0; $i < MarketSetup::MARKET_SIZE + 1; $i++) 
+        for ($i=1; $i <= MarketSetup::MARKET_SIZE + 1; $i++) 
             $this->deck->pickCardForLocation('deck', 'next', $i);
         return $this;
     }

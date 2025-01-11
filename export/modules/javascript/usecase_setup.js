@@ -47,11 +47,11 @@ define(['dojo/_base/declare'], (declare) => {
                     </table>
                 </div>
             `);
-            for (let i = 0; i < 4; i++) {
+            for (let i = 1; i <= 4; i++) {
                 this.setup_market_element('next', i);
                 this.stocks['next-' + i].addToStockWithId(i, i);
             }
-            for (let i = 0; i < 3; i++) {
+            for (let i = 1; i <= 3; i++) {
                 this.setup_market_element('quarry', i);
                 this.stocks['quarry-' + i].addToStockWithId(10+i, 10+i);
             }

@@ -61,3 +61,6 @@ npm test
 
 ### BGA
 Copy and adapt file _ide_helper.php to replace the anonymous namespace with a specific namespace to be used in unit testing
+
+### Images
+To concatenate individual dominoes into a bigger image: https://imagemagick.org/script/download.php#windows
