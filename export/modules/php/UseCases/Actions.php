@@ -16,6 +16,7 @@ namespace Bga\Games\PyramidoCannonFodder\UseCases;
 include_once(__DIR__.'/GetAllDatas.php');
 
 include_once(__DIR__.'/../Infrastructure/Domino.php');
+use Bga\Games\PyramidoCannonFodder\Infrastructure;
 
 class Actions {
     protected array $decks = [];
@@ -54,8 +55,9 @@ class Actions {
     }
 
     public function action_first_domino_chosen(int $quarry_index): void {
+        $update_domino = Infrastructure\UpdateDomino::create($this->decks['domino']);
         $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
-        FirstDominoChosen::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_get_current_data($get_current_data)->execute()->nextState();
+        FirstDominoChosen::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_get_current_data($get_current_data)->set_update_domino($update_domino)->set_quarry_index($quarry_index)->execute()->nextState();
     }
 }
 ?>

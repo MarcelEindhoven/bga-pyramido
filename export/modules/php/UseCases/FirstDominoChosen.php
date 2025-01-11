@@ -27,7 +27,21 @@ class FirstDominoChosen extends \NieuwenhovenGames\BGA\Action {
         return $this;
     }
 
+    public function set_update_domino($update_domino) : FirstDominoChosen {
+        $this->update_domino = $update_domino;
+        return $this;
+    }
+
+    public function set_quarry_index($quarry_index) : FirstDominoChosen {
+        $this->quarry_index = $quarry_index;
+        return $this;
+    }
+
     public function execute(): FirstDominoChosen {
+        $this->update_domino->move($this->quarry_index, $this->player_id, 1, 10, 10, 0);
+
+        $this->get_current_data->get();
+
         return $this;
     }
 }

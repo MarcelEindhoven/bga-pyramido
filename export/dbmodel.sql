@@ -39,7 +39,7 @@
 -- A type number is composed of colour (6 possibilities) and the presence/absence of a jewel icon in each of the 4 corners
 -- Location is 'deck', 'market', 'next', player ID
 -- Location argument for market and next is the index, starting from 0
--- Location argument for player ID is the stage (0-4), horizontal and vertical of the first tile (0-9) and rotation (0-3)
+-- Location argument for player ID is the stage (0-4), horizontal and vertical of the first tile (0-19) and rotation (0-3)
 CREATE TABLE IF NOT EXISTS `domino` (
   `card_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `card_type` varchar(16) NOT NULL,
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `domino` (
 -- A type number is composed of primary colour (6 possibilities) and the presence/absence of a jewel icon in each of the 4 corners
 -- and secondary colour (6 possibilities)
 -- Location is player ID
--- Location argument for player ID is the stage (0-4), horizontal and vertical of the first tile (0-9) and rotation (0-3)
+-- Location argument for player ID is the stage (0-4), horizontal and vertical of the first tile (0-19) and rotation (0-3)
 CREATE TABLE IF NOT EXISTS `resurfacing` (
   `card_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `card_type` varchar(16) NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `resurfacing` (
 -- The type specifies the marker
 -- A type number is composed of colour (6 possibilities)
 -- Location is player ID
--- Location argument for player ID is the stage (0-4), horizontal and vertical of the first tile (0-9)
+-- Location argument for player ID is the stage (0-4), horizontal and vertical of the first tile (0-19)
 CREATE TABLE IF NOT EXISTS `marker` (
   `card_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `card_type` varchar(16) NOT NULL,

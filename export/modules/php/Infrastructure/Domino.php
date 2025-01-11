@@ -67,8 +67,32 @@ class MarketSetup
 }
 
 #[\AllowDynamicProperties]
+class UpdateDomino extends CurrentMarket
+{
+    static public function create($deck_domino): UpdateDomino {
+        $object = new UpdateDomino();
+        $object->set_deck($deck_domino);
+        return $object;
+    }
+    public function move($quarry_index, $player_id, $stage_index, $horizontal, $vertical, $rotation): UpdateDomino {
+        $this->deck->moveAllCardsInLocation(CurrentMarket::LOCATION_MARKET, $player_id, $quarry_index
+        , $stage_index
+        + CurrentMarket::FACTOR_STAGE * $horizontal
+        + CurrentMarket::FACTOR_STAGE * CurrentMarket::FACTOR_HORIZONTAL * $vertical
+        + CurrentMarket::FACTOR_STAGE * CurrentMarket::FACTOR_HORIZONTAL * CurrentMarket::FACTOR_VERTICAL * $rotation);
+
+        return $this;
+    }
+}
+
+#[\AllowDynamicProperties]
 class CurrentMarket
 {
+    const LOCATION_MARKET = 'market';
+    const FACTOR_STAGE = 5;
+    const FACTOR_HORIZONTAL = 20;
+    const FACTOR_VERTICAL = 20;
+
     static public function create($deck_domino): CurrentMarket {
         $object = new CurrentMarket();
         $object->set_deck($deck_domino);
@@ -80,7 +104,7 @@ class CurrentMarket
     }
 
     public function get_market() : array {
-        return $this->get_market_entries('market');
+        return $this->get_market_entries(CurrentMarket::LOCATION_MARKET);
     }
 
     public function get_next_market() : array {
