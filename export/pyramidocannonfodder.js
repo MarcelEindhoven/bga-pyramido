@@ -87,10 +87,7 @@ function (dojo, declare, market, usecase_setup, usecase_choose_first_domino) {
         call: function(action, args, handler) {
             console.log(action);
             console.log(args);
-            this.bgaPerformAction('action_' + action, args).then(() =>  {                
-                // What to do after the server call if it succeeded
-                // (most of the time, nothing, as the game will react to notifs / change of state instead)
-            });        
+            this.bgaPerformAction('action_' + action, args);
         },
 
        

@@ -1,0 +1,60 @@
+<?php
+/**
+ *------
+ * BGA framework: Gregory Isabelli & Emmanuel Colin & BoardGameArena
+ * PyramidoCannonFodder implementation : © Marcel van Nieuwenhoven marcel.eindhoven@hotmail.com
+ *
+ * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
+ * See http://en.boardgamearena.com/#!doc/Studio for more information.
+ * -----
+ *
+ */
+declare(strict_types=1);
+
+namespace Bga\Games\PyramidoCannonFodder\UseCases;
+
+include_once(__DIR__.'/GetAllDatas.php');
+
+include_once(__DIR__.'/../Infrastructure/Domino.php');
+
+class Actions {
+    protected array $decks = [];
+
+    static public function create(): Actions {
+        $object = new Actions();
+        return $object;
+    }
+
+    public function set_gamestate($gamestate) : Actions {
+        $this->gamestate = $gamestate;
+        return $this;
+    }
+
+    public function set_decks($decks) : Actions {
+        $this->decks = $decks;
+        return $this;
+    }
+
+    public function set_notifications($notifications) : Actions {
+        $this->notifications = $notifications;
+        return $this;
+    }
+
+    public function set_database($database) : Actions {
+        $this->database = $database;
+        return $this;
+    }
+
+    /**
+     * Current player ID is not known during game setup
+     */
+    public function set_player_id($player_id) : Actions {
+        $this->player_id = $player_id;
+        return $this;
+    }
+
+    public function action_first_domino_chosen(int $quarry_index): void {
+        $this->gamestate->nextState('');
+    }
+}
+?>

@@ -60,8 +60,26 @@ class Game extends \Table
         $this->decks['domino'] = self::getNew('module.common.deck');
         $this->decks['domino']->init('domino');
     }
+    /**
+     * The framework demands that each action starts with the prefix "act"
+     */
     public function action_first_domino_chosen(int $quarry_index): void {
-        $this->gamestate->nextState('');
+        $this->initialise();
+
+        $this->actions->action_first_domino_chosen($quarry_index);
+    }
+
+    protected function initialise() {
+        $this->actions = new UseCases\Actions();
+
+        $this->actions->set_gamestate($this->gamestate);
+        $this->actions->set_decks($this->decks);
+
+        $this->actions->set_notifications($this);
+        $this->actions->set_database($this);
+
+        // Note: the following statement crashes in setup stage
+        $this->actions->set_player_id(self::getCurrentPlayerId());
     }
 
     /**
