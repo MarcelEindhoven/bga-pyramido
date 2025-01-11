@@ -77,11 +77,40 @@ class UpdateDomino extends CurrentMarket
     public function move($quarry_index, $player_id, $stage_index, $horizontal, $vertical, $rotation): UpdateDomino {
         $this->deck->moveAllCardsInLocation(CurrentMarket::LOCATION_MARKET, $player_id, $quarry_index
         , $stage_index
-        + CurrentMarket::FACTOR_STAGE * $horizontal
-        + CurrentMarket::FACTOR_STAGE * CurrentMarket::FACTOR_HORIZONTAL * $vertical
-        + CurrentMarket::FACTOR_STAGE * CurrentMarket::FACTOR_HORIZONTAL * CurrentMarket::FACTOR_VERTICAL * $rotation);
+        + CurrentTiles::FACTOR_STAGE * $horizontal
+        + CurrentTiles::FACTOR_STAGE * CurrentTiles::FACTOR_HORIZONTAL * $vertical
+        + CurrentTiles::FACTOR_STAGE * CurrentTiles::FACTOR_HORIZONTAL * CurrentTiles::FACTOR_VERTICAL * $rotation);
 
         return $this;
+    }
+}
+
+#[\AllowDynamicProperties]
+class CurrentTiles
+{
+    const FACTOR_STAGE = 5;
+    const FACTOR_HORIZONTAL = 20;
+    const FACTOR_VERTICAL = 20;
+
+    static public function create($deck_domino): CurrentTiles {
+        $object = new CurrentTiles();
+        $object->set_deck_domino($deck_domino);
+        return $object;
+    }
+
+    public function set_deck_domino($deck_domino) {
+        $this->deck_domino = $deck_domino;
+    }
+
+    public function set_players($players) {
+        $this->players = $players;
+    }
+
+    public function get(): array {
+        foreach ($this->players as $player_id => $player) {
+            $this->deck_domino->getCardsInLocation(strval($player_id));
+        }
+        return [];
     }
 }
 
@@ -89,9 +118,6 @@ class UpdateDomino extends CurrentMarket
 class CurrentMarket
 {
     const LOCATION_MARKET = 'market';
-    const FACTOR_STAGE = 5;
-    const FACTOR_HORIZONTAL = 20;
-    const FACTOR_VERTICAL = 20;
 
     static public function create($deck_domino): CurrentMarket {
         $object = new CurrentMarket();

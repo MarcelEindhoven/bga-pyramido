@@ -50,10 +50,18 @@ class FirstDominoChosenTest extends TestCase{
         $this->sut->set_player_id($this->player_id);
     }
 
-    public function test_execute_triggers_select_wildlife() {
+    public function test_execute_moves_domino() {
         // Arrange
         $this->mock_update_domino->expects($this->exactly(1))->method('move')->with($this->quarry_index, $this->player_id, 1, 10, 10, 0);
 
+        $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn($this->current_data_first);
+        // Act
+        $this->act_default();
+        // Assert
+    }
+
+    public function test_execute_notifies_players() {
+        // Arrange
         $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn($this->current_data_first);
         // Act
         $this->act_default();
