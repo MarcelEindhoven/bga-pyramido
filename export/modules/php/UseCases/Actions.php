@@ -54,7 +54,8 @@ class Actions {
     }
 
     public function action_first_domino_chosen(int $quarry_index): void {
-        $this->gamestate->nextState('');
+        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
+        FirstDominoChosen::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_get_current_data($get_current_data)->execute()->nextState();
     }
 }
 ?>
