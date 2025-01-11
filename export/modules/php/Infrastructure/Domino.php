@@ -107,10 +107,27 @@ class CurrentTiles
     }
 
     public function get(): array {
-        foreach ($this->players as $player_id => $player) {
-            $this->deck_domino->getCardsInLocation(strval($player_id));
+        $tiles_per_player = [];
+        foreach ($this->players as $player_id => $player)
+            $tiles_per_player[strval($player_id)] = $this->get_tiles_for($player_id);
+
+        return $tiles_per_player;
+    }
+    public function get_tiles_for($player_id) {
+        $tiles_per_stage = [];
+        $dominoes = $this->deck_domino->getCardsInLocation(strval($player_id));
+        foreach ($dominoes as $domino) {
+            $stage = $domino['location_arg'] % CurrentTiles::FACTOR_STAGE;
+            if (!array_key_exists($stage, $tiles_per_stage))
+                $tiles_per_stage[$stage] = [];
+            $tiles_per_stage[$stage][] = $this->get_first_tile_for($domino);
+            $tiles_per_stage[$stage][] = $this->get_first_tile_for($domino);
         }
-        return [];
+        return $tiles_per_stage;
+    }
+    protected function get_first_tile_for($domino) {
+        $tile = ['unique_id' => 'tile_1051', 'colour' => 0, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0];
+        return $tile;
     }
 }
 
