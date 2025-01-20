@@ -8,4 +8,12 @@ Typically, this directory should contain fewer than 10 files, with no file large
 
 See: http://en.doc.boardgamearena.com/Game_art:_img_directory for more details.
 
-The GitHub archive does not contain any original art, these files are ignored by git
+The GitHub archive does not contain any original art.
+
+Image processing is done with the image magic program.
+magick montage tokens\*.png -geometry 80x80 -tile x1 tokens.png
+magick montage dominoes\*.png -rotate 90 -geometry 160x80 -tile 10x dominoes.png
+magick montage replacements\*Front*.png -geometry 80x80 -tile x1 Front.png
+magick montage replacements\*Back*.png -geometry 80x80 -tile x1 Back.png
+magick montage Front.png Back.png  -geometry 240x80 -tile 1x replacements.png
+

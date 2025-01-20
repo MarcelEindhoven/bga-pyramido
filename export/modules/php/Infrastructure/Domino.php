@@ -91,6 +91,7 @@ class CurrentTiles
     const FACTOR_STAGE = 5;
     const FACTOR_HORIZONTAL = 20;
     const FACTOR_VERTICAL = 20;
+    const FACTOR_ROTATION = 4;
 
     static public function create($deck_domino): CurrentTiles {
         $object = new CurrentTiles();
@@ -121,13 +122,40 @@ class CurrentTiles
             if (!array_key_exists($stage, $tiles_per_stage))
                 $tiles_per_stage[$stage] = [];
             $tiles_per_stage[$stage][] = $this->get_first_tile_for($domino);
-            $tiles_per_stage[$stage][] = $this->get_first_tile_for($domino);
+            $tiles_per_stage[$stage][] = $this->get_second_tile_for($domino);
         }
         return $tiles_per_stage;
     }
     protected function get_first_tile_for($domino) {
-        $tile = ['unique_id' => 'tile_1051', 'colour' => 0, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0];
+        $tile = $this->get_tile_common($domino);
         return $tile;
+    }
+    protected function get_second_tile_for($domino) {
+        $tile = $this->get_tile_common($domino);
+        if ($tile['rotation'] == 0)
+            $tile['horizontal'] = $tile['horizontal'] + 1;
+
+        if ($tile['rotation'] == 1)
+            $tile['vertical'] = $tile['vertical'] + 1;
+        return $tile;
+    }
+    protected function get_tile_common($domino) {
+        $tile = ['id' => '1', 'colour' => 0, 'stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0];
+
+        $location_arg = $domino['location_arg'];
+        $tile['stage'] = $location_arg % CurrentTiles::FACTOR_STAGE;
+
+        $remaining = intdiv($location_arg, CurrentTiles::FACTOR_STAGE);
+        $tile['horizontal'] = $remaining % CurrentTiles::FACTOR_HORIZONTAL;
+
+        $remaining = intdiv($remaining, CurrentTiles::FACTOR_HORIZONTAL);
+        $tile['vertical'] = $remaining % CurrentTiles::FACTOR_VERTICAL;
+
+        $remaining = intdiv($remaining, CurrentTiles::FACTOR_VERTICAL);
+        $tile['rotation'] = $remaining % CurrentTiles::FACTOR_ROTATION;
+
+        return $tile;
+
     }
 }
 

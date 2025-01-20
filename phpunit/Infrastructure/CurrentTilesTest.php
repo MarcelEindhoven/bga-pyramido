@@ -19,6 +19,7 @@ class CurrentTilesTest extends TestCase{
     protected ?FrameworkInterfaces\Deck $mock_dominoes = null;
     protected string $player_id = '77';
     protected array $players = ['77' => [],];
+    protected array $default_tile = ['id' => 0, 'type' => 0, 'type_arg' => 0, 'location' => '0', 'location_arg' => 0];
 
     protected function setUp(): void {
         $this->mock_dominoes = $this->createMock(FrameworkInterfaces\Deck::class);
@@ -39,16 +40,27 @@ class CurrentTilesTest extends TestCase{
         $this->assertEqualsCanonicalizing($expected_tiles, $tiles[$this->player_id]);
     }
     static public function tile_provider(): array {
-        $retrieved_card_simple = ['id' => 1, 'type' => 0, 'type_arg' => 0, 'location' => '77', 'location_arg' => 1051];
-        $expected_tile_simple = ['unique_id' => 'tile_1051', 'colour' => 0, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0];
+        $retrieved_card_rotation0 = ['id' => 1, 'type' => 0, 'type_arg' => 0, 'location' => '77', 'location_arg' => 1051];
+        $expected_tile_rotation0_first = ['id' => '1', 'colour' => 0, 'stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0];
+        $expected_tile_rotation0_second = ['id' => '1', 'colour' => 0, 'stage' => 1, 'horizontal' => 11, 'vertical' => 10, 'rotation' => 0];
 
-        $retrieved_card5 = ['id' => 5, 'type' => 1, 'type_arg' => 5, 'location' => 'tile', 'location_arg' => 0];
-        $expected_domino5 = ['id' => 5, 'tiles' => [['colour' => 1], ['colour' => 5]]];
+        $retrieved_card_rotation1 = ['id' => 1, 'type' => 0, 'type_arg' => 0, 'location' => '77', 'location_arg' => 3859];
+        $expected_tile_rotation1_first = ['id' => '1', 'colour' => 0, 'stage' => 4, 'horizontal' => 11, 'vertical' => 18, 'rotation' => 1];
+        $expected_tile_rotation1_second = ['id' => '1', 'colour' => 0, 'stage' => 4, 'horizontal' => 11, 'vertical' => 19, 'rotation' => 1];
 
         return [
             [[], []],
-            [[$retrieved_card_simple], [1 => [$expected_tile_simple, $expected_tile_simple]]],
+            [[$retrieved_card_rotation0], [1 => [$expected_tile_rotation0_first, $expected_tile_rotation0_second]]],
+            [[$retrieved_card_rotation1], [1 => [$expected_tile_rotation1_first, $expected_tile_rotation1_second]]],
         ];
     }
+    static public function random_provider(): array {
+        return [
+            [[], []],
+            [[$retrieved_card_rotation0], [1 => [$expected_tile_rotation0_first, $expected_tile_rotation0_second]]],
+            [[$retrieved_card_rotation1], [1 => [$expected_tile_rotation1_first, $expected_tile_rotation1_second]]],
+        ];
+    }
+
 }
 ?>

@@ -13,9 +13,9 @@ define(['dojo/_base/declare'], (declare) => {
         constructor(dependencies) {
             this.clone(dependencies);
 
-            this.cardwidth = 100;
-            this.cardheight = 50;
-            this.image_items_per_row = 15;
+            this.cardwidth = 160;
+            this.cardheight = 80;
+            this.image_items_per_row = 10;
 
             this.stocks = {};
         },
@@ -34,13 +34,13 @@ define(['dojo/_base/declare'], (declare) => {
                     <table>
                         <tr>
                             <table>
-                                <tr><td>.............................</td><td>.............................</td><td>.............................</td><td>.............................</td></tr>
+                                <tr><td>.......................................</td><td>.......................................</td><td>.......................................</td><td>.......................................</td></tr>
                                 <tr id="next"></tr>
                             </table>
                         </tr>
                         <tr>
                             <table>
-                                <tr><td>..........................................</td><td>.............................</td><td>.............................................</td></tr>
+                                <tr><td>..........................................</td><td>.......................................</td><td>.............................................</td></tr>
                                 <tr id="quarry"></tr>
                             </table>
                         </tr>
@@ -70,7 +70,7 @@ define(['dojo/_base/declare'], (declare) => {
             for (let row = 0; row < 90/hand.image_items_per_row; row++) {
                 for (let i = 0; i < hand.image_items_per_row; i++) {
                     let card_type_id = this.get_card_type_id(row, i);
-                    hand.addItemType(card_type_id, card_type_id, this.gamethemeurl+'img/' + 'tiles.png', card_type_id);
+                    hand.addItemType(card_type_id, card_type_id, this.gamethemeurl+'img/' + 'dominoes.png', card_type_id);
                 }
             }
             this.stocks[element_id] = hand;
