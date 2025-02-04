@@ -31,14 +31,14 @@ define(['dojo/_base/declare'], (declare) => {
         setup_market_structure() {
             this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
                 <div id="market">
-                    <table>
+                    <table style="justify-content:center;">
                         <tr>
                             <table>
                                 <tr><td>.......................................</td><td>.......................................</td><td>.......................................</td><td>.......................................</td></tr>
                                 <tr id="next"></tr>
                             </table>
                         </tr>
-                        <tr>
+                        <tr style="background-color:powderblue;">
                             <table>
                                 <tr><td>..........................................</td><td>.......................................</td><td>.............................................</td></tr>
                                 <tr id="quarry"></tr>
@@ -70,7 +70,7 @@ define(['dojo/_base/declare'], (declare) => {
             for (let row = 0; row < 90/hand.image_items_per_row; row++) {
                 for (let i = 0; i < hand.image_items_per_row; i++) {
                     let card_type_id = this.get_card_type_id(row, i);
-                    hand.addItemType(card_type_id, card_type_id, this.gamethemeurl+'img/' + 'dominoes.png', card_type_id);
+                    hand.addItemType(card_type_id, card_type_id, this.gamethemeurl+'img/' + 'dominoesx80.png', card_type_id);
                 }
             }
             this.stocks[element_id] = hand;
