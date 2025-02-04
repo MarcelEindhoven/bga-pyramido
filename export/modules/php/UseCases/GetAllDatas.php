@@ -18,6 +18,7 @@ use Bga\Games\PyramidoCannonFodder\Infrastructure;
 
 class GetAllDatas {
     protected array $decks = [];
+    protected array $players = [];
     /**
      * 
      */
@@ -34,6 +35,12 @@ class GetAllDatas {
 
     public function set_decks($decks): GetAllDatas {
         $this->decks = $decks;
+        return $this;
+    }
+
+    public function set_players($players): GetAllDatas {
+        $this->players = $players;
+
         return $this;
     }
 
@@ -54,6 +61,7 @@ class GetAllDatas {
         $results = $this->get_results_from_database();
         $results['market'] = Infrastructure\CurrentMarket::create($this->decks['domino'])->get_market();
         $results['next'] = Infrastructure\CurrentMarket::create($this->decks['domino'])->get_next_market();
+        $results['tiles'] = Infrastructure\CurrentTiles::create($this->decks['domino'])->set_players($this->players)->get();
 
         return $results;
     }
