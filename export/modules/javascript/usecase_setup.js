@@ -27,6 +27,7 @@ define(['dojo/_base/declare'], (declare) => {
         setup(gamedatas) {
             this.setup_market_structure();
             this.setup_original(gamedatas);
+            this.display_tiles(gamedatas);
         },
         setup_market_structure() {
             this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
@@ -97,10 +98,41 @@ define(['dojo/_base/declare'], (declare) => {
                 this.document.getElementById('player-tables').insertAdjacentHTML('beforeend', `
                     <div id="player-table-${player.id}">
                         <strong>${player.name}</strong>
-                        <div>Player zone content goes here</div>
+                        <div id="pyramid-${player.id}" style = "display: inline-block; width: 80px ; height: 80px"></div>
                     </div>
                 `);
+                console.log(`pyramid-${player.id}`);
+                Object.values(gamedatas.tiles[player.id]).forEach(tiles_per_stage => {
+                    console.log(tiles_per_stage);
+                    Object.values(tiles_per_stage).forEach(tile => {
+                        tile.player_id = player.id;console.log(player);console.log(this);console.log(tile);this.display_tile(tile);
+                        
+                    });
+                });
             });
+    },
+        display_tiles(gamedatas) {
+            Object.values(gamedatas.players).forEach(player => {
+                Object.values(gamedatas.tiles[player.id]).forEach(tiles_per_stage => {
+                    console.log(tiles_per_stage);
+                    Object.values(tiles_per_stage).forEach(tile => {
+                        this.game.placeOnObjectPos(unique_id, "pyramid-" + tile.player_id, 0, 0);
+                    });
+                });
+            });
+        },
+        display_tile(tile) {
+            unique_id = "tile-" + tile.tile_id;
+            this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
+                <div id="${unique_id}">
+            `);
+            this.dojo.addClass(unique_id,'tile');
+            id_horizontal = tile.tile_id % 20;
+            id_vertical = (tile.tile_id-id_horizontal) / 20;
+            this.dojo.style(unique_id, 'backgroundPosition', '-' + 80 * id_horizontal + 'px -' + 80 * id_vertical + 'px');
+            console.log ("pyramid-" + tile.player_id);
+            //this.game.slideToObjectPos(unique_id, "pyramid-" + tile.player_id, 0, 0).play();
+
         },
     });
 });

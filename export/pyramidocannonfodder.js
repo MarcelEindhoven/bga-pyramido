@@ -59,6 +59,7 @@ function (dojo, declare, market, usecase_setup, usecase_choose_first_domino) {
                 gamethemeurl: g_gamethemeurl,
                 document: document,
                 market_class: market,
+                dojo: dojo, 
             });
             this.usecase_setup.setup(gamedatas);
 
