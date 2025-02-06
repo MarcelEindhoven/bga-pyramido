@@ -26,7 +26,9 @@ define(['dojo/_base/declare'], (declare) => {
          */
         create_tile_from(specification) {
             class Tile {
-                constructor(dependencies) {
+                TILES_PER_ROW = 20;
+                PIXELS_PER_TILE = 80;
+                        constructor(dependencies) {
                     this.clone(dependencies);
                 }
                 create_token(specification) {
@@ -36,9 +38,9 @@ define(['dojo/_base/declare'], (declare) => {
                         <div id="${this.unique_id}">
                     `);
                     this.dojo.addClass(this.unique_id,'tile');
-                    const id_horizontal = this.tile_id % 20;
-                    const id_vertical = (this.tile_id-id_horizontal) / 20;
-                    this.dojo.style(this.unique_id, 'backgroundPosition', '-' + 80 * id_horizontal + 'px -' + 80 * id_vertical + 'px');
+                    const id_horizontal = this.tile_id % this.TILES_PER_ROW;
+                    const id_vertical = (this.tile_id-id_horizontal) / this.TILES_PER_ROW;
+                    this.dojo.style(this.unique_id, 'backgroundPosition', '-' + this.PIXELS_PER_TILE * id_horizontal + 'px -' + this.PIXELS_PER_TILE * id_vertical + 'px');
                 }
                 clone(properties){
                     for (var property in properties) {

@@ -10,12 +10,15 @@ define(['dojo/_base/declare'], (declare) => {
          * game
          * stock_class
          */
+        DOMINOES_PER_ROW: 10,
+        PIXELS_PER_TILE: 80,
+
         constructor(dependencies) {
             this.clone(dependencies);
 
-            this.cardwidth = 160;
-            this.cardheight = 80;
-            this.image_items_per_row = 10;
+            this.cardwidth = 2 * this.PIXELS_PER_TILE;
+            this.cardheight = this.PIXELS_PER_TILE;
+            this.image_items_per_row = this.DOMINOES_PER_ROW;
 
             this.stocks = {};
         },
@@ -71,7 +74,7 @@ define(['dojo/_base/declare'], (declare) => {
             for (let row = 0; row < 90/hand.image_items_per_row; row++) {
                 for (let i = 0; i < hand.image_items_per_row; i++) {
                     let card_type_id = this.get_card_type_id(row, i);
-                    hand.addItemType(card_type_id, card_type_id, this.gamethemeurl+'img/' + 'dominoesx80.png', card_type_id);
+                    hand.addItemType(card_type_id, card_type_id, this.gamethemeurl+'img/' + 'dominoesx' + this.PIXELS_PER_TILE + '.png', card_type_id);
                 }
             }
             this.stocks[element_id] = hand;
