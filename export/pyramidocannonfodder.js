@@ -252,7 +252,7 @@ function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_fi
             
             dojo.subscribe( 'domino_placed', this, "notify_domino_placed" );
             this.notifqueue.setSynchronous( 'domino_placed', 3000 );
-        },  
+        },
         
         notify_domino_placed: function( notif )
         {
