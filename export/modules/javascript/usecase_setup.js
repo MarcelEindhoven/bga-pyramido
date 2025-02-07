@@ -31,6 +31,8 @@ define(['dojo/_base/declare'], (declare) => {
         },
         setup(gamedatas) {
             this.setup_market_structure();
+            this.setup_market_quarry(gamedatas.quarry);
+            this.setup_market_next(gamedatas.next);
             this.setup_players(gamedatas.players);
             this.setup_pyramid_tiles(gamedatas.tiles);
         },
@@ -53,15 +55,22 @@ define(['dojo/_base/declare'], (declare) => {
                     </table>
                 </div>
             `);
-            for (let i = 1; i <= 4; i++) {
-                this.setup_market_element('next', i);
-                this.stocks['next-' + i].addToStockWithId(i, i);
-            }
-            for (let i = 1; i <= 3; i++) {
-                this.setup_market_element('quarry', i);
-                this.stocks['quarry-' + i].addToStockWithId(10+i, 10+i);
-            }
-
+        },
+        setup_market_next(next) {
+            this.setup_market_category(next, 'next');
+        },
+        setup_market_quarry(quarry) {
+            this.setup_market_category(quarry, 'quarry');
+        },
+        setup_market_category(elements, category_name) {
+            console.log(elements);
+            Object.keys(elements).forEach(index => {
+                const element = elements[index];
+                console.log(index);
+                console.log(element);
+                this.setup_market_element(category_name, index + 1);
+                this.stocks[category_name + '-' + (index + 1)].addToStockWithId(element.id, element.id);
+            });
         },
         setup_market_element(category, index) {
             let element_id = category + '-'+ index;
@@ -86,13 +95,6 @@ define(['dojo/_base/declare'], (declare) => {
         },
         setup_players(players) {
             Object.values(players).forEach(player => {
-                console.log (`
-                    <div id="player-table-${player.id}">
-                        <div style = "display: inline-block;"><strong>${player.name}</strong></div>
-                        <div id="replacement-${player.id}" style = "display: inline-block; width: 80px ; height: 80px"></div>
-                        <div id="pyramid-${player.id}" style = "display: inline-block; width: 80px ; height: 80px"></div>
-                    </div>
-                `);
                 this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
                     <div id="player-table-${player.id}">
                         <div style = "display: inline-block;"><strong>${player.name}</strong></div>
@@ -115,61 +117,6 @@ define(['dojo/_base/declare'], (declare) => {
                     });
                 });
             });
-        },
-        setup_original(gamedatas) {
-            // Example to add a div on the game area
-            this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
-                <div id="player-tables"></div>
-            `);
-            
-            // Setting up player boards
-            Object.values(gamedatas.players).forEach(player => {
-                // example of setting up players boards
-                /*
-                this.getPlayerPanelElement(player.id).insertAdjacentHTML('beforeend', `
-                    <div id="player-counter-${player.id}">A player counter</div>
-                `);
-                */
-
-                // example of adding a div for each player
-                this.document.getElementById('player-tables').insertAdjacentHTML('beforeend', `
-                    <div id="player-table-${player.id}">
-                        <strong>${player.name}</strong>
-                        <div id="pyramid-${player.id}" style = "display: inline-block; width: 80px ; height: 80px"></div>
-                    </div>
-                `);
-                console.log(`pyramid-${player.id}`);
-                Object.values(gamedatas.tiles[player.id]).forEach(tiles_per_stage => {
-                    console.log(tiles_per_stage);
-                    Object.values(tiles_per_stage).forEach(tile => {
-                        tile.player_id = player.id;console.log(player);console.log(this);console.log(tile);this.display_tile(tile);
-                        
-                    });
-                });
-            });
-    },
-        display_tiles(gamedatas) {
-            Object.values(gamedatas.players).forEach(player => {
-                Object.values(gamedatas.tiles[player.id]).forEach(tiles_per_stage => {
-                    console.log(tiles_per_stage);
-                    Object.values(tiles_per_stage).forEach(tile => {
-                        this.game.placeOnObjectPos(unique_id, "pyramid-" + tile.player_id, 0, 0);
-                    });
-                });
-            });
-        },
-        display_tile(tile) {
-            unique_id = "tile-" + tile.tile_id;
-            this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
-                <div id="${unique_id}">
-            `);
-            this.dojo.addClass(unique_id,'tile');
-            id_horizontal = tile.tile_id % 20;
-            id_vertical = (tile.tile_id-id_horizontal) / 20;
-            this.dojo.style(unique_id, 'backgroundPosition', '-' + 80 * id_horizontal + 'px -' + 80 * id_vertical + 'px');
-            console.log ("pyramid-" + tile.player_id);
-            //this.game.slideToObjectPos(unique_id, "pyramid-" + tile.player_id, 0, 0).play();
-
         },
     });
 });

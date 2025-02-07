@@ -46,7 +46,6 @@ define(['dojo/_base/declare'], (declare) => {
             this.paintables.push(paintable);
         },
         resize_element() {
-            console.log(this.element_id, 'width', '' + this.x_maximum - this.x_minimum + this.PIXELS_PER_TILE + 'px');
             this.dojo.style(this.element_id, 'width', '' + this.x_maximum - this.x_minimum + this.PIXELS_PER_TILE + 'px');
             this.dojo.style(this.element_id, 'height', '' + this.y_maximum - this.y_minimum + this.PIXELS_PER_TILE + 'px');
         },

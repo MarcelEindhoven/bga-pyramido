@@ -59,7 +59,7 @@ class GetAllDatas {
      */
     public function get(): array {
         $results = $this->get_results_from_database();
-        $results['market'] = Infrastructure\CurrentMarket::create($this->decks['domino'])->get_market();
+        $results['quarry'] = Infrastructure\CurrentMarket::create($this->decks['domino'])->get_market();
         $results['next'] = Infrastructure\CurrentMarket::create($this->decks['domino'])->get_next_market();
         $results['tiles'] = Infrastructure\CurrentTiles::create($this->decks['domino'])->set_players($this->players)->get();
 
