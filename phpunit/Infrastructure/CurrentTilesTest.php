@@ -134,7 +134,7 @@ class CurrentTilesTest extends TestCase{
         $second_tile = $this->act_second_tile();
 
         // Assert
-        $this->assertEquals(10 + 1, $second_tile['horizontal']);
+        $this->assertEquals(10 + 2, $second_tile['horizontal']);
         $this->assertEquals(12 + 0, $second_tile['vertical']);
     }
 
@@ -147,7 +147,7 @@ class CurrentTilesTest extends TestCase{
 
         // Assert
         $this->assertEquals(10 + 0, $second_tile['horizontal']);
-        $this->assertEquals(12 + 1, $second_tile['vertical']);
+        $this->assertEquals(12 + 2, $second_tile['vertical']);
     }
 
     public function test_second_tile_rotation2() {
@@ -158,7 +158,7 @@ class CurrentTilesTest extends TestCase{
         $second_tile = $this->act_second_tile();
 
         // Assert
-        $this->assertEquals(10 - 1, $second_tile['horizontal']);
+        $this->assertEquals(10 - 2, $second_tile['horizontal']);
         $this->assertEquals(12 + 0, $second_tile['vertical']);
     }
 
@@ -171,7 +171,7 @@ class CurrentTilesTest extends TestCase{
 
         // Assert
         $this->assertEquals(10 + 0, $second_tile['horizontal']);
-        $this->assertEquals(12 - 1, $second_tile['vertical']);
+        $this->assertEquals(12 - 2, $second_tile['vertical']);
     }
 
     public function test_second_tile_tile_id() {

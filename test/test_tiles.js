@@ -6,11 +6,14 @@ var sut_module = require('../export/modules/javascript/tiles.js');
 class Document {
     getElementById(element_id) {return {insertAdjacentHTML: sinon.spy(),};}
 }
+class Animation {
+    play () {}
+}
 describe('Tiles', function () {
     beforeEach(function() {
         dojo = {style:sinon.spy(), addClass:sinon.spy(), removeClass:sinon.spy(), };
         document = new Document();
-        game = {placeOnObjectPos:sinon.spy(),};
+        game = {slideToObjectPos:sinon.stub().returns (new Animation ()) ,};
         dependencies = {dojo: dojo, document: document, game:game, };
         sut = new sut_module(dependencies);
         tile_specification = {tile_id: 0, stage: 0, horizontal: 0,vertical: 0,};
@@ -33,12 +36,12 @@ describe('Tiles', function () {
         beforeEach(function() {
             tile = sut.create_tile_from(tile_specification);
         });
-        it('calls placeOnObjectPos with unique_id', function () {
+        it('calls slideToObjectPos with unique_id', function () {
             // Arrange
             // Act
             tile.paint();
             // Assert
-            assert.equal(game.placeOnObjectPos.getCall(0).args[0], tile.unique_id);
+            assert.equal(game.slideToObjectPos.getCall(0).args[0], tile.unique_id);
         });
         it('uses the parameters from move', function () {
             // Arrange
@@ -46,9 +49,9 @@ describe('Tiles', function () {
             // Act
             tile.paint();
             // Assert
-            assert.equal(game.placeOnObjectPos.getCall(0).args[1], element_id);
-            assert.equal(game.placeOnObjectPos.getCall(0).args[2], x);
-            assert.equal(game.placeOnObjectPos.getCall(0).args[3], y);
+            assert.equal(game.slideToObjectPos.getCall(0).args[1], element_id);
+            assert.equal(game.slideToObjectPos.getCall(0).args[2], x);
+            assert.equal(game.slideToObjectPos.getCall(0).args[3], y);
         });
     });
 });

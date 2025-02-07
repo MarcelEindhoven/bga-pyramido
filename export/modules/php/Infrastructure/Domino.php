@@ -142,16 +142,16 @@ class CurrentTiles
         $tile['tile_id'] = ($domino['id'] - 1) * 2 + 1;
 
         if ($tile['rotation'] == 0)
-            $tile['horizontal'] = $tile['horizontal'] + 1;
+            $tile['horizontal'] = $tile['horizontal'] + 2;
 
         if ($tile['rotation'] == 1)
-            $tile['vertical'] = $tile['vertical'] + 1;
+            $tile['vertical'] = $tile['vertical'] + 2;
 
         if ($tile['rotation'] == 2)
-            $tile['horizontal'] = $tile['horizontal'] - 1;
+            $tile['horizontal'] = $tile['horizontal'] - 2;
 
         if ($tile['rotation'] == 3)
-            $tile['vertical'] = $tile['vertical'] - 1;
+            $tile['vertical'] = $tile['vertical'] - 2;
 
         return $tile;
     }
