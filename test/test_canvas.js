@@ -16,6 +16,9 @@ describe('Canvas class', function () {
         tile = {tile_id: 0, stage: 0, horizontal: 10,vertical: 20,
             move_to:sinon.spy(),
         };
+        other_tile = {tile_id: 0, stage: 0, horizontal: 12,vertical: 17,
+            move_to:sinon.spy(),
+        };
         element_id = 'HTML element ID ';
         x = 12;
         y = 33;
@@ -96,38 +99,31 @@ describe('Canvas class', function () {
         });
         it('resizes a half tile per coordinate', function () {
             // Arrange
-            tile.horizontal = 12;
-            tile.vertical = 17;
             // Act
-            act(tile);            
+            act(other_tile);            
             // Assert
             assert.equal(dojo.style.getCall(2).args[2], '' + (2*sut.PIXELS_PER_TILE) + 'px');
             assert.equal(dojo.style.getCall(3).args[2], '' + (2.5*sut.PIXELS_PER_TILE) + 'px');
         });
         it('also moves existing tiles when resizing', function () {
             // Arrange
-            tile.horizontal = 12;
             // Act
-            act(tile);
+            act(other_tile);
             // Assert
-            sinon.assert.callCount(tile.move_to, 3);
+            sinon.assert.callCount(tile.move_to, 2);
         });
         it('moves new tile a half tile per coordinate', function () {
             // Arrange
-            tile.horizontal = 12;
-            tile.vertical = 17;
             // Act
-            act(tile);            
+            act(other_tile);            
             // Assert
-            assert.equal(tile.move_to.getCall(2).args[1], 0.5 * sut.PIXELS_PER_TILE);
-            assert.equal(tile.move_to.getCall(2).args[2], - 0.75 * sut.PIXELS_PER_TILE);
+            assert.equal(other_tile.move_to.getCall(0).args[1], 0.5 * sut.PIXELS_PER_TILE);
+            assert.equal(other_tile.move_to.getCall(0).args[2], - 0.75 * sut.PIXELS_PER_TILE);
         });
-        it('moves existing tile a half tile per coordinate', function () {
+        it('moves existing tile with original data', function () {
             // Arrange
-            tile.horizontal = 12;
-            tile.vertical = 17;
             // Act
-            act(tile);            
+            act(other_tile);            
             // Assert
             assert.equal(tile.move_to.getCall(1).args[1], - 0.5 * sut.PIXELS_PER_TILE);
             assert.equal(tile.move_to.getCall(1).args[2], 0.75 * sut.PIXELS_PER_TILE);

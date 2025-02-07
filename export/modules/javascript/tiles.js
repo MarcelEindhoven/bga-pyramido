@@ -56,7 +56,9 @@ define(['dojo/_base/declare'], (declare) => {
                  * Precondition: move_to has been called
                  */
                 paint() {
-                    this.game.placeOnObjectPos(this.unique_id, this.element_id, this.x, this.y);
+                    console.log(this.unique_id, this.element_id, this.x, this.y);
+                    //this.game.placeOnObjectPos(this.unique_id, this.element_id, this.x, this.y);
+                    this.game.slideToObjectPos(this.unique_id, this.element_id, this.x, this.y).play();
                 }
             }
             result = new Tile({document: this.document, dojo: this.dojo, game: this.game,});

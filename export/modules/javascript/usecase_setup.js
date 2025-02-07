@@ -21,6 +21,8 @@ define(['dojo/_base/declare'], (declare) => {
             this.image_items_per_row = this.DOMINOES_PER_ROW;
 
             this.stocks = {};
+            this.tile_containers = {};
+            this.paintables = {};
         },
         clone(properties){
             for (var property in properties) {
@@ -29,8 +31,8 @@ define(['dojo/_base/declare'], (declare) => {
         },
         setup(gamedatas) {
             this.setup_market_structure();
-            this.setup_original(gamedatas);
-            this.display_tiles(gamedatas);
+            this.setup_players(gamedatas.players);
+            this.setup_pyramid_tiles(gamedatas.tiles);
         },
         setup_market_structure() {
             this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
@@ -81,6 +83,38 @@ define(['dojo/_base/declare'], (declare) => {
         },
         get_card_type_id(row, i) {
             return row * 90/this.image_items_per_row + i;
+        },
+        setup_players(players) {
+            Object.values(players).forEach(player => {
+                console.log (`
+                    <div id="player-table-${player.id}">
+                        <div style = "display: inline-block;"><strong>${player.name}</strong></div>
+                        <div id="replacement-${player.id}" style = "display: inline-block; width: 80px ; height: 80px"></div>
+                        <div id="pyramid-${player.id}" style = "display: inline-block; width: 80px ; height: 80px"></div>
+                    </div>
+                `);
+                this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
+                    <div id="player-table-${player.id}">
+                        <div style = "display: inline-block;"><strong>${player.name}</strong></div>
+                        <div id="replacement-${player.id}" style = "display: inline-block; width: 80px ; height: 80px"></div>
+                        <div id="pyramid-${player.id}" style = "display: inline-block; width: 80px ; height: 80px"></div>
+                    </div>
+                `);
+                element_id = 'pyramid-' + player.id;
+                dependencies = {dojo: this.dojo, game: this.game, element_id: element_id};
+                this.tile_containers[element_id] = new this.canvas_class(dependencies);
+            });
+        },
+        setup_pyramid_tiles(tiles_per_player) {
+            Object.keys(tiles_per_player).forEach(player_id => {
+                Object.values(tiles_per_player[player_id]).forEach(tiles_per_stage => {
+                    Object.values(tiles_per_stage).forEach(tile_specification => {
+                        tile = this.tile_factory.create_tile_from(tile_specification);
+                        this.paintables[tile.tile_id] = tile;
+                        this.tile_containers['pyramid-' + player_id].add(tile);
+                    });
+                });
+            });
         },
         setup_original(gamedatas) {
             // Example to add a div on the game area

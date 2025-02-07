@@ -18,13 +18,15 @@
 define([
     "dojo","dojo/_base/declare",
     g_gamethemeurl + 'modules/javascript/market.js',
+    g_gamethemeurl + 'modules/javascript/canvas.js',
+    g_gamethemeurl + 'modules/javascript/tiles.js',
     g_gamethemeurl + 'modules/javascript/usecase_setup.js',
     g_gamethemeurl + 'modules/javascript/usecase_choose_first_domino.js',
     "ebg/core/gamegui",
     "ebg/counter",
     "ebg/stock",
 ],
-function (dojo, declare, market, usecase_setup, usecase_choose_first_domino) {
+function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_first_domino) {
     return declare("bgagame.pyramidocannonfodder", ebg.core.gamegui, {
         constructor: function(){
             console.log('pyramidocannonfodder constructor');
@@ -53,6 +55,11 @@ function (dojo, declare, market, usecase_setup, usecase_choose_first_domino) {
             console.log( "Starting game setup" );
             console.log(gamedatas);
 
+            this.tile_factory = new tiles({
+                game: this,
+                document: document,
+                dojo: dojo, 
+            });
             this.usecase_setup = new usecase_setup({
                 game: this,
                 stock_class:ebg.stock,
@@ -60,8 +67,11 @@ function (dojo, declare, market, usecase_setup, usecase_choose_first_domino) {
                 document: document,
                 market_class: market,
                 dojo: dojo, 
+                tile_factory: this.tile_factory,
+                canvas_class: canvas,
             });
             this.usecase_setup.setup(gamedatas);
+            this.paintables = this.usecase_setup.paintables;
 
             // Setup game notifications to handle (see "setupNotifications" method below)
             this.setupNotifications();
@@ -70,11 +80,21 @@ function (dojo, declare, market, usecase_setup, usecase_choose_first_domino) {
             this.usecase_choose_first_domino = new usecase_choose_first_domino({market: this.market});
             this.usecase_choose_first_domino.subscribe(this, 'first_domino_chosen');
 
-            this.experiment(gamedatas);
+            this.paint();
+            //this.experiment(gamedatas);
+            this.paint();
 
             console.log( "Ending game setup" );
         },
+        paint: function() {
+            Object.values(this.paintables).forEach(paintable => {
+                paintable.paint();
+            });
+        },
         experiment: function( gamedatas ) {
+            this.placeOnObjectPos('tile-18', 'quarry-2', 0, 0);
+            this.slideToObjectPos('tile-18', 'pyramid-2371153', -20, 0).play();
+            this.slideToObjectPos('tile-19', 'pyramid-2371153', 20, 0).play();
         },
         first_domino_chosen(quarry_index) {
             console.log( "first_domino_chosen" );
