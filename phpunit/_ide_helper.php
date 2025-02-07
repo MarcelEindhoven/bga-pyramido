@@ -42,7 +42,7 @@ abstract class APP_Object
     /**
      * Debug message. Appear only if needed.
      */
-    final public function debug(string $message): void
+    public function debug(string $message): void
     {
         //
     }
@@ -50,7 +50,7 @@ abstract class APP_Object
     /**
      * Dump an object with a custom prefix.
      */
-    final public function dump(string $prefix, mixed $object): void
+    public function dump(string $prefix, mixed $object): void
     {
         //
     }
@@ -58,7 +58,7 @@ abstract class APP_Object
     /**
      * Error message. Appear in production.
      */
-    final public function error(string $message): void
+    public function error(string $message): void
     {
         //
     }
@@ -66,7 +66,7 @@ abstract class APP_Object
     /**
      * Standard log message (INFO level).
      */
-    final public function trace(string $message): void
+    public function trace(string $message): void
     {
         //
     }
@@ -74,7 +74,7 @@ abstract class APP_Object
     /**
      * Warning message. Appear in production.
      */
-    final public function warn(string $message): void
+    public function warn(string $message): void
     {
         //
     }
@@ -85,7 +85,7 @@ abstract class APP_Template
     /**
      * TBD.
      */
-    final public function begin_block(string $template_name, string $block_name): void
+    public function begin_block(string $template_name, string $block_name): void
     {
         //
     }
@@ -93,7 +93,7 @@ abstract class APP_Template
     /**
      * TBD.
      */
-    final public function begin_subblock(string $template_name, string $block_name): void
+    public function begin_subblock(string $template_name, string $block_name): void
     {
         //
     }
@@ -101,7 +101,7 @@ abstract class APP_Template
     /**
      * TBD.
      */
-    final public function insert_block(string $block_name, array $tpl = []): void
+    public function insert_block(string $block_name, array $tpl = []): void
     {
         //
     }
@@ -109,7 +109,7 @@ abstract class APP_Template
     /**
      * TBD.
      */
-    final public function insert_subblock(string $block_name, array $tpl = []): void
+    public function insert_subblock(string $block_name, array $tpl = []): void
     {
         //
     }
@@ -143,7 +143,7 @@ abstract class game_view
     /**
      * Translation function using appropriate gettext domain.
      */
-    final protected function _(string $text): string
+    protected function _(string $text): string
     {
         return ''; 
     }
@@ -153,7 +153,7 @@ abstract class game_view
      */
     abstract protected function getGameName();
 
-    final protected function raw(string $string): array
+    protected function raw(string $string): array
     {
         return [];
     }
@@ -167,7 +167,7 @@ abstract class GameState extends APP_Object
      * NOTE: you CANNOT use this method in an "activeplayer" or "multipleactiveplayer" state. You must use a "game"
      * type game state for this.
      */
-    final public function changeActivePlayer(int $playerId): void
+    public function changeActivePlayer(int $playerId): void
     {
         //
     }
@@ -176,7 +176,7 @@ abstract class GameState extends APP_Object
      * This works exactly like `Table::checkAction()`, except that it does NOT check if the current player is
      * active.
      */
-    final public function checkPossibleAction(string $actionName): void
+    public function checkPossibleAction(string $actionName): void
     {
         //
     }
@@ -190,7 +190,7 @@ abstract class GameState extends APP_Object
      *
      * NOTE: You should only use this method in the latter case.
      */
-    final public function getActivePlayerList(): array
+    public function getActivePlayerList(): array
     {
         return [];
     }
@@ -198,7 +198,7 @@ abstract class GameState extends APP_Object
     /**
      * This return the private state or null if not initialized or not in private state.
      */
-    final public function getPrivateState(int $playerId): array
+    public function getPrivateState(int $playerId): array
     {
         return [];
     }
@@ -216,7 +216,7 @@ abstract class GameState extends APP_Object
      * - Note: this method is usually preceded with activating that player
      * - Note: initializing private state can run action or args methods of the initial private state
      */
-    final public function initializePrivateState(int $playerId): void
+    public function initializePrivateState(int $playerId): void
     {
         //
     }
@@ -234,7 +234,7 @@ abstract class GameState extends APP_Object
      * - Note: this method is usually preceded with activating some or all players
      * - Note: initializing private state can run action or args methods of the initial private state
      */
-    final public function initializePrivateStateForAllActivePlayers(): void
+    public function initializePrivateStateForAllActivePlayers(): void
     {
         //
     }
@@ -245,7 +245,7 @@ abstract class GameState extends APP_Object
      *
      * @param array<int> $playerIds
      */
-    final public function initializePrivateStateForPlayers(array $playerIds): void
+    public function initializePrivateStateForPlayers(array $playerIds): void
     {
         //
     }
@@ -253,7 +253,7 @@ abstract class GameState extends APP_Object
     /**
      * Return true if we are in multipleactiveplayer state, false otherwise.
      */
-    final public function isMutiactiveState(): bool
+    public function isMutiactiveState(): bool
     {
         return false;
     }
@@ -264,7 +264,7 @@ abstract class GameState extends APP_Object
      * This method take into account game state type, ie nobody is active if game state is "game" and several
      * players can be active if game state is "multiplayer".
      */
-    final public function isPlayerActive(int $player_id): bool
+    public function isPlayerActive(int $player_id): bool
     {
         return false;
     }
@@ -276,7 +276,7 @@ abstract class GameState extends APP_Object
      * include - jumping to specific state from "do_anytime" actions, jumping to dispatcher state or jumping to
      * recovery state from zombie player function.
      */
-    final public function jumpToState(int $nextState, bool $bWithActions = true): void
+    public function jumpToState(int $nextState, bool $bWithActions = true): void
     {
         //
     }
@@ -290,7 +290,7 @@ abstract class GameState extends APP_Object
      * - Note: this method can run action or args methods of the target state for specified player
      * - Note: this is usually used after some player actions to move to next private state
      */
-    final public function nextPrivateState(int $playerId, string $transition): void
+    public function nextPrivateState(int $playerId, string $transition): void
     {
         //
     }
@@ -305,7 +305,7 @@ abstract class GameState extends APP_Object
      * - Note: this is usually used after initializing the private state to move players to specific private state
      * according to the game logic
      */
-    final public function nextPrivateStateForAllActivePlayers(string $transition): void
+    public function nextPrivateStateForAllActivePlayers(string $transition): void
     {
         //
     }
@@ -316,7 +316,7 @@ abstract class GameState extends APP_Object
      *
      * @param array<int> $playerIds
      */
-    final public function nextPrivateStateForPlayers(array $playerIds, string $transition): void
+    public function nextPrivateStateForPlayers(array $playerIds, string $transition): void
     {
         //
     }
@@ -328,7 +328,7 @@ abstract class GameState extends APP_Object
      *
      * @see states.inc.php
      */
-    final public function nextState(string $transition): void
+    public function nextState(string $transition): void
     {
         //
     }
@@ -336,7 +336,7 @@ abstract class GameState extends APP_Object
     /**
      * Reload the current state.
      */
-    final public function reloadState(): void
+    public function reloadState(): void
     {
         //
     }
@@ -350,7 +350,7 @@ abstract class GameState extends APP_Object
      * you're going to make some more changes in the active player list. (I.e., if you want to take away
      * `multipleactiveplayer` status immediately afterward, use `setPlayersMultiactive` instead).
      */
-    final public function setAllPlayersMultiactive(): void
+    public function setAllPlayersMultiactive(): void
     {
         //
     }
@@ -358,7 +358,7 @@ abstract class GameState extends APP_Object
     /**
      * All playing players are made inactive. Transition to next state.
      */
-    final public function setAllPlayersNonMultiactive(string $nextState): void
+    public function setAllPlayersNonMultiactive(string $nextState): void
     {
         //
     }
@@ -370,7 +370,7 @@ abstract class GameState extends APP_Object
      * possible to call it directly from multiplayer action handler. If this player was the last active player, the
      * method trigger the "next_state" transition to go to the next game state.
      */
-    final public function setPlayerNonMultiactive(int $player, string $nextState): bool
+    public function setPlayerNonMultiactive(int $player, string $nextState): bool
     {
         return false;
     }
@@ -387,7 +387,7 @@ abstract class GameState extends APP_Object
      *
      * Returns true if state transition happened, false otherwise.
      */
-    final public function setPlayersMultiactive(array $players, string $nextState, bool $bInactivePlayersNotOnTheList = false): bool
+    public function setPlayersMultiactive(array $players, string $nextState, bool $bInactivePlayersNotOnTheList = false): bool
     {
         return false;
     }
@@ -402,7 +402,7 @@ abstract class GameState extends APP_Object
      * become very tedious.)
      * - Note: this method can run action or args methods of the target state for specified player
      */
-    final public function setPrivateState(int $playerId, int $newStateId): void
+    public function setPrivateState(int $playerId, int $newStateId): void
     {
         //
     }
@@ -412,7 +412,7 @@ abstract class GameState extends APP_Object
      *
      * @see states.inc.php
      */
-    final public function state(bool $bSkipStateArgs = false, bool $bOnlyVariableContent = false, bool $bSkipReflexionTimeLoad = false): array
+    public function state(bool $bSkipStateArgs = false, bool $bOnlyVariableContent = false, bool $bSkipReflexionTimeLoad = false): array
     {
         return [];
     }
@@ -421,7 +421,7 @@ abstract class GameState extends APP_Object
      * Get the id of the current game state (rarely useful, it's best to use name, unless you use constants for
      * state ids).
      */
-    final public function state_id(): string|int
+    public function state_id(): string|int
     {
         return '0'; 
     }
@@ -437,7 +437,7 @@ abstract class GameState extends APP_Object
      * when private states are needed again. Nevertheless, it is generally better to clean private state when not
      * needed to avoid bugs.
      */
-    final public function unsetPrivateState(int $playerId): void
+    public function unsetPrivateState(int $playerId): void
     {
         //
     }
@@ -455,7 +455,7 @@ abstract class GameState extends APP_Object
      * state when private states are needed again. Nevertheless, it is generally better to clean private state after
      * exiting private parallel states to avoid bugs.
      */
-    final public function unsetPrivateStateForAllPlayers(): void
+    public function unsetPrivateStateForAllPlayers(): void
     {
         //
     }
@@ -466,7 +466,7 @@ abstract class GameState extends APP_Object
      *
      * @param array<int> $playerIds
      */
-    final public function unsetPrivateStateForPlayers(array $playerIds): void
+    public function unsetPrivateStateForPlayers(array $playerIds): void
     {
         //
     }
@@ -478,7 +478,7 @@ abstract class GameState extends APP_Object
      *
      * Do not call this if you're calling one of the other setters above.
      */
-    final public function updateMultiactiveOrNextState(string $nextStateIfNone): void
+    public function updateMultiactiveOrNextState(string $nextStateIfNone): void
     {
         //
     }
@@ -557,7 +557,7 @@ abstract class Table extends APP_Object
      * @see mysql_affected_rows()
      * @see https://en.doc.boardgamearena.com/Main_game_logic:_yourgamename.game.php#Accessing_the_database
      */
-    final static public function DbAffectedRow(): int
+    static public function DbAffectedRow(): int
     {
         return 0;
     }
@@ -568,7 +568,7 @@ abstract class Table extends APP_Object
      * @see mysql_insert_id()
      * @see https://en.doc.boardgamearena.com/Main_game_logic:_yourgamename.game.php#Accessing_the_database
      */
-    final static public function DbGetLastId(): int
+    static public function DbGetLastId(): int
     {
         return 0;
     }
@@ -578,7 +578,7 @@ abstract class Table extends APP_Object
      *
      * @see https://en.doc.boardgamearena.com/Main_game_logic:_yourgamename.game.php#Accessing_the_database
      */
-    final static public function DbQuery(string $sql): null|mysqli_result|bool
+    static public function DbQuery(string $sql): null|mysqli_result|bool
     {
         return null;
     }
@@ -594,7 +594,7 @@ abstract class Table extends APP_Object
      * @see mysql_real_escape_string()
      * @see https://en.doc.boardgamearena.com/Main_game_logic:_yourgamename.game.php#Accessing_the_database
      */
-    final static public function escapeStringForDB(string $string): string
+    static public function escapeStringForDB(string $string): string
     {
         return ''; 
     }
@@ -609,7 +609,7 @@ abstract class Table extends APP_Object
      * @see Table::getCollectionFromDB
      * @see https://en.doc.boardgamearena.com/Main_game_logic:_yourgamename.game.php#Accessing_the_database
      */
-    final static public function getObjectListFromDB(string $sql, bool $bUniqueValue = false): array
+    static public function getObjectListFromDB(string $sql, bool $bUniqueValue = false): array
     {
         return [];
     }
@@ -620,7 +620,7 @@ abstract class Table extends APP_Object
      * @throws BgaSystemException Raise an exception if more than 1 row is returned.
      * @see https://en.doc.boardgamearena.com/Main_game_logic:_yourgamename.game.php#Accessing_the_database
      */
-    final static public function getUniqueValueFromDB(string $sql): mixed
+    static public function getUniqueValueFromDB(string $sql): mixed
     {
         return null;
     }
@@ -633,7 +633,7 @@ abstract class Table extends APP_Object
      *
      * @return void
      */
-    final public function activeNextPlayer(): int|string
+    public function activeNextPlayer(): int|string
     {
         return '0';
     }
@@ -654,7 +654,7 @@ abstract class Table extends APP_Object
      *
      * @throws BgaSystemException if `$bThrowException` is true and a failure occurs
      */
-    final public function checkAction(string $actionName, bool $bThrowException = true): mixed
+    public function checkAction(string $actionName, bool $bThrowException = true): mixed
     {
         return null;
     }
@@ -665,7 +665,7 @@ abstract class Table extends APP_Object
      *
      * @see https://en.doc.boardgamearena.com/Main_game_logic:_yourgamename.game.php#Player_elimination
      */
-    final public function eliminatePlayer(int $playerId): void
+    public function eliminatePlayer(int $playerId): void
     {
         //
     }
@@ -678,7 +678,7 @@ abstract class Table extends APP_Object
      *
      * Note: avoid using this method in a "multiplayer" state because it does not mean anything.
      */
-    final public function getActivePlayerId(): string|int
+    public function getActivePlayerId(): string|int
     {
         return '0'; 
     }
@@ -688,7 +688,7 @@ abstract class Table extends APP_Object
      *
      * Note: avoid using this method in a "multiplayer" state because it does not mean anything.
      */
-    final public function getActivePlayerName(): string
+    public function getActivePlayerName(): string
     {
         return ''; 
     }
@@ -715,7 +715,7 @@ abstract class Table extends APP_Object
      *
      * @see https://en.doc.boardgamearena.com/Main_game_logic:_yourgamename.game.php#Accessing_the_database
      */
-    final public function getCollectionFromDB(string $sql, bool $bSingleValue = false): array
+    public function getCollectionFromDB(string $sql, bool $bSingleValue = false): array
     {
         return [];
     }
@@ -728,7 +728,7 @@ abstract class Table extends APP_Object
      *
      * @see https://en.doc.boardgamearena.com/Main_game_logic:_yourgamename.game.php#File-Structure
      */
-    final public function getCurrentPlayerId(bool $bReturnNullIfNotLogged = false): string|int
+    public function getCurrentPlayerId(bool $bReturnNullIfNotLogged = false): string|int
     {
         return '0';
     }
@@ -741,7 +741,7 @@ abstract class Table extends APP_Object
      *
      * @see https://en.doc.boardgamearena.com/Main_game_logic:_yourgamename.game.php#Accessing_the_database
      */
-    final public function getDoubleKeyCollectionFromDB(string $sql, bool $bSingleValue = false): array
+    public function getDoubleKeyCollectionFromDB(string $sql, bool $bSingleValue = false): array
     {
         return [];
     }
@@ -749,7 +749,7 @@ abstract class Table extends APP_Object
     /**
      * Returns an index of the selected language as defined in gameinfos.inc.php.
      */
-    final public function getGameLanguage(): string
+    public function getGameLanguage(): string
     {
         return '';
     }
@@ -776,7 +776,7 @@ abstract class Table extends APP_Object
      * NOTE: this method use globals "cache" if you directly manipulated globals table OR call this function after
      * `undoRestorePoint()` - it won't work as expected.
      */
-    final public function getGameStateValue(string $label, int $default = 0): int|string
+    public function getGameStateValue(string $label, int $default = 0): int|string
     {
         return '0';
     }
@@ -785,7 +785,7 @@ abstract class Table extends APP_Object
      * Returns the value of a user preference for a player. It will return the value currently selected in the
      * select combo box, in the top-right menu.
      */
-    final public function getGameUserPreference(int $playerId, int $prefId): ?int
+    public function getGameUserPreference(int $playerId, int $prefId): ?int
     {
         return 0;
     }
@@ -822,7 +822,7 @@ abstract class Table extends APP_Object
      * }
      * @see gameinfos.inc.php
      */
-    final public function getGameinfos(): array
+    public function getGameinfos(): array
     {
         return [];
     }
@@ -834,7 +834,7 @@ abstract class Table extends APP_Object
      *
      * @return array<int, int>
      */
-    final public function getNextPlayerTable(): array
+    public function getNextPlayerTable(): array
     {
         return [];
     }
@@ -846,7 +846,7 @@ abstract class Table extends APP_Object
      * @see Table::getCollectionFromDB()
      * @see https://en.doc.boardgamearena.com/Main_game_logic:_yourgamename.game.php#Accessing_the_database
      */
-    final public function getNonEmptyCollectionFromDB(string $sql): array
+    public function getNonEmptyCollectionFromDB(string $sql): array
     {
         return [];
     }
@@ -859,7 +859,7 @@ abstract class Table extends APP_Object
      * @see Table::getObjectFromDB()
      * @see https://en.doc.boardgamearena.com/Main_game_logic:_yourgamename.game.php#Accessing_the_database
      */
-    final public function getNonEmptyObjectFromDB(string $sql): array
+    public function getNonEmptyObjectFromDB(string $sql): array
     {
         return [];
     }
@@ -871,7 +871,7 @@ abstract class Table extends APP_Object
      * @throws BgaSystemException if the query return more than one row.
      * @see https://en.doc.boardgamearena.com/Main_game_logic:_yourgamename.game.php#Accessing_the_database
      */
-    final public function getObjectFromDB(string $sql): array
+    public function getObjectFromDB(string $sql): array
     {
         return [];
     }
@@ -879,7 +879,7 @@ abstract class Table extends APP_Object
     /**
      * Get player playing after given player in natural playing order.
      */
-    final public function getPlayerAfter(int $playerId): int
+    public function getPlayerAfter(int $playerId): int
     {
         return 0;
     }
@@ -887,7 +887,7 @@ abstract class Table extends APP_Object
     /**
      * Get player playing before given player in natural playing order.
      */
-    final public function getPlayerBefore(int $playerId): int
+    public function getPlayerBefore(int $playerId): int
     {
         return 0;
     }
@@ -895,7 +895,7 @@ abstract class Table extends APP_Object
     /**
      * Get the player color by player id;
      */
-    final public function getPlayerColorById(int $playerId): string
+    public function getPlayerColorById(int $playerId): string
     {
         return '';
     }
@@ -903,7 +903,7 @@ abstract class Table extends APP_Object
     /**
      * Get the player name by player id.
      */
-    final public function getPlayerNameById(int $playerId): string
+    public function getPlayerNameById(int $playerId): string
     {
         return '';
     }
@@ -911,7 +911,7 @@ abstract class Table extends APP_Object
     /**
      * Get 'player_no' (number) by player id.
      */
-    final public function getPlayerNoById(int $playerId): int
+    public function getPlayerNoById(int $playerId): int
     {
         return 0;
     }
@@ -921,7 +921,7 @@ abstract class Table extends APP_Object
      *
      * @return int
      */
-    final public function getPlayersNumber()
+    public function getPlayersNumber()
     {
         //
     }
@@ -953,7 +953,7 @@ abstract class Table extends APP_Object
     /**
      * Return the value of statistic specified by $name. Useful when creating derivative statistics such as average.
      */
-    final public function getStat(string $name, ?int $playerId = null): int
+    public function getStat(string $name, ?int $playerId = null): int
     {
         return Table::getStat($name, $playerId);
     }
@@ -961,7 +961,7 @@ abstract class Table extends APP_Object
     /**
      * Give standard extra time to this player.
      */
-    final public function giveExtraTime(int $playerId, ?int $specificTime = null): void
+    public function giveExtraTime(int $playerId, ?int $specificTime = null): void
     {
         //
     }
@@ -969,12 +969,12 @@ abstract class Table extends APP_Object
     /**
      * Increment the current value of a global. If increment is negative, decrement the value of the global.
      *
-     * Return the final value of the global. If global was not initialized it will initialize it as 0.
+     * Return the value of the global. If global was not initialized it will initialize it as 0.
      *
      * NOTE: this method use globals "cache" if you directly manipulated globals table OR call this function after
      * `undoRestorePoint()` - it won't work as expected.
      */
-    final public function incGameStateValue(string $label, int $increment): int
+    public function incGameStateValue(string $label, int $increment): int
     {
         return 0;
     }
@@ -983,7 +983,7 @@ abstract class Table extends APP_Object
      * Increment (or decrement) specified statistic value by `$inc` value. Same behavior as `Table::setStat()`
      * function.
      */
-    final public function incStat(int $inc, string $name, ?int $playerId = null, bool $bDoNotLoop = false): void
+    public function incStat(int $inc, string $name, ?int $playerId = null, bool $bDoNotLoop = false): void
     {
         //
     }
@@ -1002,7 +1002,7 @@ abstract class Table extends APP_Object
      * - `$name` is the name of your statistic, as it has been defined in your stats.inc.php file.
      * - `$value` is the initial value of the statistic. If this is a player statistic and if the player is not specified by "$player_id" argument, the value is set for ALL players.
      */
-    final public function initStat(string $tableOrPlayer, string $name, int $value, ?int $playerId = null): void
+    public function initStat(string $tableOrPlayer, string $name, int $value, ?int $playerId = null): void
     {
         //
     }
@@ -1010,7 +1010,7 @@ abstract class Table extends APP_Object
     /**
      * Returns true if game is turn based, false if it is realtime
      */
-    final public function isAsync(): bool
+    public function isAsync(): bool
     {
         return false;
     }
@@ -1018,7 +1018,7 @@ abstract class Table extends APP_Object
     /**
      * Returns true if game is realtime, false if it is async.
      */
-    final public function isRealtime(): bool
+    public function isRealtime(): bool
     {
         return false;
     }
@@ -1030,7 +1030,7 @@ abstract class Table extends APP_Object
      *
      * @return bool
      */
-    final public function isSpectator(): bool
+    public function isSpectator(): bool
     {
         return false;
     }
@@ -1040,7 +1040,7 @@ abstract class Table extends APP_Object
      *
      * @return array<int, array{ player_name: string, player_color: string, player_no: int}>
      */
-    final public function loadPlayersBasicInfos()
+    public function loadPlayersBasicInfos()
     {
         //
     }
@@ -1049,7 +1049,7 @@ abstract class Table extends APP_Object
      * This function will have no visible consequence for your game, but will allow players to report the text to
      * moderators if something happens.
      */
-    final public function logTextForModeration(int $playerId, string $message): void
+    public function logTextForModeration(int $playerId, string $message): void
     {
         //
     }
@@ -1059,7 +1059,7 @@ abstract class Table extends APP_Object
      *
      * @see https://en.doc.boardgamearena.com/Main_game_logic:_yourgamename.game.php#NotifyAllPlayers
      */
-    final public function notifyAllPlayers(string $notificationType, string $notificationLog, array $notificationArgs): void
+    public function notifyAllPlayers(string $notificationType, string $notificationLog, array $notificationArgs): void
     {
         //
     }
@@ -1069,7 +1069,7 @@ abstract class Table extends APP_Object
      *
      * @see https://en.doc.boardgamearena.com/Main_game_logic:_yourgamename.game.php#NotifyPlayer
      */
-    final public function notifyPlayer(int $playerId, string $notificationType, string $notificationLog, array $notificationArgs): void
+    public function notifyPlayer(int $playerId, string $notificationType, string $notificationLog, array $notificationArgs): void
     {
         //
     }
@@ -1081,7 +1081,7 @@ abstract class Table extends APP_Object
      * @param array<string> $colors
      * @return void
      */
-    final public function reattributeColorsBasedOnPreferences(array $players, array $colors): void
+    public function reattributeColorsBasedOnPreferences(array $players, array $colors): void
     {
         //
     }
@@ -1091,7 +1091,7 @@ abstract class Table extends APP_Object
      *
      * @return void
      */
-    final public function reloadPlayersBasicInfos(): void
+    public function reloadPlayersBasicInfos(): void
     {
         //
     }
@@ -1099,7 +1099,7 @@ abstract class Table extends APP_Object
     /**
      * Remove some legacy data with the given key.
      */
-    final public function removeLegacyData(int $playerId, string $key): void
+    public function removeLegacyData(int $playerId, string $key): void
     {
         //
     }
@@ -1108,7 +1108,7 @@ abstract class Table extends APP_Object
      * Same as `Table::storeLegacyData()`, except that it stores some data for the whole team within the current
      * table and does not use a key.
      */
-    final public function removeLegacyTeamData(): void
+    public function removeLegacyTeamData(): void
     {
         //
     }
@@ -1116,7 +1116,7 @@ abstract class Table extends APP_Object
     /**
      * Get data associated with $key for the current game.
      */
-    final public function retrieveLegacyData($playerId, $key): array
+    public function retrieveLegacyData($playerId, $key): array
     {
         return [];
     }
@@ -1125,7 +1125,7 @@ abstract class Table extends APP_Object
      * Same as `Table::storeLegacyData()`, except that it stores some data for the whole team within the current
      * table and does not use a key.
      */
-    final public function retrieveLegacyTeamData(): array
+    public function retrieveLegacyTeamData(): array
     {
         return [];
     }
@@ -1134,7 +1134,7 @@ abstract class Table extends APP_Object
      * Initialize global value. This is not required if you ok with default value if 0. This should be called from
      * `Table::setupNewGame()` function.
      */
-    final public function setGameStateInitialValue(string $label, int $value): void
+    public function setGameStateInitialValue(string $label, int $value): void
     {
         //
     }
@@ -1142,7 +1142,7 @@ abstract class Table extends APP_Object
     /**
      * Set the current value of a global.
      */
-    final public function setGameStateValue(string $label, int $value): void
+    public function setGameStateValue(string $label, int $value): void
     {
         //
     }
@@ -1153,7 +1153,7 @@ abstract class Table extends APP_Object
      * - If `$player_id` is not specified, setStat consider it is a TABLE statistic.
      * - If `$player_id` is specified, setStat consider it is a PLAYER statistic.
      */
-    final public function setStat(int $value, string $name, ?int $player_id = null, bool $bDoNotLoop = false): void
+    public function setStat(int $value, string $name, ?int $player_id = null, bool $bDoNotLoop = false): void
     {
         //
     }
@@ -1164,7 +1164,7 @@ abstract class Table extends APP_Object
      *
      * @return void
      */
-    final public function stMakeEveryoneActive(): void
+    public function stMakeEveryoneActive(): void
     {
         //
     }
@@ -1188,7 +1188,7 @@ abstract class Table extends APP_Object
      *
      * Note: This function cannot be called during game setup (will throw an error).
      */
-    final public function storeLegacyData(int $playerId, string $key, array $data, int $ttl = 365): void
+    public function storeLegacyData(int $playerId, string $key, array $data, int $ttl = 365): void
     {
         //
     }
@@ -1197,7 +1197,7 @@ abstract class Table extends APP_Object
      * Same as `Table::storeLegacyData()`, except that it stores some data for the whole team within the current
      * table and does not use a key.
      */
-    final public function storeLegacyTeamData(array $data, int $ttl = 365): void
+    public function storeLegacyTeamData(array $data, int $ttl = 365): void
     {
         //
     }
@@ -1205,7 +1205,7 @@ abstract class Table extends APP_Object
     /**
      * Restore the situation previously saved as an "Undo save point".
      */
-    final public function undoRestorePoint(): void
+    public function undoRestorePoint(): void
     {
         //
     }
@@ -1213,7 +1213,7 @@ abstract class Table extends APP_Object
     /**
      * Save the whole game situation inside an "Undo save point".
      */
-    final public function undoSavepoint(): void
+    public function undoSavepoint(): void
     {
         //
     }
@@ -1240,7 +1240,7 @@ abstract class Table extends APP_Object
     /**
      * Make the previous player active (in the natural player order).
      */
-    final protected function activePrevPlayer(): void
+    protected function activePrevPlayer(): void
     {
         //
     }
@@ -1254,7 +1254,7 @@ abstract class Table extends APP_Object
      *
      * @param array<int, ?int> $players
      */
-    final protected function createNextPlayerTable(array $players, bool $bLoop = true): void
+    protected function createNextPlayerTable(array $players, bool $bLoop = true): void
     {
         //
     }
@@ -1275,7 +1275,7 @@ abstract class Table extends APP_Object
      *
      * @throws BgaSystemException if the current player is not at the table (i.e. spectator).
      */
-    final protected function getCurrentPlayerColor(): string
+    protected function getCurrentPlayerColor(): string
     {
         return '';
     }
@@ -1287,7 +1287,7 @@ abstract class Table extends APP_Object
      *
      * @throws BgaSystemException if the current player is not at the table (i.e. spectator).
      */
-    final protected function getCurrentPlayerName($bReturnEmptyIfNotLogged = false): string
+    protected function getCurrentPlayerName($bReturnEmptyIfNotLogged = false): string
     {
         return '';
     }
@@ -1304,7 +1304,7 @@ abstract class Table extends APP_Object
     /**
      * Return an associative array which associate each player with the previous player around the table.
      */
-    final protected function getPrevPlayerTable($players): array
+    protected function getPrevPlayerTable($players): array
     {
         return [];
     }
@@ -1320,7 +1320,7 @@ abstract class Table extends APP_Object
      *
      * @param array<string, int> $labels
      */
-    final protected function initGameStateLabels(array $labels): void
+    protected function initGameStateLabels(array $labels): void
     {
         //
     }
@@ -1343,7 +1343,7 @@ abstract class Table extends APP_Object
      *
      * @throws BgaSystemException if the current player is not at the table (i.e. spectator).
      */
-    final protected function isCurrentPlayerZombie(): bool
+    protected function isCurrentPlayerZombie(): bool
     {
         return false;
     }
@@ -1456,7 +1456,7 @@ abstract class APP_GameAction extends APP_Object
     /**
      * Must be used at the end of each action method.
      */
-    final protected function ajaxResponse(): void
+    protected function ajaxResponse(): void
     {
         //
     }
@@ -1468,7 +1468,7 @@ abstract class APP_GameAction extends APP_Object
      *
      * @throws BgaSystemException if `$bMandatory` is set to true and the argument is not found.
      */
-    final protected function getArg(string $argName, int $argType, bool $bMandatory = false, mixed $default = null, array $argTypeDetails = [], bool $bCanFail = false): mixed
+    protected function getArg(string $argName, int $argType, bool $bMandatory = false, mixed $default = null, array $argTypeDetails = [], bool $bCanFail = false): mixed
     {
         return null;
     }
@@ -1480,7 +1480,7 @@ abstract class APP_GameAction extends APP_Object
      * It returns "true" or "false" according to whether "argName" has been specified as an argument of the AJAX
      * request or not.
      */
-    final protected function isArg($argName): bool
+    protected function isArg($argName): bool
     {
         return false;
     }
@@ -1488,7 +1488,7 @@ abstract class APP_GameAction extends APP_Object
     /**
      * Must be used at the beginning of each action method.
      */
-    final protected function setAjaxMode(): void
+    protected function setAjaxMode(): void
     {
         //
     }

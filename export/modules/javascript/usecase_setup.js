@@ -66,10 +66,11 @@ define(['dojo/_base/declare'], (declare) => {
             console.log(elements);
             Object.keys(elements).forEach(index => {
                 const element = elements[index];
+                const array_index = Number(index) + 1;
                 console.log(index);
                 console.log(element);
-                this.setup_market_element(category_name, index + 1);
-                this.stocks[category_name + '-' + (index + 1)].addToStockWithId(element.id, element.id);
+                this.setup_market_element(category_name, array_index);
+                this.stocks[category_name + '-' + array_index].addToStockWithId(element.id, 1);
             });
         },
         setup_market_element(category, index) {

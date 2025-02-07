@@ -41,6 +41,8 @@ class FirstDominoChosen extends \NieuwenhovenGames\BGA\Action {
         $this->update_domino->move($this->quarry_index, $this->player_id, 1, 10, 10, 0);
 
         $this->get_current_data->get();
+        $this->notifications->notifyAllPlayers('domino_placed', 'domino_placed',
+        ['quarry_index' => $this->quarry_index, ]);
 
         return $this;
     }

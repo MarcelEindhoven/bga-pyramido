@@ -19,6 +19,7 @@ use Bga\Games\PyramidoCannonFodder\Infrastructure;
 include_once(__DIR__.'/../_ide_helper.php');
 use Bga\Games\FrameworkInterfaces;
 
+#[\AllowDynamicProperties]
 class FirstDominoChosenTest extends TestCase{
     protected ?FirstDominoChosen $sut = null;
     protected ?FrameworkInterfaces\GameState $mock_gamestate = null;
@@ -63,6 +64,8 @@ class FirstDominoChosenTest extends TestCase{
     public function test_execute_notifies_players() {
         // Arrange
         $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn($this->current_data_first);
+        $this->mock_notifications->expects($this->exactly(1))->method('notifyAllPlayers')
+        ->with('domino_placed', 'domino_placed', ['quarry_index' => $this->quarry_index]);
         // Act
         $this->act_default();
         // Assert

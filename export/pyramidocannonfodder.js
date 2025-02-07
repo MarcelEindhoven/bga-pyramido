@@ -72,6 +72,7 @@ function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_fi
             });
             this.usecase_setup.setup(gamedatas);
             this.paintables = this.usecase_setup.paintables;
+            this.stocks = this.usecase_setup.stocks;
 
             // Setup game notifications to handle (see "setupNotifications" method below)
             this.setupNotifications();
@@ -249,33 +250,26 @@ function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_fi
         {
             console.log( 'notifications subscriptions setup' );
             
-            // TODO: here, associate your game notifications with local methods
-            
-            // Example 1: standard notification handling
-            // dojo.subscribe( 'cardPlayed', this, "notif_cardPlayed" );
-            
-            // Example 2: standard notification handling + tell the user interface to wait
-            //            during 3 seconds after calling the method in order to let the players
-            //            see what is happening in the game.
-            // dojo.subscribe( 'cardPlayed', this, "notif_cardPlayed" );
-            // this.notifqueue.setSynchronous( 'cardPlayed', 3000 );
-            // 
+            dojo.subscribe( 'domino_placed', this, "notify_domino_placed" );
+            this.notifqueue.setSynchronous( 'domino_placed', 3000 );
         },  
         
-        // TODO: from this point and below, you can write your game notifications handling methods
-        
-        /*
-        Example:
-        
-        notif_cardPlayed: function( notif )
+        notify_domino_placed: function( notif )
         {
-            console.log( 'notif_cardPlayed' );
+            console.log( 'notify_domino_placed' );
             console.log( notif );
+            console.log( this.stocks );
+            this.stocks['quarry-' + notif.args.quarry_index].removeFromStockById(1);
             
             // Note: notif.args contains the arguments specified during you "notifyAllPlayers" / "notifyPlayer" PHP call
             
             // TODO: play the card in the user interface.
         },    
+        // TODO: from this point and below, you can write your game notifications handling methods
+        
+        /*
+        Example:
+        
         
         */
    });             
