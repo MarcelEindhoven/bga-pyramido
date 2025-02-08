@@ -67,15 +67,15 @@ class MarketSetup
 }
 
 #[\AllowDynamicProperties]
-class UpdateDomino extends CurrentMarket
+class UpdateDomino extends CurrentTiles
 {
     static public function create($deck_domino): UpdateDomino {
         $object = new UpdateDomino();
-        $object->set_deck($deck_domino);
+        $object->set_deck_domino($deck_domino);
         return $object;
     }
     public function move($quarry_index, $player_id, $stage_index, $horizontal, $vertical, $rotation): UpdateDomino {
-        $this->deck->moveAllCardsInLocation(CurrentMarket::LOCATION_MARKET, $player_id, $quarry_index
+        $this->deck_domino->moveAllCardsInLocation(CurrentMarket::LOCATION_MARKET, $player_id, $quarry_index
         , $stage_index
         + CurrentTiles::FACTOR_STAGE * $horizontal
         + CurrentTiles::FACTOR_STAGE * CurrentTiles::FACTOR_HORIZONTAL * $vertical
@@ -110,6 +110,13 @@ class CurrentTiles
 
         return $this;
     }
+    public function get_domino($player_id, $stage, $horizontal, $vertical, $rotation) {
+        $domino_array =  $this->deck_domino->getCardsInLocation(strval($player_id), $stage
+        + $horizontal * CurrentTiles::FACTOR_STAGE
+        + $vertical * CurrentTiles::FACTOR_STAGE * CurrentTiles::FACTOR_HORIZONTAL
+        + $rotation * CurrentTiles::FACTOR_STAGE * CurrentTiles::FACTOR_HORIZONTAL * CurrentTiles::FACTOR_VERTICAL);
+        return end($domino_array);
+    }
 
     public function get(): array {
         $tiles_per_player = [];
@@ -130,14 +137,14 @@ class CurrentTiles
         }
         return $tiles_per_stage;
     }
-    protected function get_first_tile_for($domino) {
+    public function get_first_tile_for($domino) {
         $tile = $this->get_tile_common($domino);
 
         $tile['tile_id'] = ($domino['id'] - 1) * 2;
 
         return $tile;
     }
-    protected function get_second_tile_for($domino) {
+    public function get_second_tile_for($domino) {
         $tile = $this->get_tile_common($domino);
         $tile['tile_id'] = ($domino['id'] - 1) * 2 + 1;
 
@@ -202,7 +209,7 @@ class CurrentMarket
         $dominoes = [];
         $cards = $this->deck->getCardsInLocation($category);
         foreach ($cards as $card) {
-            $dominoes[] = ['id' => $card['id'], 'tiles' => [['colour' => $card['type']], ['colour' => $card['type_arg']]]];
+            $dominoes[] = ['id' => $card['id'], 'index' => $card['location_arg']];
         }
         return $dominoes;
     }

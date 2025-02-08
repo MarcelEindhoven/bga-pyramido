@@ -54,8 +54,6 @@ class FirstDominoChosenTest extends TestCase{
     public function test_execute_moves_domino() {
         // Arrange
         $this->mock_update_domino->expects($this->exactly(1))->method('move')->with($this->quarry_index, $this->player_id, 1, 10, 10, 0);
-
-        $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn($this->current_data_first);
         // Act
         $this->act_default();
         // Assert
@@ -63,11 +61,15 @@ class FirstDominoChosenTest extends TestCase{
 
     public function test_execute_notifies_players() {
         // Arrange
-        $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn($this->current_data_first);
+        $this->mock_update_domino->expects($this->exactly(1))->method('get_domino')->with($this->player_id, 1, 10, 10, 0)->willReturn('x');
+        $this->mock_update_domino->expects($this->exactly(1))->method('get_first_tile_for')->with('x')->willReturn('a');
+        $this->mock_update_domino->expects($this->exactly(1))->method('get_second_tile_for')->with('x')->willReturn('b');
+
         $this->mock_notifications->expects($this->exactly(1))->method('notifyAllPlayers')
         ->with('domino_placed', 'domino_placed', 
         ['quarry_index' => $this->quarry_index
         , 'player_id' => $this->player_id
+        , 'tiles' => ['a', 'b']
         ]);
         // Act
         $this->act_default();

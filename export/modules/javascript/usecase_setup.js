@@ -22,7 +22,7 @@ define(['dojo/_base/declare'], (declare) => {
 
             this.stocks = {};
             this.tile_containers = {};
-            this.paintables = {};
+            this.paintables = {0: {}, 1: {}, 2: {}, 3: {}, 4: {}, };
         },
         clone(properties){
             for (var property in properties) {
@@ -57,20 +57,22 @@ define(['dojo/_base/declare'], (declare) => {
             `);
         },
         setup_market_next(next) {
-            this.setup_market_category(next, 'next');
+            for (const x of Array(4).keys()) {
+                this.setup_market_element('next', x + 1);
+            }
+            this.fill_market_category(next, 'next');
         },
         setup_market_quarry(quarry) {
-            this.setup_market_category(quarry, 'quarry');
+            for (const x of Array(3).keys()) {
+                this.setup_market_element('quarry', x + 1);
+            }
+            this.fill_market_category(quarry, 'quarry');
         },
-        setup_market_category(elements, category_name) {
+        fill_market_category(elements, category_name) {
             console.log(elements);
             Object.keys(elements).forEach(index => {
                 const element = elements[index];
-                const array_index = Number(index) + 1;
-                console.log(index);
-                console.log(element);
-                this.setup_market_element(category_name, array_index);
-                this.stocks[category_name + '-' + array_index].addToStockWithId(element.id, 1);
+                this.stocks[category_name + '-' + element.index].addToStockWithId(element.id, 1);
             });
         },
         setup_market_element(category, index) {
@@ -113,7 +115,7 @@ define(['dojo/_base/declare'], (declare) => {
                 Object.values(tiles_per_player[player_id]).forEach(tiles_per_stage => {
                     Object.values(tiles_per_stage).forEach(tile_specification => {
                         tile = this.tile_factory.create_tile_from(tile_specification);
-                        this.paintables[tile.tile_id] = tile;
+                        this.paintables[tile.stage][tile.tile_id] = tile;
                         this.tile_containers['pyramid-' + player_id].add(tile);
                     });
                 });

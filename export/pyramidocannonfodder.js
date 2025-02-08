@@ -73,6 +73,7 @@ function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_fi
             this.usecase_setup.setup(gamedatas);
             this.paintables = this.usecase_setup.paintables;
             this.stocks = this.usecase_setup.stocks;
+            this.tile_containers = this.usecase_setup.tile_containers;
 
             // Setup game notifications to handle (see "setupNotifications" method below)
             this.setupNotifications();
@@ -88,8 +89,10 @@ function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_fi
             console.log( "Ending game setup" );
         },
         paint: function() {
-            Object.values(this.paintables).forEach(paintable => {
-                paintable.paint();
+            Object.values(this.paintables).forEach(tiles_per_stage => {
+                Object.values(tiles_per_stage).forEach(paintable => {
+                    paintable.paint();
+                });
             });
         },
         experiment: function( gamedatas ) {
@@ -260,7 +263,14 @@ function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_fi
             console.log( notif );
             console.log( this.stocks );
             this.stocks['quarry-' + notif.args.quarry_index].removeFromStockById(1);
-            
+
+            Object.values(notif.args.tiles).forEach(tile_specification => {
+                let tile = this.tile_factory.create_tile_from(tile_specification);
+                this.tile_containers['pyramid-' + notif.args.player_id].add(tile);
+                this.paintables[tile.stage][tile.unique_id] = tile;
+            });
+            this.paint();
+            this.paint();
             // Note: notif.args contains the arguments specified during you "notifyAllPlayers" / "notifyPlayer" PHP call
             
             // TODO: play the card in the user interface.

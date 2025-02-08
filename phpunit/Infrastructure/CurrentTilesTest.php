@@ -26,6 +26,24 @@ class CurrentTilesTest extends TestCase{
         $this->sut = CurrentTiles::create($this->mock_dominoes);
         $this->sut->set_players($this->players);
     }
+    public function test_get_domino() {
+        // Arrange
+        $stage = 2;
+        $horizontal = 11;
+        $vertical = 5;
+        $rotation = 3;
+        $this->mock_dominoes->expects($this->exactly(1))->method('getCardsInLocation')->with('77'
+        , $stage
+        + $horizontal * CurrentTiles::FACTOR_STAGE
+         + $vertical * CurrentTiles::FACTOR_STAGE * CurrentTiles::FACTOR_HORIZONTAL
+         + $rotation * CurrentTiles::FACTOR_STAGE * CurrentTiles::FACTOR_HORIZONTAL * CurrentTiles::FACTOR_VERTICAL)->willReturn([$this->default_domino]);
+
+        // Act
+        $domino = $this->sut->get_domino($this->player_id, $stage, $horizontal, $vertical, $rotation );
+        // Assert
+        $this->assertEquals($this->default_domino, $domino);
+        
+    }
 
     public function test_get_single_stage_per_domino() {
         // Arrange
