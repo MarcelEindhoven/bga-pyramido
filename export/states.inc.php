@@ -65,7 +65,7 @@ $machinestates = [
     // Note: ID=2 => your first state
 
     2 => [
-        "name" => "playerTurn",
+        "name" => "selectFirstDomino",
         "description" => clienttranslate('${actplayer} must play a card or pass'),
         "descriptionmyturn" => clienttranslate('${you} must play a card or pass'),
         "type" => "activeplayer",
@@ -74,7 +74,7 @@ $machinestates = [
             // these actions are called from the front with bgaPerformAction, and matched to the function on the game.php file
             "action_first_domino_chosen", 
         ],
-        "transitions" => ["" => 3,]
+        "transitions" => ["" => 11,]
     ],
 
     3 => [
@@ -86,6 +86,46 @@ $machinestates = [
         "transitions" => ["endGame" => 99, "nextPlayer" => 2]
     ],
 
+    10 => [
+        "name" => "selectAndPlaceQuarry",
+        "description" => clienttranslate('${actplayer} must place a domino'),
+        "descriptionmyturn" => clienttranslate('${you} must place a domino'),
+        "type" => "activeplayer",
+        "args" => "argPlayerTurn",
+        "possibleactions" => [
+            // these actions are called from the front with bgaPerformAction, and matched to the function on the game.php file
+            "action_domino_placed", 
+        ],
+        "transitions" => ["" => 11,]
+    ],
+    11 => [
+        "name" => "afterDominoPlaced",
+        "description" => '',
+        "type" => "game",
+        "action" => "stAfterDominoPlaced",
+        "updateGameProgression" => true,
+        "transitions" => ["nextDomino" => 30,]
+    ],
+    30 => [
+        "name" => "selectNextDomino",
+        "description" => clienttranslate('${actplayer} must select next domino'),
+        "descriptionmyturn" => clienttranslate('${you} must select next domino'),
+        "type" => "activeplayer",
+        "args" => "argPlayerTurn",
+        "possibleactions" => [
+            // these actions are called from the front with bgaPerformAction, and matched to the function on the game.php file
+            "action_next_domino_chosen", 
+        ],
+        "transitions" => ["" => 31,]
+    ],
+    31 => [
+        "name" => "nextPlayer",
+        "description" => '',
+        "type" => "game",
+        "action" => "stNextPlayer",
+        "updateGameProgression" => true,
+        "transitions" => ["endGame" => 99, "nextPlayer" => 10]
+    ],
     // Final state.
     // Please do not modify (and do not overload action/args methods).
     99 => [

@@ -79,8 +79,6 @@ function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_fi
             this.setupNotifications();
 
             this.market = new market({dojo: dojo, stocks:this.usecase_setup.stocks});
-            this.usecase_choose_first_domino = new usecase_choose_first_domino({market: this.market});
-            this.usecase_choose_first_domino.subscribe(this, 'first_domino_chosen');
 
             this.paint();
             //this.experiment(gamedatas);
@@ -100,20 +98,10 @@ function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_fi
             this.slideToObjectPos('tile-18', 'pyramid-2371153', -20, 0).play();
             this.slideToObjectPos('tile-19', 'pyramid-2371153', 20, 0).play();
         },
-        first_domino_chosen(quarry_index) {
-            console.log( "first_domino_chosen" );
-            console.log(quarry_index);
-            this.call('first_domino_chosen', {quarry_index});
-        },
         /**
          * Generic functions
          */
         get_element: function(html_id) {return $(html_id);},
-        call: function(action, args, handler) {
-            console.log(action);
-            console.log(args);
-            this.bgaPerformAction('action_' + action, args);
-        },
 
        
 
@@ -126,24 +114,29 @@ function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_fi
         onEnteringState: function( stateName, args )
         {
             console.log( 'Entering state: '+stateName, args );
+            if( this.isCurrentPlayerActive() ) {
+                switch( stateName )
+                {
+                case 'selectFirstDomino':
+                    this.usecase_choose_first_domino = new usecase_choose_first_domino({market: this.market});
+                    this.usecase_choose_first_domino.subscribe(this, 'first_domino_chosen');
+                            
+                    break;
             
-            switch( stateName )
-            {
-            
-            /* Example:
-            
-            case 'myGameState':
-            
-                // Show some HTML block at this game state
-                dojo.style( 'my_html_block_id', 'display', 'block' );
-                
-                break;
-           */
-           
-           
-            case 'dummy':
-                break;
+                case 'dummy':
+                    break;
+                }
             }
+        },
+        first_domino_chosen(quarry_index) {
+            console.log( "first_domino_chosen" );
+            console.log(quarry_index);
+            this.call('first_domino_chosen', {quarry_index});
+        },
+        call: function(action, args, handler) {
+            console.log(action);
+            console.log(args);
+            this.bgaPerformAction('action_' + action, args);
         },
 
         // onLeavingState: this method is called each time we are leaving a game state.
