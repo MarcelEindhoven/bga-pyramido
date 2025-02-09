@@ -5,7 +5,7 @@ var sut_module = require('../export/modules/javascript/usecase_choose_first_domi
 
 describe('Use case choose first domino', function () {
     beforeEach(function() {
-        market = {subscribe_to_quarry: sinon.spy(),};
+        market = {subscribe_to_quarry: sinon.spy(), unsubscribe: sinon.spy(),};
         sut = new sut_module({market: market});
         stock = {control_name: "quarry-2"};
     });
@@ -49,6 +49,18 @@ describe('Use case choose first domino', function () {
             // Assert
             sinon.assert.callCount(callback_object.first_domino_selected, 1);
             assert.equal(callback_object.first_domino_selected.getCall(0).args[0], 2);
+        });
+    });
+    describe('Stop subscription', function () {
+        function act_default() {
+            sut.stop();
+        };
+        it('calls subscriber with quarry index', function () {
+            // Arrange
+            // Act
+            act_default();
+            // Assert
+            sinon.assert.callCount(market.unsubscribe, 1);
         });
     });
 });

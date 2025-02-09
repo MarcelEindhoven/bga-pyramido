@@ -132,6 +132,7 @@ function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_fi
             console.log( "first_domino_chosen" );
             console.log(quarry_index);
             this.call('first_domino_chosen', {quarry_index});
+            this.usecase_choose_first_domino.stop();
         },
         call: function(action, args, handler) {
             console.log(action);

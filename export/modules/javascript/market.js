@@ -23,27 +23,34 @@ define(['dojo/_base/declare'], (declare) => {
         /**
          * Support single subscription
          */
+        subscribe_to_next(callback_object, callback_method) {
+            this.subscribe(callback_object, callback_method, 'next');
+        },
         subscribe_to_quarry(callback_object, callback_method) {
+            this.subscribe(callback_object, callback_method, 'quarry');
+        },
+        subscribe(callback_object, callback_method, category) {
             this.callback_object = callback_object;
             this.callback_method = callback_method;
-            this.get_stock_keys('quarry').forEach(key => this.make_stock_selectable(key));
+            this.category_subscription = category;
+            this.get_stock_keys(category).forEach(key => this.make_stock_selectable(key));
         },
         /**
-         * Terminate subscription after subscriber is notified
+         * Notify subscriber when domino selected
          */
         domino_selected(selected_element_id) {
             if (this.callback_object) {
-                this.get_stock_keys('quarry').forEach(key => this.make_stock_unselectable(key));
-                this.call_subscriber_and_terminate_subscription(selected_element_id);
+                this.callback_object[this.callback_method](this.stocks[selected_element_id]);
             }
         },
         /**
          * Private methods
          */
-        call_subscriber_and_terminate_subscription(selected_element_id) {
-            this.callback_object[this.callback_method](this.stocks[selected_element_id]);
+        unsubscribe() {
+            this.get_stock_keys(this.category_subscription).forEach(key => this.make_stock_unselectable(key));
             delete this.callback_object;
             delete this.callback_method;
+            delete this.category_subscription;
         },
         get_stock_keys(prefix) {
             return Object.keys(this.stocks).filter(key => key.startsWith(prefix));

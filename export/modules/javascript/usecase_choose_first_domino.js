@@ -25,5 +25,8 @@ define(['dojo/_base/declare'], (declare) => {
         quarry_selected(stock) {
             this.callback_object[this.callback_method](stock.control_name.substring(7));
         },
+        stop() {
+            this.market.unsubscribe();
+        },
     });
 });

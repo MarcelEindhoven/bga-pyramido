@@ -168,8 +168,16 @@ class Game extends \Table
     }
 
     /**
-     * Game state action, example content.
-     *
+     * Game state actions
+     */
+    public function stAfterDominoPlaced(): void {
+        // Retrieve the active player ID.
+        $player_id = (int)$this->getActivePlayerId();
+
+        $this->gamestate->nextState("nextDomino");
+    }
+
+    /**
      * The action method of state `nextPlayer` is called everytime the current game state is set to `nextPlayer`.
      */
     public function stNextPlayer(): void {

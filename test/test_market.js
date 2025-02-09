@@ -55,6 +55,39 @@ describe('Market', function () {
             assert.equal(dojo.addClass.getCall(1).args[1], 'selectable');
         });
     });
+    describe('Unsubscribe', function () {
+        beforeEach(function() {
+            callback_object = {
+                quarry_selected: sinon.spy(),
+            };
+        });
+        function arrange_default() {
+            sut.subscribe_to_quarry(callback_object, 'quarry_selected');
+        };
+        function act_default() {
+            sut.unsubscribe();
+        };
+        it('make unselectables when unsubscribe is called', function () {
+            // Arrange
+            arrange_default();
+            // Act
+            act_default();
+            // Assert
+            sinon.assert.callCount(dojo.removeClass, 2);
+            assert.equal(dojo.removeClass.getCall(1).args[0], 'quarry1');
+            assert.equal(dojo.removeClass.getCall(1).args[1], 'selectable');
+        });
+        it('removes subscription when unsubscribe is called', function () {
+            // Arrange
+            arrange_default();
+            // Act
+            act_default();
+            selected_element_id = 'quarry1';
+            sut.domino_selected(selected_element_id);
+            // Assert
+            sinon.assert.callCount(callback_object.quarry_selected, 0);
+        });
+    });
     describe('Domino selected', function () {
         beforeEach(function() {
             callback_object = {
@@ -92,24 +125,22 @@ describe('Market', function () {
             // Assert
             assert.equal(callback_object.quarry_selected.getCall(0).args[0], dependencies.stocks['quarry1']);
         });
-        it('makes unselectable when subscriber is called', function () {
+        it('does not make unselectable when subscriber is called', function () {
             // Arrange
             arrange_default();
             // Act
             act_default();
             // Assert
-            sinon.assert.callCount(dojo.removeClass, 2);
-            assert.equal(dojo.removeClass.getCall(1).args[0], 'quarry1');
-            assert.equal(dojo.removeClass.getCall(1).args[1], 'selectable');
+            sinon.assert.callCount(dojo.removeClass, 0);
         });
-        it('removes subscription when subscriber is called', function () {
+        it('does not remove subscription when subscriber is called', function () {
             // Arrange
             arrange_default();
             // Act
             act_default();
             act_default();
             // Assert
-            sinon.assert.callCount(callback_object.quarry_selected, 1);
+            sinon.assert.callCount(callback_object.quarry_selected, 2);
         });
     });
 });
