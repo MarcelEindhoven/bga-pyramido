@@ -183,9 +183,23 @@ class CurrentTiles
 }
 
 #[\AllowDynamicProperties]
+class UpdateMarket extends CurrentMarket
+{
+    static public function create($deck_domino): UpdateMarket {
+        $object = new UpdateMarket();
+        $object->set_deck($deck_domino);
+        return $object;
+    }
+    public function move($next_index, $quarry_index) {
+        $this->deck->moveAllCardsInLocation(CurrentMarket::LOCATION_NEXT, CurrentMarket::LOCATION_MARKET, $next_index, $quarry_index);
+    }
+}
+
+#[\AllowDynamicProperties]
 class CurrentMarket
 {
     const LOCATION_MARKET = 'market';
+    const LOCATION_NEXT = 'next';
 
     static public function create($deck_domino): CurrentMarket {
         $object = new CurrentMarket();
