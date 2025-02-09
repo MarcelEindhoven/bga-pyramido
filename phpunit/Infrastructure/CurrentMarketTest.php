@@ -48,11 +48,11 @@ class CurrentMarketTest extends TestCase{
         $this->assertEquals($expected_dominoes, $dominoes);
     }
     static public function market_provider(): array {
-        $retrieved_card1 = ['id' => 1, 'type' => 0, 'type_arg' => 0, 'location' => 'market', 'location_arg' => 0];
-        $expected_domino1 = ['id' => 1, 'tiles' => [['colour' => 0], ['colour' => 0]]];
+        $retrieved_card1 = ['id' => 1, 'type' => 0, 'type_arg' => 0, 'location' => 'market', 'location_arg' => 1];
+        $expected_domino1 = ['id' => 1, 'index' => 1];
 
-        $retrieved_card5 = ['id' => 5, 'type' => 1, 'type_arg' => 5, 'location' => 'market', 'location_arg' => 0];
-        $expected_domino5 = ['id' => 5, 'tiles' => [['colour' => 1], ['colour' => 5]]];
+        $retrieved_card5 = ['id' => 5, 'type' => 1, 'type_arg' => 5, 'location' => 'market', 'location_arg' => 3];
+        $expected_domino5 = ['id' => 5, 'index' => 3];
 
         return [
             [[], []],
