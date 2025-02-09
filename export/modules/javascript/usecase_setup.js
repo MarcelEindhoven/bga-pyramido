@@ -48,8 +48,8 @@ define(['dojo/_base/declare'], (declare) => {
                         </tr>
                         <tr style="background-color:powderblue;">
                             <table>
-                                <tr><td>..........................................</td><td>.......................................</td><td>.............................................</td></tr>
-                                <tr id="quarry"></tr>
+                                <tr><td>.....................</td><td>..........................................</td><td>.......................................</td><td>.............................................</td></tr>
+                                <tr id="quarry"><td class=".tile"><div style="display: inline-block" ></div></td></tr>
                             </table>
                         </tr>
                     </table>
