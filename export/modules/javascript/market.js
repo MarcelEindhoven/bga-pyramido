@@ -25,15 +25,19 @@ define(['dojo/_base/declare'], (declare) => {
          */
         subscribe_to_next(callback_object, callback_method) {
             this.subscribe(callback_object, callback_method, 'next');
+            const first = +this.get_missing_index();
+
+            this.make_stock_selectable('next-' + first);
+            this.make_stock_selectable('next-' + (first + 1));
         },
         subscribe_to_quarry(callback_object, callback_method) {
             this.subscribe(callback_object, callback_method, 'quarry');
+            this.get_stock_keys('quarry').forEach(key => this.make_stock_selectable(key));
         },
         subscribe(callback_object, callback_method, category) {
             this.callback_object = callback_object;
             this.callback_method = callback_method;
             this.category_subscription = category;
-            this.get_stock_keys(category).forEach(key => this.make_stock_selectable(key));
         },
         /**
          * Notify subscriber when domino selected
@@ -48,6 +52,9 @@ define(['dojo/_base/declare'], (declare) => {
             delete this.callback_object;
             delete this.callback_method;
             delete this.category_subscription;
+        },
+        get_missing_index() {
+            return Object.keys(this.stocks).find(key => 0 == this.stocks[key].count()).slice(7);
         },
         /**
          * Private methods

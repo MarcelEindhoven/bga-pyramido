@@ -190,8 +190,13 @@ class UpdateMarket extends CurrentMarket
         $object->set_deck($deck_domino);
         return $object;
     }
+
     public function move($next_index, $quarry_index) {
         $this->deck->moveAllCardsInLocation(CurrentMarket::LOCATION_NEXT, CurrentMarket::LOCATION_MARKET, $next_index, $quarry_index);
+    }
+
+    public function refill($index) {
+        $this->deck->pickCardForLocation('deck', 'next', $index);
     }
 }
 

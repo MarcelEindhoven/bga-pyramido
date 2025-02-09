@@ -39,6 +39,9 @@ class NextDominoChosen extends \NieuwenhovenGames\BGA\Action {
 
     public function execute(): NextDominoChosen {
         $this->update_market->move($this->next_index, $this->quarry_index);
+
+        $this->update_market->refill($this->next_index);
+
         return $this;
     }
 }

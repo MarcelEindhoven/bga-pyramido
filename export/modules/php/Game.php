@@ -69,6 +69,12 @@ class Game extends \Table
         $this->actions->action_first_domino_chosen($quarry_index);
     }
 
+    public function action_next_domino_chosen(int $next_index, int $quarry_index): void {
+        $this->initialise();
+
+        $this->actions->action_next_domino_chosen($next_index, $quarry_index);
+    }
+
     protected function initialise() {
         $this->actions = new UseCases\Actions();
 

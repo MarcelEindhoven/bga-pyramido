@@ -35,5 +35,15 @@ class UpdateMarketTest extends TestCase{
         $this->sut->move($this->next_index, $this->quarry_index);
         // Assert
     }
+
+    public function test_refill() {
+        // Arrange
+        $this->mock_cards->expects($this->exactly(1))->method('pickCardForLocation')
+        ->with('deck', 'next', $this->next_index);
+
+        // Act
+        $this->sut->refill($this->next_index);
+        // Assert
+    }
 }
 ?>

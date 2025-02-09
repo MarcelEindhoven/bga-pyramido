@@ -6,7 +6,7 @@ var sut_module = require('../export/modules/javascript/market.js');
 describe('Market', function () {
     beforeEach(function() {
         dojo = {connect:sinon.spy(), addClass:sinon.spy(), removeClass:sinon.spy(), };
-        dependencies = {dojo: dojo, stocks:{'next0': sinon.spy(), 'quarry0': sinon.spy(), 'quarry1': sinon.spy()}};
+        dependencies = {dojo: dojo, stocks:{'next-0': {count:sinon.stub().returns(1)}, 'quarry-0': {count:sinon.stub().returns(1)}, 'quarry-1': {count:sinon.stub().returns(0)}}};
         sut = new sut_module(dependencies);
         callback_object = {
             tile_placed: sinon.spy(),
@@ -24,10 +24,22 @@ describe('Market', function () {
             // Arrange
             // Act
             // Assert
-            assert.equal(dojo.connect.getCall(0).args[0], dependencies.stocks['next0']);
+            assert.equal(dojo.connect.getCall(0).args[0], dependencies.stocks['next-0']);
             assert.equal(dojo.connect.getCall(0).args[1], 'onChangeSelection');
             assert.equal(dojo.connect.getCall(0).args[2], sut);
             assert.equal(dojo.connect.getCall(0).args[3], 'domino_selected');
+        });
+    });
+    describe('Get missing quarry index', function () {
+        function act_default() {
+            sut.get_missing_index();
+        };
+        it('checks count of each stock and returns index for empty count', function () {
+            // Arrange
+            // Act
+            $index = sut.get_missing_index();
+            // Assert
+            assert.equal($index, 1);
         });
     });
     describe('Selectable', function () {
@@ -51,7 +63,7 @@ describe('Market', function () {
             // Act
             act_default();
             // Assert
-            assert.equal(dojo.addClass.getCall(1).args[0], 'quarry1');
+            assert.equal(dojo.addClass.getCall(1).args[0], 'quarry-1');
             assert.equal(dojo.addClass.getCall(1).args[1], 'selectable');
         });
     });
@@ -74,7 +86,7 @@ describe('Market', function () {
             act_default();
             // Assert
             sinon.assert.callCount(dojo.removeClass, 2);
-            assert.equal(dojo.removeClass.getCall(1).args[0], 'quarry1');
+            assert.equal(dojo.removeClass.getCall(1).args[0], 'quarry-1');
             assert.equal(dojo.removeClass.getCall(1).args[1], 'selectable');
         });
         it('removes subscription when unsubscribe is called', function () {
@@ -82,7 +94,7 @@ describe('Market', function () {
             arrange_default();
             // Act
             act_default();
-            selected_element_id = 'quarry1';
+            selected_element_id = 'quarry-1';
             sut.domino_selected(selected_element_id);
             // Assert
             sinon.assert.callCount(callback_object.quarry_selected, 0);
@@ -98,7 +110,7 @@ describe('Market', function () {
             sut.subscribe_to_quarry(callback_object, 'quarry_selected');
         };
         function act_default() {
-            selected_element_id = 'quarry1';
+            selected_element_id = 'quarry-1';
             sut.domino_selected(selected_element_id);
         };
         it('does nothing when not subscribed', function () {
@@ -123,7 +135,7 @@ describe('Market', function () {
             // Act
             act_default();
             // Assert
-            assert.equal(callback_object.quarry_selected.getCall(0).args[0], dependencies.stocks['quarry1']);
+            assert.equal(callback_object.quarry_selected.getCall(0).args[0], dependencies.stocks['quarry-1']);
         });
         it('does not make unselectable when subscriber is called', function () {
             // Arrange

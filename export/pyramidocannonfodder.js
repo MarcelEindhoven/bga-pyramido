@@ -138,10 +138,10 @@ function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_fi
             this.call('first_domino_chosen', {quarry_index});
             this.usecase_choose_first_domino.stop();
         },
-        next_domino_chosen(quarry_index) {
+        next_domino_chosen(next_index) {
             console.log( "next_domino_chosen" );
             console.log(quarry_index);
-            this.call('next_domino_chosen', {quarry_index});
+            this.call('next_domino_chosen', {next_index: next_index, quarry_index: this.usecase_choose_next_domino.quarry_index});
             this.usecase_choose_next_domino.stop();
         },
         call: function(action, args, handler) {

@@ -5,7 +5,7 @@ var sut_module = require('../export/modules/javascript/usecase_choose_next_domin
 
 describe('Use case choose next domino', function () {
     beforeEach(function() {
-        market = {subscribe_to_next: sinon.spy(), unsubscribe: sinon.spy(),};
+        market = {subscribe_to_next: sinon.spy(), get_missing_index: sinon.stub().returns(1), unsubscribe: sinon.spy(),};
         sut = new sut_module({market: market});
         stock = {control_name: "next-2"};
     });

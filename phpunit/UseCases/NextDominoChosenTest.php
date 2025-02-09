@@ -59,6 +59,14 @@ class NextDominoChosenTest extends TestCase{
         // Assert
     }
 
+    public function test_execute_refills_next() {
+        // Arrange
+        $this->mock_update_market->expects($this->exactly(1))->method('refill')->with($this->next_index);
+        // Act
+        $this->act_default();
+        // Assert
+    }
+
     protected function act_default() {
         $this->sut->execute();
     }
