@@ -43,15 +43,15 @@ define(['dojo/_base/declare'], (declare) => {
                 this.callback_object[this.callback_method](this.stocks[selected_element_id]);
             }
         },
-        /**
-         * Private methods
-         */
         unsubscribe() {
             this.get_stock_keys(this.category_subscription).forEach(key => this.make_stock_unselectable(key));
             delete this.callback_object;
             delete this.callback_method;
             delete this.category_subscription;
         },
+        /**
+         * Private methods
+         */
         get_stock_keys(prefix) {
             return Object.keys(this.stocks).filter(key => key.startsWith(prefix));
         },

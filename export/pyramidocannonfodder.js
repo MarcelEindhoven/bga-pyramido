@@ -22,11 +22,12 @@ define([
     g_gamethemeurl + 'modules/javascript/tiles.js',
     g_gamethemeurl + 'modules/javascript/usecase_setup.js',
     g_gamethemeurl + 'modules/javascript/usecase_choose_first_domino.js',
+    g_gamethemeurl + 'modules/javascript/usecase_choose_next_domino.js',
     "ebg/core/gamegui",
     "ebg/counter",
     "ebg/stock",
 ],
-function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_first_domino) {
+function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_first_domino, usecase_choose_next_domino) {
     return declare("bgagame.pyramidocannonfodder", ebg.core.gamegui, {
         constructor: function(){
             console.log('pyramidocannonfodder constructor');
@@ -120,9 +121,12 @@ function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_fi
                 case 'selectFirstDomino':
                     this.usecase_choose_first_domino = new usecase_choose_first_domino({market: this.market});
                     this.usecase_choose_first_domino.subscribe(this, 'first_domino_chosen');
-                            
                     break;
-            
+                case 'selectNextDomino':
+                    this.usecase_choose_next_domino = new usecase_choose_next_domino({market: this.market});
+                    this.usecase_choose_next_domino.subscribe(this, 'next_domino_chosen');
+                    break;
+                
                 case 'dummy':
                     break;
                 }
@@ -133,6 +137,12 @@ function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_fi
             console.log(quarry_index);
             this.call('first_domino_chosen', {quarry_index});
             this.usecase_choose_first_domino.stop();
+        },
+        next_domino_chosen(quarry_index) {
+            console.log( "next_domino_chosen" );
+            console.log(quarry_index);
+            this.call('next_domino_chosen', {quarry_index});
+            this.usecase_choose_next_domino.stop();
         },
         call: function(action, args, handler) {
             console.log(action);
