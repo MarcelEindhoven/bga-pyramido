@@ -45,16 +45,6 @@ class CurrentTilesTest extends TestCase{
         
     }
 
-    public function test_get_single_stage_per_domino() {
-        // Arrange
-        $this->mock_dominoes->expects($this->exactly(1))->method('getCardsInLocation')->with('77')->willReturn([$this->default_domino]);
-
-        // Act
-        $tiles_per_stage = $this->sut->get()[$this->player_id];
-        // Assert
-        $this->assertEquals(1, sizeof($tiles_per_stage));
-    }
-
     public function test_get_double_tile_per_domino() {
         // Arrange
         $stage = 3;
@@ -237,11 +227,11 @@ class CurrentTilesTest extends TestCase{
     }
 
     protected function act_second_tile() {
-        return $this->sut->get()[$this->player_id][3][1];
+        return $this->sut->get()[$this->player_id][1];
     }
 
     protected function act_default($expected_stage) {
-        return $this->sut->get()[$this->player_id][$expected_stage];
+        return $this->sut->get()[$this->player_id];
     }
 }
 ?>

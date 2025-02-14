@@ -119,6 +119,7 @@ function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_fi
                 switch( stateName )
                 {
                 case 'selectFirstDomino':
+                case 'selectAndPlaceQuarry':
                     this.usecase_choose_first_domino = new usecase_choose_first_domino({market: this.market});
                     this.usecase_choose_first_domino.subscribe(this, 'first_domino_chosen');
                     break;

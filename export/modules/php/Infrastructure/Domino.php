@@ -126,16 +126,13 @@ class CurrentTiles
         return $tiles_per_player;
     }
     public function get_tiles_for($player_id) {
-        $tiles_per_stage = [];
+        $tiles_per_player = [];
         $dominoes = $this->deck_domino->getCardsInLocation(strval($player_id));
         foreach ($dominoes as $domino) {
-            $stage = $domino['location_arg'] % CurrentTiles::FACTOR_STAGE;
-            if (!array_key_exists($stage, $tiles_per_stage))
-                $tiles_per_stage[$stage] = [];
-            $tiles_per_stage[$stage][] = $this->get_first_tile_for($domino);
-            $tiles_per_stage[$stage][] = $this->get_second_tile_for($domino);
+            $tiles_per_player[] = $this->get_first_tile_for($domino);
+            $tiles_per_player[] = $this->get_second_tile_for($domino);
         }
-        return $tiles_per_stage;
+        return $tiles_per_player;
     }
     public function get_first_tile_for($domino) {
         $tile = $this->get_tile_common($domino);

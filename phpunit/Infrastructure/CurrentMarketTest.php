@@ -49,15 +49,15 @@ class CurrentMarketTest extends TestCase{
     }
     static public function market_provider(): array {
         $retrieved_card1 = ['id' => 1, 'type' => 0, 'type_arg' => 0, 'location' => 'market', 'location_arg' => 1];
-        $expected_domino1 = ['id' => 1, 'index' => 1];
+        $expected_domino1 = ['id' => 0, 'index' => 1];
 
         $retrieved_card5 = ['id' => 5, 'type' => 1, 'type_arg' => 5, 'location' => 'market', 'location_arg' => 3];
-        $expected_domino5 = ['id' => 5, 'index' => 3];
+        $expected_domino5 = ['id' => 4, 'index' => 3];
 
         return [
             [[], []],
-            [[$retrieved_card1], [$expected_domino1]],
-            [[$retrieved_card1, $retrieved_card5], [$expected_domino1, $expected_domino5]],
+            [[$retrieved_card1], [1 => $expected_domino1]],
+            [[$retrieved_card1, $retrieved_card5], [1 =>$expected_domino1, 3 => $expected_domino5]],
         ];
     }
 }

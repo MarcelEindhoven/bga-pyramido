@@ -112,12 +112,10 @@ define(['dojo/_base/declare'], (declare) => {
         },
         setup_pyramid_tiles(tiles_per_player) {
             Object.keys(tiles_per_player).forEach(player_id => {
-                Object.values(tiles_per_player[player_id]).forEach(tiles_per_stage => {
-                    Object.values(tiles_per_stage).forEach(tile_specification => {
-                        tile = this.tile_factory.create_tile_from(tile_specification);
-                        this.paintables[tile.stage][tile.tile_id] = tile;
-                        this.tile_containers['pyramid-' + player_id].add(tile);
-                    });
+                Object.values(tiles_per_player[player_id]).forEach(tile_specification => {
+                    tile = this.tile_factory.create_tile_from(tile_specification);
+                    this.paintables[tile.stage][tile.tile_id] = tile;
+                    this.tile_containers['pyramid-' + player_id].add(tile);
                 });
             });
         },
