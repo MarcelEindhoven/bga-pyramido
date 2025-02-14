@@ -228,7 +228,7 @@ class CurrentMarket
         $dominoes = [];
         $cards = $this->deck->getCardsInLocation($category);
         foreach ($cards as $card) {
-            $dominoes[] = ['id' => $card['id'], 'index' => $card['location_arg']];
+            $dominoes[$card['location_arg']] = ['id' => $card['id'] - 1, 'index' => $card['location_arg']];
         }
         return $dominoes;
     }

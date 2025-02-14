@@ -140,7 +140,8 @@ function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_fi
         },
         next_domino_chosen(next_index) {
             console.log( "next_domino_chosen" );
-            console.log(quarry_index);
+            console.log( next_index);
+            console.log(this.usecase_choose_next_domino.quarry_index);
             this.call('next_domino_chosen', {next_index: next_index, quarry_index: this.usecase_choose_next_domino.quarry_index});
             this.usecase_choose_next_domino.stop();
         },
@@ -256,9 +257,27 @@ function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_fi
         setupNotifications: function()
         {
             console.log( 'notifications subscriptions setup' );
-            
+
             dojo.subscribe( 'domino_placed', this, "notify_domino_placed" );
-            this.notifqueue.setSynchronous( 'domino_placed', 3000 );
+            this.notifqueue.setSynchronous( 'domino_placed', 300 );
+
+            dojo.subscribe( 'next_domino_chosen', this, "notify_next_domino_chosen" );
+            this.notifqueue.setSynchronous( 'next_domino_chosen', 300 );
+        },
+        
+        notify_next_domino_chosen: function( notif )
+        {
+            console.log( 'notify_next_domino_chosen' );
+            console.log( notif );
+
+            next_index = notif.args.next_index;
+            quarry_index = notif.args.quarry_index;
+
+            next = this.stocks['next-' + next_index].getAllItems().shift().type;
+            console.log( next );
+            this.stocks['next-' + next_index].removeFromStockById(1);
+            this.stocks['quarry-' + quarry_index].addToStockWithId(next, 1);
+            this.stocks['next-' + next_index].addToStockWithId(notif.args.next_domino, 1);
         },
         
         notify_domino_placed: function( notif )
