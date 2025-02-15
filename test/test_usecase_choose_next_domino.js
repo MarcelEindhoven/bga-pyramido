@@ -53,7 +53,7 @@ describe('Use case choose next domino', function () {
     });
     describe('Stop subscription', function () {
         function act_default() {
-            sut.stop();
+            sut.unsubscribe();
         };
         it('calls subscriber with next index', function () {
             // Arrange

@@ -1,7 +1,7 @@
 var assert = require('assert');
 var sinon = require('sinon');
 
-var sut_module = require('../export/modules/javascript/usecase_choose_first_domino.js');
+var sut_module = require('../export/modules/javascript/usecase_choose_domino.js');
 
 describe('Use case choose first domino', function () {
     beforeEach(function() {
@@ -53,7 +53,7 @@ describe('Use case choose first domino', function () {
     });
     describe('Stop subscription', function () {
         function act_default() {
-            sut.stop();
+            sut.unsubscribe();
         };
         it('calls subscriber with quarry index', function () {
             // Arrange

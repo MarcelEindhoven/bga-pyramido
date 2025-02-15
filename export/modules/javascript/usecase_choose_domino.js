@@ -1,12 +1,12 @@
 define(['dojo/_base/declare'], (declare) => {
-    return declare('pyramido.usecase_choose_first_domino', null, {
+    return declare('pyramido.usecase_choose_domino', null, {
         /**
          * Dependencies:
          * market
          */
         /**
          * Use case:
-         * u = usecase_choose_first_domino(dependencies);
+         * u = usecase_choose_domino(dependencies);
          */
         constructor(dependencies) {
             this.clone(dependencies);
@@ -23,9 +23,9 @@ define(['dojo/_base/declare'], (declare) => {
             this.market.subscribe_to_quarry(this, 'quarry_selected');
         },
         quarry_selected(stock) {
-            this.callback_object[this.callback_method](stock.control_name.substring(7));
+            this.callback_object[this.callback_method](0 + stock.control_name.substring(7));
         },
-        stop() {
+        unsubscribe() {
             this.market.unsubscribe();
         },
     });
