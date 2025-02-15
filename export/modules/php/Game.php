@@ -246,7 +246,7 @@ class Game extends \Table
         // WARNING: We must only return information visible by the current player.
         $current_player_id = (int) $this->getCurrentPlayerId();
 
-        return UseCases\GetAllDatas::create($this, $this->decks)->set_players($this->loadPlayersBasicInfos())->get();
+        return UseCases\GetAllDatas::create($this, $this->decks)->set_players($this->loadPlayersBasicInfos())->set_current_player_id($current_player_id)->get();
     }
 
     /**

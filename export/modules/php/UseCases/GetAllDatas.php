@@ -14,6 +14,10 @@ declare(strict_types=1);
 namespace Bga\Games\PyramidoCannonFodder\UseCases;
 
 include_once(__DIR__.'/../Infrastructure/Domino.php');
+
+include_once(__DIR__.'/../Domain/Pyramid.php');
+
+use Bga\Games\PyramidoCannonFodder\Domain;
 use Bga\Games\PyramidoCannonFodder\Infrastructure;
 
 class GetAllDatas {
@@ -62,6 +66,11 @@ class GetAllDatas {
         $results['quarry'] = Infrastructure\CurrentMarket::create($this->decks['domino'])->get_market();
         $results['next'] = Infrastructure\CurrentMarket::create($this->decks['domino'])->get_next_market();
         $results['tiles'] = Infrastructure\CurrentTiles::create($this->decks['domino'])->set_players($this->players)->get();
+        $pyramid = Domain\Pyramid::create($results['tiles'][$this->current_player_id]);
+        $pyramid = new Domain\Pyramid();
+        $pyramid->set_tiles($results['tiles'][$this->current_player_id]);
+        $pyramid->get_adjacent_positions_first_stage();
+        $results['candidate_positions'] = Domain\Pyramid::create($results['tiles'][$this->current_player_id])->get_adjacent_positions_first_stage();
 
         return $results;
     }
