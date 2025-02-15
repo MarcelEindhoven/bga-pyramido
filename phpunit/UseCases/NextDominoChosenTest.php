@@ -53,6 +53,7 @@ class NextDominoChosenTest extends TestCase{
 
     public function test_execute_moves_domino() {
         // Arrange
+        $this->arrange_default();
         $this->mock_update_market->expects($this->exactly(1))->method('move')->with($this->next_index, $this->quarry_index);
         // Act
         $this->act_default();
@@ -61,10 +62,15 @@ class NextDominoChosenTest extends TestCase{
 
     public function test_execute_refills_next() {
         // Arrange
+        $this->arrange_default();
         $this->mock_update_market->expects($this->exactly(1))->method('refill')->with($this->next_index);
         // Act
         $this->act_default();
         // Assert
+    }
+
+    protected function arrange_default() {
+        $this->mock_update_market->expects($this->exactly(1))->method('get_market_entries')->with('next')->willReturn([1 => ['id' => 1], 2 => ['id' => 2], 3 => ['id' => 3], 4 => ['id' => 4], ]);
     }
 
     protected function act_default() {

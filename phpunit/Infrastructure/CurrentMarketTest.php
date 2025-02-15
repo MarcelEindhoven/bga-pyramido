@@ -7,6 +7,7 @@ namespace Bga\Games\PyramidoCannonFodder\Infrastructure;
  */
 
 include_once(__DIR__.'/../../vendor/autoload.php');
+use PHPUnit\Framework\Attributes;
 use PHPUnit\Framework\TestCase;
 
 include_once(__DIR__.'/../../export/modules/php/Infrastructure/Domino.php');
@@ -23,9 +24,7 @@ class CurrentMarketTest extends TestCase{
         $this->sut = CurrentMarket::create($this->mock_cards);
     }
 
-    /**
-     * @dataProvider market_provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('market_provider')]
     public function test_get_market($retrieved_cards, $expected_dominoes) {
         // Arrange
         $this->mock_cards->expects($this->exactly(1))->method('getCardsInLocation')->with('market')->willReturn($retrieved_cards);
@@ -35,9 +34,8 @@ class CurrentMarketTest extends TestCase{
         // Assert
         $this->assertEquals($expected_dominoes, $dominoes);
     }
-    /**
-     * @dataProvider market_provider
-     */
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('market_provider')]
     public function test_get_next_market($retrieved_cards, $expected_dominoes) {
         // Arrange
         $this->mock_cards->expects($this->exactly(1))->method('getCardsInLocation')->with('next')->willReturn($retrieved_cards);
