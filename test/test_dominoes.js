@@ -33,15 +33,50 @@ describe('Dominoes', function () {
         });
     });
     describe('Bounding box', function () {
-        it('returns bounding box for rotation 0', function () {
-            // Arrange
+        function act_default(rotation) {
+            domino_specification.rotation = rotation;
             domino = sut.create_domino_from(domino_specification);
             // Act
-            bounding_box = domino.get_bounding_box();
+            return domino.get_bounding_box();
+        }
+        it('returns bounding box for rotation 0', function () {
+            // Arrange
+            // Act
+            bounding_box = act_default(0);
             // Assert
             assert.equal(bounding_box.horizontal_min, 10);
             assert.equal(bounding_box.vertical_min, 12);
             assert.equal(bounding_box.horizontal_max, 14);
+            assert.equal(bounding_box.vertical_max, 14);
+        });
+        it('returns bounding box for rotation 1', function () {
+            // Arrange
+            // Act
+            bounding_box = act_default(1);
+            // Assert
+            assert.equal(bounding_box.horizontal_min, 10);
+            assert.equal(bounding_box.vertical_min, 12);
+            assert.equal(bounding_box.horizontal_max, 12);
+            assert.equal(bounding_box.vertical_max, 16);
+        });
+        it('returns bounding box for rotation 2', function () {
+            // Arrange
+            // Act
+            bounding_box = act_default(2);
+            // Assert
+            assert.equal(bounding_box.horizontal_min, 8);
+            assert.equal(bounding_box.vertical_min, 12);
+            assert.equal(bounding_box.horizontal_max, 12);
+            assert.equal(bounding_box.vertical_max, 14);
+        });
+        it('returns bounding box for rotation 3', function () {
+            // Arrange
+            // Act
+            bounding_box = act_default(3);
+            // Assert
+            assert.equal(bounding_box.horizontal_min, 10);
+            assert.equal(bounding_box.vertical_min, 10);
+            assert.equal(bounding_box.horizontal_max, 12);
             assert.equal(bounding_box.vertical_max, 14);
         });
     });
