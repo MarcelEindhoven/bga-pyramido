@@ -10,19 +10,11 @@ define(['dojo/_base/declare'], (declare) => {
          * game
          * stock_class
          */
-        DOMINOES_PER_ROW: 10,
-        PIXELS_PER_TILE: 80,
 
         constructor(dependencies) {
             this.clone(dependencies);
             console.log(dependencies);
 
-            this.cardwidth = 2 * this.PIXELS_PER_TILE;
-            this.cardheight = this.PIXELS_PER_TILE;
-            this.image_items_per_row = this.DOMINOES_PER_ROW;
-
-            this.stocks = {};
-            this.dominoes = {},
             this.tile_containers = {};
             this.paintables = {0: {}, 1: {}, 2: {}, 3: {}, 4: {}, };
         },
@@ -32,72 +24,9 @@ define(['dojo/_base/declare'], (declare) => {
             }
         },
         setup(gamedatas) {
-            this.setup_market_structure();
-            this.setup_market_quarry(gamedatas.quarry);
-            this.setup_market_next(gamedatas.next);
+            this.market.setup(gamedatas);
             this.setup_players(gamedatas.players);
             this.setup_pyramid_tiles(gamedatas.tiles);
-        },
-        setup_market_structure() {
-            this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
-                <div id="market">
-                    <table style="justify-content:center;">
-                        <tr>
-                            <table>
-                                <tr><td>.......................................</td><td>.......................................</td><td>.......................................</td><td>.......................................</td></tr>
-                                <tr id="next"></tr>
-                            </table>
-                        </tr>
-                        <tr style="background-color:powderblue;">
-                            <table>
-                                <tr><td>.....................</td><td>..........................................</td><td>.......................................</td><td>.............................................</td></tr>
-                                <tr id="quarry"><td class=".tile"><div style="display: inline-block" ></div></td></tr>
-                            </table>
-                        </tr>
-                    </table>
-                </div>
-            `);
-        },
-        setup_market_next(next) {
-            for (const x of Array(4).keys()) {
-                this.setup_market_element('next', x + 1);
-            }
-            this.fill_market_category(next, 'next');
-        },
-        setup_market_quarry(quarry) {
-            for (const x of Array(3).keys()) {
-                this.setup_market_element('quarry', x + 1);
-            }
-            this.fill_market_category(quarry, 'quarry');
-        },
-        fill_market_category(elements, category_name) {
-            console.log(elements);
-            Object.keys(elements).forEach(index => {
-                const element = elements[index];
-                this.stocks[category_name + '-' + element.index].addToStockWithId(element.id, 1);
-                this.dominoes[category_name + '-' + element.index] = this.domino_factory.create_domino_from(element);
-            });
-        },
-        setup_market_element(category, index) {
-            let element_id = category + '-'+ index;
-            this.document.getElementById(category).insertAdjacentHTML('beforeend', `
-                <td class=".single_card">
-                <div id = "${category}-${index}" style="display: inline-block" ></div>
-                </td>
-            `);
-            hand = new this.stock_class();
-            hand.create(this.game, this.game.get_element(element_id), this.cardwidth, this.cardheight);
-            hand.image_items_per_row = this.image_items_per_row;
-            for (let row = 0; row < 90/hand.image_items_per_row; row++) {
-                for (let i = 0; i < hand.image_items_per_row; i++) {
-                    let card_type_id = this.get_card_type_id(row, i);
-                    hand.addItemType(card_type_id, card_type_id, this.gamethemeurl+'img/' + 'dominoesx' + this.PIXELS_PER_TILE + '.png', card_type_id);
-                }
-            }
-            this.stocks[element_id] = hand;
-        },
-        get_card_type_id(row, i) {
-            return row * 90/this.image_items_per_row + i;
         },
         setup_players(players) {
             Object.values(players).forEach(player => {

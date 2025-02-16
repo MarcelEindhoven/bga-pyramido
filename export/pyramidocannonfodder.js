@@ -67,28 +67,21 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
                 document: document,
                 dojo: dojo, 
             });
+            this.market = new market({dojo: dojo, document: document, game: this, stock_class: ebg.stock, gamethemeurl: g_gamethemeurl, domino_factory: this.domino_factory,});
             this.usecase_setup = new usecase_setup({
                 game: this,
-                stock_class:ebg.stock,
-                gamethemeurl: g_gamethemeurl,
                 document: document,
-                market_class: market,
+                market: this.market,
                 dojo: dojo, 
-                domino_factory: this.domino_factory,
                 tile_factory: this.tile_factory,
                 canvas_class: canvas,
             });
             this.usecase_setup.setup(gamedatas);
             this.paintables = this.usecase_setup.paintables;
-            this.stocks = this.usecase_setup.stocks;
-            this.dominoes = this.usecase_setup.dominoes;
             this.tile_containers = this.usecase_setup.tile_containers;
-            console.log(this.dominoes);
 
             // Setup game notifications to handle (see "setupNotifications" method below)
             this.setupNotifications();
-
-            this.market = new market({dojo: dojo, stocks:this.usecase_setup.stocks});
 
             this.paint();
             //this.experiment(gamedatas);
@@ -283,23 +276,15 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
             next_index = notif.args.next_index;
             quarry_index = notif.args.quarry_index;
 
-            next = this.stocks['next-' + next_index].getAllItems().shift().type;
-            console.log( next );
-            this.stocks['next-' + next_index].removeFromStockById(1);
-            this.stocks['quarry-' + quarry_index].addToStockWithId(next, 1);
-            this.stocks['next-' + next_index].addToStockWithId(notif.args.next_domino.id, 1);
-            this.dominoes['quarry-' + quarry_index] = this.dominoes['next-' + next_index];
-            this.dominoes['next-' + next_index] = this.domino_factory.create_domino_from(next_domino);
-            console.log(this.dominoes);
+            this.market.move('next-' + next_index, 'quarry-' + quarry_index);
+            this.market.fill('next-' + next_index, notif.args.next_domino);
         },
         
         notify_domino_placed: function( notif )
         {
             console.log( 'notify_domino_placed' );
             console.log( notif );
-            console.log( this.stocks );
-            this.stocks['quarry-' + notif.args.quarry_index].removeFromStockById(1);
-            delete this.dominoes['quarry-' + notif.args.quarry_index];
+            this.market.delete('quarry-' + notif.args.quarry_index);
 
             Object.values(notif.args.tiles).forEach(tile_specification => {
                 let tile = this.tile_factory.create_tile_from(tile_specification);
