@@ -32,22 +32,24 @@ define(['dojo/_base/declare'], (declare) => {
          * stage
          * horizontal
          * vertical
+         * get_bounding_box
          */
         add(paintable) {
-            const [x, y] = this.getAbsoluteCoordinates(paintable.horizontal, paintable.vertical);
-            if ( this.is_resize_needed(x, y) ) {
-                this.adjust_boundary(x, y);
-                this.resize_element();
-                this.relocate_paintables();
-            }
+            bounding_box = paintable.get_bounding_box();
+            this.resize_if_needed(this.getAbsoluteCoordinates(bounding_box.horizontal_min, bounding_box.vertical_min));
+            this.resize_if_needed(this.getAbsoluteCoordinates(bounding_box.horizontal_max, bounding_box.vertical_max));
 
             this.relocate(paintable);
 
             this.paintables.push(paintable);
         },
-        resize_element() {
-            this.dojo.style(this.element_id, 'width', '' + this.x_maximum - this.x_minimum + this.PIXELS_PER_TILE + 'px');
-            this.dojo.style(this.element_id, 'height', '' + this.y_maximum - this.y_minimum + this.PIXELS_PER_TILE + 'px');
+        resize_if_needed(location) {
+            const [x, y] = location;
+            if ( this.is_resize_needed(x, y) ) {
+                this.adjust_boundary(x, y);
+                this.resize_element();
+                this.relocate_paintables();
+            }
         },
         is_resize_needed(new_x, new_y) {
             return (new_y < this.y_minimum) || (new_y > this.y_maximum) || (new_x < this.x_minimum) || (new_x > this.x_maximum);
@@ -66,15 +68,17 @@ define(['dojo/_base/declare'], (declare) => {
                 this.y_minimum = new_y;
             }
         },
+        resize_element() {
+            this.dojo.style(this.element_id, 'width', '' + this.x_maximum - this.x_minimum + 'px');
+            this.dojo.style(this.element_id, 'height', '' + this.y_maximum - this.y_minimum + 'px');
+        },
         relocate_paintables() {
             for (index in this.paintables)
                 this.relocate(this.paintables[index]);
         },
         relocate(paintable) {
-            const y_centre = (this.y_maximum + this.y_minimum)/2;
-            const x_centre = (this.x_maximum + this.x_minimum)/2;
             const [x, y] = this.getAbsoluteCoordinates(paintable.horizontal, paintable.vertical);
-            paintable.move_to(this.element_id, x - x_centre, y - y_centre);
+            paintable.move_to(this.element_id, x - this.x_minimum, y - this.y_minimum);
         },
         getAbsoluteCoordinates(horizontal, vertical) {
             x = horizontal * this.PIXELS_PER_TILE / 2;

@@ -61,6 +61,9 @@ define(['dojo/_base/declare'], (declare) => {
                     //this.game.placeOnObjectPos(this.unique_id, this.element_id, this.x, this.y);
                     this.game.slideToObjectPos(this.unique_id, this.element_id, this.x, this.y).play();
                 }
+                get_bounding_box() {
+                    return {horizontal_min: this.horizontal, vertical_min: this.vertical, horizontal_max: this.horizontal + 2, vertical_max: this.vertical + 2};
+                }
             }
             result = new Tile({document: this.document, dojo: this.dojo, game: this.game,});
             result.create_token(specification);

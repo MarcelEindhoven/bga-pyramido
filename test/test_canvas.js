@@ -15,9 +15,11 @@ describe('Canvas class', function () {
         sut = new sut_module(dependencies);
         tile = {tile_id: 0, stage: 0, horizontal: 10,vertical: 20,
             move_to:sinon.spy(),
+            get_bounding_box: function() { return {horizontal_min: this.horizontal, vertical_min: this.vertical, horizontal_max: this.horizontal + 2, vertical_max: this.vertical + 2};}
         };
         other_tile = {tile_id: 0, stage: 0, horizontal: 12,vertical: 17,
             move_to:sinon.spy(),
+            get_bounding_box: function() { return {horizontal_min: this.horizontal, vertical_min: this.vertical, horizontal_max: this.horizontal + 2, vertical_max: this.vertical + 2};}
         };
         element_id = 'HTML element ID ';
         x = 12;
@@ -43,13 +45,15 @@ describe('Canvas class', function () {
             assert.equal(tile.move_to.getCall(0).args[1], 0);
             assert.equal(tile.move_to.getCall(0).args[2], 0);
         });
-        it('styles itself twice', function () {
+        it('styles itself twice per resize', function () {
             // Arrange
             // Act
             act(tile);            
             // Assert
             assert.equal(dojo.style.getCall(0).args[0], id);
             assert.equal(dojo.style.getCall(1).args[0], id);
+            assert.equal(dojo.style.getCall(2).args[0], id);
+            assert.equal(dojo.style.getCall(3).args[0], id);
         });
         it('resizes width as well as height', function () {
             // Arrange
@@ -58,14 +62,16 @@ describe('Canvas class', function () {
             // Assert
             assert.equal(dojo.style.getCall(0).args[1], 'width');
             assert.equal(dojo.style.getCall(1).args[1], 'height');
+            assert.equal(dojo.style.getCall(2).args[1], 'width');
+            assert.equal(dojo.style.getCall(3).args[1], 'height');
         });
         it('resizes to one tile', function () {
             // Arrange
             // Act
             act(tile);            
             // Assert
-            assert.equal(dojo.style.getCall(0).args[2], '' + sut.PIXELS_PER_TILE + 'px');
-            assert.equal(dojo.style.getCall(1).args[2], '' + sut.PIXELS_PER_TILE + 'px');
+            assert.equal(dojo.style.getCall(2).args[2], '' + sut.PIXELS_PER_TILE + 'px');
+            assert.equal(dojo.style.getCall(3).args[2], '' + sut.PIXELS_PER_TILE + 'px');
         });
     });
     describe('Multiple paintables', function () {
@@ -80,7 +86,7 @@ describe('Canvas class', function () {
             // Act
             act(tile);
             // Assert
-            sinon.assert.callCount(dojo.style, 2);
+            sinon.assert.callCount(dojo.style, 4);
         });
         it('no additional resize means no additional move', function () {
             // Arrange
@@ -89,44 +95,44 @@ describe('Canvas class', function () {
             // Assert
             sinon.assert.callCount(tile.move_to, 2);
         });
-        it('resizes when adding second tile', function () {
+        it('resizes once when adding second tile', function () {
             // Arrange
             tile.horizontal = 12;
             // Act
             act(tile);
             // Assert
-            sinon.assert.callCount(dojo.style, 4);
+            sinon.assert.callCount(dojo.style, 6);
         });
         it('resizes a half tile per coordinate', function () {
             // Arrange
             // Act
             act(other_tile);            
             // Assert
-            assert.equal(dojo.style.getCall(2).args[2], '' + (2*sut.PIXELS_PER_TILE) + 'px');
-            assert.equal(dojo.style.getCall(3).args[2], '' + (2.5*sut.PIXELS_PER_TILE) + 'px');
+            assert.equal(dojo.style.getCall(6).args[2], '' + (2*sut.PIXELS_PER_TILE) + 'px');
+            assert.equal(dojo.style.getCall(7).args[2], '' + (2.5*sut.PIXELS_PER_TILE) + 'px');
         });
         it('also moves existing tiles when resizing', function () {
             // Arrange
             // Act
             act(other_tile);
             // Assert
-            sinon.assert.callCount(tile.move_to, 2);
+            sinon.assert.callCount(tile.move_to, 3);
         });
         it('moves new tile a half tile per coordinate', function () {
             // Arrange
             // Act
             act(other_tile);            
             // Assert
-            assert.equal(other_tile.move_to.getCall(0).args[1], 0.5 * sut.PIXELS_PER_TILE);
-            assert.equal(other_tile.move_to.getCall(0).args[2], - 0.75 * sut.PIXELS_PER_TILE);
+            assert.equal(other_tile.move_to.getCall(0).args[1], 1 * sut.PIXELS_PER_TILE);
+            assert.equal(other_tile.move_to.getCall(0).args[2], 0);
         });
         it('moves existing tile with original data', function () {
             // Arrange
             // Act
             act(other_tile);            
             // Assert
-            assert.equal(tile.move_to.getCall(1).args[1], - 0.5 * sut.PIXELS_PER_TILE);
-            assert.equal(tile.move_to.getCall(1).args[2], 0.75 * sut.PIXELS_PER_TILE);
+            assert.equal(tile.move_to.getCall(1).args[1], 0);
+            assert.equal(tile.move_to.getCall(1).args[2], 1.5 * sut.PIXELS_PER_TILE);
         });
     });
 });

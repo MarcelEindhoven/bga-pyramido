@@ -23,6 +23,7 @@ define(['dojo/_base/declare'], (declare) => {
          * stage
          * horizontal
          * vertical
+         * rotation
          */
         create_domino_from(specification) {
             class Domino {
@@ -35,6 +36,11 @@ define(['dojo/_base/declare'], (declare) => {
                 clone(properties){
                     for (var property in properties) {
                         this[property] = properties[property];
+                    }
+                }
+                get_bounding_box() {
+                    if (this.rotation == 0) {
+                        return {horizontal_min: this.horizontal, vertical_min: this.vertical, horizontal_max: this.horizontal + 4, vertical_max: this.vertical + 2};
                     }
                 }
             }
