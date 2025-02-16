@@ -15,12 +15,14 @@ define(['dojo/_base/declare'], (declare) => {
 
         constructor(dependencies) {
             this.clone(dependencies);
+            console.log(dependencies);
 
             this.cardwidth = 2 * this.PIXELS_PER_TILE;
             this.cardheight = this.PIXELS_PER_TILE;
             this.image_items_per_row = this.DOMINOES_PER_ROW;
 
             this.stocks = {};
+            this.dominoes = {},
             this.tile_containers = {};
             this.paintables = {0: {}, 1: {}, 2: {}, 3: {}, 4: {}, };
         },
@@ -73,6 +75,7 @@ define(['dojo/_base/declare'], (declare) => {
             Object.keys(elements).forEach(index => {
                 const element = elements[index];
                 this.stocks[category_name + '-' + element.index].addToStockWithId(element.id, 1);
+                this.dominoes[category_name + '-' + element.index] = this.domino_factory.create_domino_from(element);
             });
         },
         setup_market_element(category, index) {

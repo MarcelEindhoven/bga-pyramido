@@ -19,6 +19,7 @@ define([
     "dojo","dojo/_base/declare",
     g_gamethemeurl + 'modules/javascript/market.js',
     g_gamethemeurl + 'modules/javascript/canvas.js',
+    g_gamethemeurl + 'modules/javascript/dominoes.js',
     g_gamethemeurl + 'modules/javascript/tiles.js',
     g_gamethemeurl + 'modules/javascript/usecase_setup.js',
     g_gamethemeurl + 'modules/javascript/usecase_choose_domino.js',
@@ -27,7 +28,7 @@ define([
     "ebg/counter",
     "ebg/stock",
 ],
-function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_domino, usecase_choose_next_domino) {
+function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase_choose_domino, usecase_choose_next_domino) {
     return declare("bgagame.pyramidocannonfodder", ebg.core.gamegui, {
         constructor: function(){
             console.log('pyramidocannonfodder constructor');
@@ -61,6 +62,11 @@ function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_do
                 document: document,
                 dojo: dojo, 
             });
+            this.domino_factory = new dominoes({
+                game: this,
+                document: document,
+                dojo: dojo, 
+            });
             this.usecase_setup = new usecase_setup({
                 game: this,
                 stock_class:ebg.stock,
@@ -68,13 +74,16 @@ function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_do
                 document: document,
                 market_class: market,
                 dojo: dojo, 
+                domino_factory: this.domino_factory,
                 tile_factory: this.tile_factory,
                 canvas_class: canvas,
             });
             this.usecase_setup.setup(gamedatas);
             this.paintables = this.usecase_setup.paintables;
             this.stocks = this.usecase_setup.stocks;
+            this.dominoes = this.usecase_setup.dominoes;
             this.tile_containers = this.usecase_setup.tile_containers;
+            console.log(this.dominoes);
 
             // Setup game notifications to handle (see "setupNotifications" method below)
             this.setupNotifications();
@@ -278,7 +287,10 @@ function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_do
             console.log( next );
             this.stocks['next-' + next_index].removeFromStockById(1);
             this.stocks['quarry-' + quarry_index].addToStockWithId(next, 1);
-            this.stocks['next-' + next_index].addToStockWithId(notif.args.next_domino, 1);
+            this.stocks['next-' + next_index].addToStockWithId(notif.args.next_domino.id, 1);
+            this.dominoes['quarry-' + quarry_index] = this.dominoes['next-' + next_index];
+            this.dominoes['next-' + next_index] = this.domino_factory.create_domino_from(next_domino);
+            console.log(this.dominoes);
         },
         
         notify_domino_placed: function( notif )
@@ -287,6 +299,7 @@ function (dojo, declare, market, canvas, tiles, usecase_setup, usecase_choose_do
             console.log( notif );
             console.log( this.stocks );
             this.stocks['quarry-' + notif.args.quarry_index].removeFromStockById(1);
+            delete this.dominoes['quarry-' + notif.args.quarry_index];
 
             Object.values(notif.args.tiles).forEach(tile_specification => {
                 let tile = this.tile_factory.create_tile_from(tile_specification);
