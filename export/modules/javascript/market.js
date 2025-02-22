@@ -3,7 +3,8 @@ define(['dojo/_base/declare'], (declare) => {
         /**
          * Dependencies:
          * dojo
-         * stocks
+         * stock_class
+         * document
          */
         /**
          * Use case creation:
@@ -50,7 +51,7 @@ define(['dojo/_base/declare'], (declare) => {
          */
         domino_selected(selected_element_id) {
             if (this.callback_object) {
-                this.callback_object[this.callback_method](this.stocks[selected_element_id]);
+                this.callback_object[this.callback_method](this.dominoes[selected_element_id]);
             }
         },
         unsubscribe() {
@@ -60,7 +61,7 @@ define(['dojo/_base/declare'], (declare) => {
             delete this.category_subscription;
         },
         get_missing_index() {
-            return Object.keys(this.stocks).find(key => 0 == this.stocks[key].count()).slice(7);
+            return Object.keys(this.stocks).find(key => 0 == this.stocks[key].count());
         },
         move(from, to) {
             this.stocks[from].removeFromStockById(1);
@@ -76,13 +77,12 @@ define(['dojo/_base/declare'], (declare) => {
         /**
          * setup
          */
-        setup(gamedatas) {
+        setup(dependencies, gamedatas) {
+            this.clone(dependencies);
+
             this.setup_market_structure();
             this.setup_market_quarry(gamedatas.quarry);
             this.setup_market_next(gamedatas.next);
-            Object.values(this.stocks).forEach(stock => {
-                this.dojo.connect(stock, 'onChangeSelection', this, 'domino_selected');
-            });
         },
         /**
          * Private methods
@@ -131,7 +131,7 @@ define(['dojo/_base/declare'], (declare) => {
         fill_market_category(elements, category_name) {
             console.log(elements);
             Object.values(elements).forEach(element => {
-                this.fill(category_name + '-' + element.index, element);
+                this.fill(element.element_id, element);
             });
         },
         fill(stock_id, domino_specification) {
@@ -155,6 +155,7 @@ define(['dojo/_base/declare'], (declare) => {
                     hand.addItemType(card_type_id, card_type_id, this.gamethemeurl+'img/' + 'dominoesx' + this.PIXELS_PER_TILE + '.png', card_type_id);
                 }
             }
+            this.dojo.connect(hand, 'onChangeSelection', this, 'domino_selected');
             this.stocks[element_id] = hand;
         },
         get_card_type_id(row, i) {

@@ -8,7 +8,6 @@ define(['dojo/_base/declare'], (declare) => {
          * Dependencies:
          * document
          * game
-         * stock_class
          */
 
         constructor(dependencies) {
