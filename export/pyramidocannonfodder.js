@@ -139,14 +139,14 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
         first_domino_chosen(domino) {
             console.log( "first_domino_chosen" );
             console.log(domino);
-            this.call('first_domino_chosen', {quarry_index: domino.element_id.slice(7)});
+            this.call('first_domino_chosen', {quarry_index: 0 + domino.element_id.slice(7)});
             this.usecase_choose_domino.unsubscribe();
         },
         next_domino_chosen(domino) {
             console.log( "next_domino_chosen" );
             console.log( domino);
             console.log(this.usecase_choose_next_domino.quarry_missing_element);
-            this.call('next_domino_chosen', {next_index: domino.element_id.slice(7), quarry_missing_element: this.usecase_choose_next_domino.quarry_missing_element.slice(5)});
+            this.call('next_domino_chosen', {next_index: 0 + domino.element_id.slice(5), quarry_index: 0 + this.usecase_choose_next_domino.quarry_missing_element.slice(7)});
             this.usecase_choose_next_domino.unsubscribe();
         },
         call: function(action, args, handler) {

@@ -32,7 +32,7 @@ define(['dojo/_base/declare'], (declare) => {
          */
         subscribe_to_next(callback_object, callback_method) {
             this.subscribe(callback_object, callback_method, 'next');
-            const first = +this.get_missing_index();
+            const first = +this.get_missing_index().slice(7);
 
             this.make_stock_selectable('next-' + first);
             this.make_stock_selectable('next-' + (first + 1));
