@@ -55,7 +55,7 @@ class MarketSetup
 
     public function setup_market() : MarketSetup {
         for ($i=1; $i <= MarketSetup::MARKET_SIZE; $i++) 
-            $this->deck->pickCardForLocation('deck', 'market', $i);
+            $this->deck->pickCardForLocation('deck', 'quarry', $i);
         return $this;
     }
 
@@ -200,7 +200,7 @@ class UpdateMarket extends CurrentMarket
 #[\AllowDynamicProperties]
 class CurrentMarket
 {
-    const LOCATION_MARKET = 'market';
+    const LOCATION_MARKET = 'quarry';
     const LOCATION_NEXT = 'next';
 
     static public function create($deck_domino): CurrentMarket {
@@ -225,7 +225,11 @@ class CurrentMarket
         $dominoes = [];
         $cards = $this->deck->getCardsInLocation($category);
         foreach ($cards as $card) {
-            $dominoes[$card['location_arg']] = ['id' => $card['id'] - 1, 'index' => $card['location_arg']];
+            $dominoes[$card['location_arg']] = [
+                'id' => $card['id'] - 1,
+                'index' => $card['location_arg'],
+                'element_id' => $card['location'] . '-' . $card['location_arg'],
+            ];
         }
         return $dominoes;
     }

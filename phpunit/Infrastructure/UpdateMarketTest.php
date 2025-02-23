@@ -29,7 +29,7 @@ class UpdateMarketTest extends TestCase{
     public function test_move() {
         // Arrange
         $this->mock_cards->expects($this->exactly(1))->method('moveAllCardsInLocation')
-        ->with('next', 'market', $this->next_index, $this->quarry_index);
+        ->with('next', 'quarry', $this->next_index, $this->quarry_index);
 
         // Act
         $this->sut->move($this->next_index, $this->quarry_index);
