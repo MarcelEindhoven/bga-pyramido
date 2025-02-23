@@ -23,7 +23,7 @@ define(['dojo/_base/declare'], (declare) => {
             }
         },
         setup(gamedatas) {
-            setup_dependencies = {dojo: this.dojo, document: this.document, stock_class: this.stock_class, game: game, domino_factory: this.domino_factory, };
+            setup_dependencies = {dojo: this.dojo, document: this.document, stock_class: this.stock_class, game: this.game, domino_factory: this.domino_factory, };
             this.market.setup(setup_dependencies, gamedatas);
             this.setup_players(gamedatas.players);
             this.setup_pyramid_tiles(gamedatas.tiles);
