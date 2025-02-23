@@ -29,7 +29,7 @@ class FirstDominoChosenTest extends TestCase{
     protected ?Infrastructure\UpdateDomino $mock_update_domino = null;
 
     protected string $player_id = '77';
-    protected int $quarry_index = 2;
+    protected string $quarry_index = 'quarry-2';
 
     protected array $current_data_first = ['market' => [2 => ['id' => 9, 'tiles'=> ['a', 'b']]]];
 

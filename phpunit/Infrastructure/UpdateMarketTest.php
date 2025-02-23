@@ -18,8 +18,8 @@ class UpdateMarketTest extends TestCase{
     protected ?UpdateMarket $sut = null;
     protected ?FrameworkInterfaces\Deck $mock_cards = null;
 
-    protected int $next_index = 2;
-    protected int $quarry_index = 1;
+    protected string $next_index = 'next-2';
+    protected string $quarry_index = 'quarry-1';
 
     protected function setUp(): void {
         $this->mock_cards = $this->createMock(FrameworkInterfaces\Deck::class);
@@ -29,7 +29,7 @@ class UpdateMarketTest extends TestCase{
     public function test_move() {
         // Arrange
         $this->mock_cards->expects($this->exactly(1))->method('moveAllCardsInLocation')
-        ->with('next', 'quarry', $this->next_index, $this->quarry_index);
+        ->with('next', 'quarry', 2, 1);
 
         // Act
         $this->sut->move($this->next_index, $this->quarry_index);
@@ -39,7 +39,7 @@ class UpdateMarketTest extends TestCase{
     public function test_refill() {
         // Arrange
         $this->mock_cards->expects($this->exactly(1))->method('pickCardForLocation')
-        ->with('deck', 'next', $this->next_index);
+        ->with('deck', 'next', 2);
 
         // Act
         $this->sut->refill($this->next_index);

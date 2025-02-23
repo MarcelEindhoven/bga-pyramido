@@ -139,7 +139,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
         first_domino_chosen(domino) {
             console.log( "first_domino_chosen" );
             console.log(domino);
-            this.call('first_domino_chosen', {quarry_index: 0 + domino.element_id.slice(7)});
+            this.call('first_domino_chosen', {quarry_index: 0 + domino.element_id});
             this.usecase_choose_domino.unsubscribe();
         },
         next_domino_chosen(domino) {
@@ -285,7 +285,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
         {
             console.log( 'notify_domino_placed' );
             console.log( notif );
-            this.market.delete('quarry-' + notif.args.quarry_index);
+            this.market.delete(notif.args.quarry_index);
 
             Object.values(notif.args.tiles).forEach(tile_specification => {
                 let tile = this.tile_factory.create_tile_from(tile_specification);

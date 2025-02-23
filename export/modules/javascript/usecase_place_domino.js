@@ -25,6 +25,9 @@ define(['dojo/_base/declare'], (declare) => {
         quarry_selected(domino) {
             this.callback_object[this.callback_method](domino);
         },
+        placement_selected(domino) {
+            this.callback_object[this.callback_method](domino);
+        },
         unsubscribe() {
             this.market.unsubscribe();
         },

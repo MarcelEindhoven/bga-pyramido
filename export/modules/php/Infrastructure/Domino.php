@@ -75,7 +75,7 @@ class UpdateDomino extends CurrentTiles
         return $object;
     }
     public function move($quarry_index, $player_id, $stage_index, $horizontal, $vertical, $rotation): UpdateDomino {
-        $this->deck_domino->moveAllCardsInLocation(CurrentMarket::LOCATION_MARKET, $player_id, $quarry_index
+        $this->deck_domino->moveAllCardsInLocation(explode('-', $quarry_index)[0], $player_id, (int)explode('-', $quarry_index)[1]
         , $stage_index
         + CurrentTiles::FACTOR_STAGE * $horizontal
         + CurrentTiles::FACTOR_STAGE * CurrentTiles::FACTOR_HORIZONTAL * $vertical
@@ -189,11 +189,11 @@ class UpdateMarket extends CurrentMarket
     }
 
     public function move($next_index, $quarry_index) {
-        $this->deck->moveAllCardsInLocation(CurrentMarket::LOCATION_NEXT, CurrentMarket::LOCATION_MARKET, $next_index, $quarry_index);
+        $this->deck->moveAllCardsInLocation(explode('-', $next_index)[0], explode('-', $quarry_index)[0], (int)explode('-', $next_index)[1], (int)explode('-', $quarry_index)[1]);
     }
 
     public function refill($index) {
-        $this->deck->pickCardForLocation('deck', 'next', $index);
+        $this->deck->pickCardForLocation('deck', 'next', (int)explode('-', $index)[1]);
     }
 }
 

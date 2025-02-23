@@ -40,6 +40,18 @@ describe('Use case choose first domino', function () {
             domino = 'domino';
             sut.quarry_selected(domino);
         };
+    });
+    describe('placement selected', function () {
+        beforeEach(function() {
+            callback_object = {
+                domino_selected: sinon.spy(),
+            };
+            sut.subscribe(callback_object, 'domino_selected');
+        });
+        function act() {
+            domino = 'domino';
+            sut.placement_selected(domino);
+        };
         it('calls subscriber', function () {
             // Arrange
             // Act
