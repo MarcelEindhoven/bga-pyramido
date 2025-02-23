@@ -22,8 +22,8 @@ define(['dojo/_base/declare'], (declare) => {
             this.callback_method = callback_method;
             this.market.subscribe_to_quarry(this, 'quarry_selected');
         },
-        quarry_selected(stock) {
-            this.callback_object[this.callback_method](0 + stock.control_name.substring(7));
+        quarry_selected(domino) {
+            this.callback_object[this.callback_method](domino);
         },
         unsubscribe() {
             this.market.unsubscribe();

@@ -22,13 +22,13 @@ define(['dojo/_base/declare'], (declare) => {
             this.callback_object = callback_object;
             this.callback_method = callback_method;
 
-            this.quarry_index = this.market.get_missing_index();
-            console.log(this.quarry_index);
+            this.quarry_missing_element = this.market.get_missing_index();
+            console.log(this.quarry_missing_element);
 
             this.market.subscribe_to_next(this, 'next_selected');
         },
-        next_selected(stock) {
-            this.callback_object[this.callback_method](0 + stock.control_name.substring(5));
+        next_selected(domino) {
+            this.callback_object[this.callback_method](domino);
         },
         unsubscribe() {
             this.market.unsubscribe();

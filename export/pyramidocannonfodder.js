@@ -75,6 +75,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
                 dojo: dojo, 
                 tile_factory: this.tile_factory,
                 canvas_class: canvas,
+                stock_class: ebg.stock, gamethemeurl: g_gamethemeurl, domino_factory: this.domino_factory,
             });
             this.usecase_setup.setup(gamedatas);
             this.paintables = this.usecase_setup.paintables;
@@ -135,17 +136,17 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
                 }
             }
         },
-        first_domino_chosen(quarry_index) {
+        first_domino_chosen(domino) {
             console.log( "first_domino_chosen" );
-            console.log(quarry_index);
-            this.call('first_domino_chosen', {quarry_index});
+            console.log(domino);
+            this.call('first_domino_chosen', {quarry_index: domino.element_id});
             this.usecase_choose_domino.unsubscribe();
         },
-        next_domino_chosen(next_index) {
+        next_domino_chosen(domino) {
             console.log( "next_domino_chosen" );
-            console.log( next_index);
-            console.log(this.usecase_choose_next_domino.quarry_index);
-            this.call('next_domino_chosen', {next_index: next_index, quarry_index: this.usecase_choose_next_domino.quarry_index});
+            console.log( domino);
+            console.log(this.usecase_choose_next_domino.quarry_missing_element);
+            this.call('next_domino_chosen', {next_index: domino.element_id, quarry_missing_element: this.usecase_choose_next_domino.quarry_missing_element});
             this.usecase_choose_next_domino.unsubscribe();
         },
         call: function(action, args, handler) {

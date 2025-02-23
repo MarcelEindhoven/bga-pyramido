@@ -15,14 +15,14 @@ describe('Use case choose first domino', function () {
                 first_domino_selected: sinon.spy(),
             };
         });
-        function act_default() {
+        function act() {
             sut.subscribe(callback_object, 'first_domino_selected');
         };
         it('subscribes to the market', function () {
             // Arrange
             
             // Act
-            act_default();
+            act();
             // Assert
             sinon.assert.callCount(market.subscribe_to_quarry, 1);
             assert.equal(market.subscribe_to_quarry.getCall(0).args[0], sut);
@@ -35,30 +35,31 @@ describe('Use case choose first domino', function () {
                 first_domino_selected: sinon.spy(),
             };
         });
-        function arrange_default() {
+        function arrange() {
             sut.subscribe(callback_object, 'first_domino_selected');
         };
-        function act_default() {
-            sut.quarry_selected(stock);
+        function act() {
+            domino = 'domino';
+            sut.quarry_selected(domino);
         };
-        it('calls subscriber with quarry index', function () {
+        it('calls subscriber with domino', function () {
             // Arrange
-            arrange_default();
+            arrange();
             // Act
-            act_default();
+            act();
             // Assert
             sinon.assert.callCount(callback_object.first_domino_selected, 1);
-            assert.equal(callback_object.first_domino_selected.getCall(0).args[0], 2);
+            assert.equal(callback_object.first_domino_selected.getCall(0).args[0], domino);
         });
     });
     describe('Stop subscription', function () {
-        function act_default() {
+        function act() {
             sut.unsubscribe();
         };
         it('calls subscriber with quarry index', function () {
             // Arrange
             // Act
-            act_default();
+            act();
             // Assert
             sinon.assert.callCount(market.unsubscribe, 1);
         });

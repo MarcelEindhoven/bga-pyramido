@@ -39,7 +39,8 @@ describe('Use case choose next domino', function () {
             sut.subscribe(callback_object, 'next_domino_selected');
         };
         function act_default() {
-            sut.next_selected(stock);
+            domino = 'domino';
+            sut.next_selected(domino);
         };
         it('calls subscriber with next index', function () {
             // Arrange
@@ -48,7 +49,7 @@ describe('Use case choose next domino', function () {
             act_default();
             // Assert
             sinon.assert.callCount(callback_object.next_domino_selected, 1);
-            assert.equal(callback_object.next_domino_selected.getCall(0).args[0], 2);
+            assert.equal(callback_object.next_domino_selected.getCall(0).args[0], domino);
         });
     });
     describe('Stop subscription', function () {

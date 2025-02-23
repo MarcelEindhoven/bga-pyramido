@@ -69,9 +69,9 @@ define(['dojo/_base/declare'], (declare) => {
 
             this.dominoes[to] = this.dominoes[from];
         },
-        delete(stock_id) {
-            this.stocks[stock_id].removeFromStockById(1);
-            delete this.dominoes[stock_id];
+        delete(element_id) {
+            this.stocks[element_id].removeFromStockById(1);
+            delete this.dominoes[element_id];
 
         },
         /**
@@ -134,9 +134,9 @@ define(['dojo/_base/declare'], (declare) => {
                 this.fill(element.element_id, element);
             });
         },
-        fill(stock_id, domino_specification) {
-            this.dominoes[stock_id] = this.domino_factory.create_domino_from(domino_specification);
-            this.stocks[stock_id].addToStockWithId(this.dominoes[stock_id].id, 1);
+        fill(element_id, domino_specification) {
+            this.dominoes[element_id] = this.domino_factory.create_domino_from(domino_specification);
+            this.stocks[element_id].addToStockWithId(this.dominoes[element_id].id, 1);
 
         },
         setup_market_element(category, index) {
