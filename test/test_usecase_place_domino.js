@@ -3,11 +3,19 @@ var sinon = require('sinon');
 
 var sut_module = require('../export/modules/javascript/usecase_place_domino.js');
 
-describe('Use case choose first domino', function () {
+class DominoFactoryx {
+    create_domino_from(domino_specification) {
+        create_domino_fromx(domino_specification);
+        return domino_specification;
+    }
+}
+
+describe('Use case choose place domino', function () {
     beforeEach(function() {
         market = {subscribe_to_quarry: sinon.spy(), unsubscribe: sinon.spy(),};
-        sut = new sut_module({market: market});
+        sut = new sut_module({market: market, domino_factory: new DominoFactoryx()});
         stock = {control_name: "quarry-2"};
+        create_domino_fromx = sinon.spy();
     });
     describe('Subscribe', function () {
         beforeEach(function() {
@@ -37,9 +45,25 @@ describe('Use case choose first domino', function () {
             sut.subscribe(callback_object, 'domino_selected');
         });
         function act() {
-            domino = 'domino';
+            domino = {id: 'domino'};
             sut.quarry_selected(domino);
         };
+        it('does not call create_domino_from without positions', function () {
+            // Arrange
+            sut.set_candidate_positions([]);
+            // Act
+            act();
+            // Assert
+            sinon.assert.callCount(create_domino_fromx, 0);
+        });
+        it('calls create_domino_from', function () {
+            // Arrange
+            sut.set_candidate_positions([{horizontal: 10, vertical: 10, rotation: 0},]);
+            // Act
+            act();
+            // Assert
+            sinon.assert.callCount(create_domino_fromx, 1);
+        });
     });
     describe('placement selected', function () {
         beforeEach(function() {

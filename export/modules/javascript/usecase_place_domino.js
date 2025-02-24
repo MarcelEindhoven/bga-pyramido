@@ -3,6 +3,7 @@ define(['dojo/_base/declare'], (declare) => {
         /**
          * Dependencies:
          * market
+         * domino_factory
          */
         /**
          * Use case:
@@ -17,6 +18,9 @@ define(['dojo/_base/declare'], (declare) => {
                 this[property] = properties[property];
             }
         },
+        set_candidate_positions(candidate_positions) {
+            this.candidate_positions = candidate_positions;
+        },
         subscribe(callback_object, callback_method) {
             this.callback_object = callback_object;
             this.callback_method = callback_method;
@@ -24,6 +28,9 @@ define(['dojo/_base/declare'], (declare) => {
         },
         quarry_selected(domino) {
             this.callback_object[this.callback_method](domino);
+            Object.values(this.candidate_positions).forEach(candidate_position => {
+                this.domino_factory.create_domino_from();
+            });
         },
         placement_selected(domino) {
             this.callback_object[this.callback_method](domino);

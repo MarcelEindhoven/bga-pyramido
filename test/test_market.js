@@ -9,9 +9,6 @@ class Document {
     getElementById(element_id) {return {insertAdjacentHTML: insertAdjacentHTML,};}
 }
 
-create = sinon.spy();
-addItemType = sinon.spy();
-count = sinon.spy();
 class Stock {
     create(game, element, width, height) {
         this.element = element;
@@ -27,7 +24,6 @@ class Stock {
     }
 }
 
-create_domino_from = sinon.spy();
 class DominoFactory {
     create_domino_from(domino_specification) {
         create_domino_from(domino_specification);
@@ -37,6 +33,11 @@ class DominoFactory {
 
 describe('Market', function () {
     beforeEach(function() {
+        create_domino_from = sinon.spy();
+        create = sinon.spy();
+        addItemType = sinon.spy();
+        count = sinon.spy();
+        
         game = {get_element:sinon.stub().returnsArg(0), };
         dojo = {connect:sinon.spy(), addClass:sinon.spy(), removeClass:sinon.spy(), };
         document = new Document();
