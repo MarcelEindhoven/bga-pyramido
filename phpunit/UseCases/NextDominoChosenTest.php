@@ -28,8 +28,8 @@ class NextDominoChosenTest extends TestCase{
     protected ?GetAllDatas $mock_get_current_data = null;
     protected ?Infrastructure\UpdateMarket $mock_update_market = null;
 
-    protected int $quarry_index = 1;
-    protected int $next_index = 2;
+    protected string $quarry_index = 'quarry-1';
+    protected string $next_index = 'next-2';
 
     protected array $current_data_first = ['market' => [2 => ['id' => 9, 'tiles'=> ['a', 'b']]]];
 

@@ -139,14 +139,14 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
         first_domino_chosen(domino) {
             console.log( "first_domino_chosen" );
             console.log(domino);
-            this.call('first_domino_chosen', {quarry_index: 0 + domino.element_id});
+            this.call('first_domino_chosen', {quarry_index: domino.element_id});
             this.usecase_choose_domino.unsubscribe();
         },
         next_domino_chosen(domino) {
             console.log( "next_domino_chosen" );
             console.log( domino);
             console.log(this.usecase_choose_next_domino.quarry_missing_element);
-            this.call('next_domino_chosen', {next_index: 0 + domino.element_id.slice(5), quarry_index: 0 + this.usecase_choose_next_domino.quarry_missing_element.slice(7)});
+            this.call('next_domino_chosen', {next_index: domino.element_id, quarry_index: this.usecase_choose_next_domino.quarry_missing_element});
             this.usecase_choose_next_domino.unsubscribe();
         },
         call: function(action, args, handler) {
@@ -277,8 +277,8 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
             next_index = notif.args.next_index;
             quarry_index = notif.args.quarry_index;
 
-            this.market.move('next-' + next_index, 'quarry-' + quarry_index);
-            this.market.fill('next-' + next_index, notif.args.next_domino);
+            this.market.move(next_index, quarry_index);
+            this.market.fill(next_index, notif.args.next_domino);
         },
         
         notify_domino_placed: function( notif )

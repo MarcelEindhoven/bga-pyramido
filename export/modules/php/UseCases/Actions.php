@@ -57,13 +57,13 @@ class Actions {
         return $this;
     }
 
-    public function action_first_domino_chosen(int $quarry_index): void {
+    public function action_first_domino_chosen(string $quarry_index): void {
         $update_domino = Infrastructure\UpdateDomino::create($this->decks['domino']);
         $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
         FirstDominoChosen::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_get_current_data($get_current_data)->set_update_domino($update_domino)->set_quarry_index($quarry_index)->execute()->nextState();
     }
 
-    public function action_next_domino_chosen(int $next_index, int $quarry_index): void {
+    public function action_next_domino_chosen(string $next_index, string $quarry_index): void {
         $update_market = Infrastructure\UpdateMarket::create($this->decks['domino']);
         NextDominoChosen::create($this->gamestate)->set_notifications($this->notifications)->set_update_market($update_market)->set_next_index($next_index)->set_quarry_index($quarry_index)->execute()->nextState();
     }
