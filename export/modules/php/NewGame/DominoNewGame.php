@@ -30,6 +30,16 @@ class DominoNewGame
         [3, 5],
         [2, 2],
         [1, 5],
+        [0, 5],
+        [1, 4],
+        [2, 3],
+        [3, 2],
+        [4, 1],
+        [5, 0],
+        [4, 4],
+        [3, 5],
+        [2, 2],
+        [1, 5],
     ];
     static public function create(): DominoNewGame {
         $object = new DominoNewGame();

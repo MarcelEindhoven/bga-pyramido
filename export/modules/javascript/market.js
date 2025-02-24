@@ -21,6 +21,7 @@ define(['dojo/_base/declare'], (declare) => {
 
             this.stocks = {};
             this.dominoes = {};
+            this.selectables = {};
         },
         clone(properties){
             for (var property in properties) {
@@ -50,7 +51,7 @@ define(['dojo/_base/declare'], (declare) => {
          * Notify subscriber when domino selected
          */
         domino_selected(selected_element_id) {
-            if (this.callback_object) {
+            if (selected_element_id in this.selectables) {
                 this.callback_object[this.callback_method](this.dominoes[selected_element_id]);
             }
         },
@@ -91,10 +92,12 @@ define(['dojo/_base/declare'], (declare) => {
             return Object.keys(this.stocks).filter(key => key.startsWith(prefix));
         },
         make_stock_selectable(key) {
-            this.dojo.addClass(key, 'selectable')
+            this.dojo.addClass(key, 'selectable');
+            this.selectables[key] = key;
         },
         make_stock_unselectable(key) {
-            this.dojo.removeClass(key, 'selectable')
+            this.dojo.removeClass(key, 'selectable');
+            delete this.selectables[key];
         },
         setup_market_structure() {
             this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `

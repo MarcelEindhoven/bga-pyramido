@@ -34,6 +34,7 @@ class DominoFactory {
         return domino_specification;
     }
 }
+
 describe('Market', function () {
     beforeEach(function() {
         game = {get_element:sinon.stub().returnsArg(0), };
@@ -172,7 +173,7 @@ describe('Market', function () {
             sinon.assert.callCount(callback_object.quarry_selected, 0);
         });
     });
-    describe('Domino selected', function () {
+    describe('Domino quarry selected', function () {
         beforeEach(function() {
             callback_object = {
                 quarry_selected: sinon.spy(),
@@ -191,6 +192,15 @@ describe('Market', function () {
             // Arrange
             // Act
             act();
+            // Assert
+            sinon.assert.callCount(callback_object.quarry_selected, 0);
+            sinon.assert.callCount(dojo.removeClass, 0);
+        });
+        it('does nothing when selected element is not from quarry', function () {
+            // Arrange
+            arrange();
+            // Act
+            sut.domino_selected('next-1');
             // Assert
             sinon.assert.callCount(callback_object.quarry_selected, 0);
             sinon.assert.callCount(dojo.removeClass, 0);
