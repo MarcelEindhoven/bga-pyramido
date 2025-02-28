@@ -23,12 +23,13 @@ define([
     g_gamethemeurl + 'modules/javascript/tiles.js',
     g_gamethemeurl + 'modules/javascript/usecase_setup.js',
     g_gamethemeurl + 'modules/javascript/usecase_choose_domino.js',
+    g_gamethemeurl + 'modules/javascript/usecase_place_domino.js',
     g_gamethemeurl + 'modules/javascript/usecase_choose_next_domino.js',
     "ebg/core/gamegui",
     "ebg/counter",
     "ebg/stock",
 ],
-function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase_choose_domino, usecase_choose_next_domino) {
+function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase_choose_domino, usecase_place_domino, usecase_choose_next_domino) {
     return declare("bgagame.pyramidocannonfodder", ebg.core.gamegui, {
         constructor: function(){
             console.log('pyramidocannonfodder constructor');
@@ -78,7 +79,6 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
                 stock_class: ebg.stock, gamethemeurl: g_gamethemeurl, domino_factory: this.domino_factory,
             });
             this.usecase_setup.setup(gamedatas);
-            this.paintables = this.usecase_setup.paintables;
             this.tile_containers = this.usecase_setup.tile_containers;
 
             // Setup game notifications to handle (see "setupNotifications" method below)
@@ -91,10 +91,8 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
             console.log( "Ending game setup" );
         },
         paint: function() {
-            Object.values(this.paintables).forEach(tiles_per_stage => {
-                Object.values(tiles_per_stage).forEach(paintable => {
-                    paintable.paint();
-                });
+            Object.values(this.tile_containers).forEach(tile_container => {
+                    tile_container.paint();
             });
         },
         experiment: function( gamedatas ) {
@@ -123,8 +121,9 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
                 {
                 case 'selectFirstDomino':
                 case 'selectAndPlaceQuarry':
+                    this.usecase_place_domino = new usecase_place_domino({market: this.market, domino_factory: this.domino_factory});
                     this.usecase_choose_domino = new usecase_choose_domino({market: this.market});
-                    this.usecase_choose_domino.subscribe(this, 'first_domino_chosen');
+                    this.usecase_choose_domino.subscribe(this.usecase_place_domino, 'quarry_selected');
                     break;
                 case 'selectNextDomino':
                     this.usecase_choose_next_domino = new usecase_choose_next_domino({market: this.market});
@@ -290,7 +289,6 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
             Object.values(notif.args.tiles).forEach(tile_specification => {
                 let tile = this.tile_factory.create_tile_from(tile_specification);
                 this.tile_containers['pyramid-' + notif.args.player_id].add(tile);
-                this.paintables[tile.stage][tile.unique_id] = tile;
             });
             this.paint();
             this.paint();

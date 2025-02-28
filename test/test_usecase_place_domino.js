@@ -100,6 +100,22 @@ describe('Use case choose place domino', function () {
             assert.equal(candidate_domino.vertical, 11);
             assert.equal(candidate_domino.rotation, 0);
         });
+        it('only for matching rotation', function () {
+            // Arrange
+            sut.set_candidate_positions([
+                {horizontal: 10, vertical: 11, rotation: 0},
+                {horizontal: 12, vertical: 13, rotation: 1},
+            ]);
+            // Act
+            sut.set_rotation(1);
+            act();
+            // Assert
+            sinon.assert.callCount(create_domino_fromx, 1);
+            sinon.assert.callCount(canvas.add, 1);
+
+            candidate_domino = canvas.add.getCall(0).args[0];
+            assert.equal(candidate_domino.id, 'domino1213');
+        });
     });
     describe('placement selected', function () {
         beforeEach(function() {

@@ -4,6 +4,7 @@ define(['dojo/_base/declare'], (declare) => {
          * Dependencies:
          * market
          * domino_factory
+         * pyramid
          */
         /**
          * Use case:
@@ -11,7 +12,7 @@ define(['dojo/_base/declare'], (declare) => {
          */
         constructor(dependencies) {
             this.clone(dependencies);
-
+            this.rotation = 0;
         },
         clone(properties){
             for (var property in properties) {
@@ -26,9 +27,14 @@ define(['dojo/_base/declare'], (declare) => {
             this.callback_method = callback_method;
             this.market.subscribe_to_quarry(this, 'quarry_selected');
         },
+        set_rotation(rotation) {
+            this.rotation = rotation;
+        },
         quarry_selected(domino) {
             this.callback_object[this.callback_method](domino);
-            Object.values(this.candidate_positions).forEach(candidate_position => {
+            Object.values(this.candidate_positions)
+            .filter(candidate_position => { if (candidate_position.rotation == this.rotation) return candidate_position;})
+                .forEach(candidate_position => {
                 candidate_domino = this.domino_factory.create_domino_from(domino);
                 candidate_domino.id = domino.id + candidate_position.horizontal + candidate_position.vertical;
                 candidate_domino.horizontal = candidate_position.horizontal;

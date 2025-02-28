@@ -43,6 +43,13 @@ define(['dojo/_base/declare'], (declare) => {
 
             this.paintables.push(paintable);
         },
+        paint: function() {
+            Object.values(this.paintables).forEach(tiles_per_stage => {
+                Object.values(tiles_per_stage).forEach(paintable => {
+                    paintable.paint();
+                });
+            });
+        },
         resize_if_needed(location) {
             const [x, y] = location;
             if ( this.is_resize_needed(x, y) ) {
