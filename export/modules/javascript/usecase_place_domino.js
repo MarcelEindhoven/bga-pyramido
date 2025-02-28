@@ -27,8 +27,9 @@ define(['dojo/_base/declare'], (declare) => {
             this.callback_method = callback_method;
             this.market.subscribe_to_quarry(this, 'quarry_selected');
         },
-        set_rotation(rotation) {
-            this.rotation = rotation;
+        rotate() {
+            this.rotation = this.rotation + 1;
+            if (this.rotation >3) this.rotation = 0;
         },
         quarry_selected(domino) {
             console.log (this.candidate_positions);
@@ -43,6 +44,8 @@ define(['dojo/_base/declare'], (declare) => {
                 candidate_domino.rotation = candidate_position.rotation;
 
                 candidate_domino.create_canvas_token();
+                candidate_domino.subscribe(this, 'placement_selected');
+
                 this.pyramid.add(candidate_domino);
             });
             this.ui.paint();

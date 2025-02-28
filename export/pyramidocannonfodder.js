@@ -125,6 +125,8 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
                 case 'selectAndPlaceQuarry':
                     this.usecase_place_domino = new usecase_place_domino({ui: this, market: this.market, pyramid: this.tile_containers['pyramid-' + this.player_id], domino_factory: this.domino_factory});
                     this.usecase_place_domino.set_candidate_positions(this.gamedatas.candidate_positions);
+                    this.usecase_place_domino.subscribe(this, 'domino_placed');
+
                     this.usecase_choose_domino = new usecase_choose_domino({market: this.market});
                     this.usecase_choose_domino.subscribe(this.usecase_place_domino, 'quarry_selected');
                     break;
@@ -138,11 +140,17 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
                 }
             }
         },
+        rotate() {
+            this.usecase_place_domino.rotate();
+        },
         first_domino_chosen(domino) {
             console.log( "first_domino_chosen" );
             console.log(domino);
             this.call('first_domino_chosen', {quarry_index: domino.element_id});
             this.usecase_choose_domino.unsubscribe();
+        },
+        domino_placed(domino) {
+            console.log(domino);
         },
         next_domino_chosen(domino) {
             console.log( "next_domino_chosen" );
@@ -194,7 +202,11 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
             {            
                 switch( stateName )
                 {
-                 case 'playerTurn':    
+                    case 'selectFirstDomino':
+                    case 'selectAndPlaceQuarry':
+                            this.addActionButton('Rotate', _('Rotate'), () => this.rotate(), null, null, 'gray'); 
+                        break;
+                    case 'playerTurn':
                     const playableCardsIds = args.playableCardsIds; // returned by the argPlayerTurn
 
                     // Add test action buttons in the action status bar, simulating a card click:

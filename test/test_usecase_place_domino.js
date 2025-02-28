@@ -10,7 +10,8 @@ class DominoFactoryx {
         for (var property in domino_specification) {
             domino[property] = domino_specification[property];
         }
-        domino.create_canvas_token = sinon.spy();
+        domino.create_canvas_token = create_canvas_token;
+        domino.subscribe = subscribe;
         return domino;
     }
 }
@@ -22,7 +23,10 @@ describe('Use case choose place domino', function () {
         ui = {paint: sinon.spy(), };
         sut = new sut_module({ui: ui, market: market, pyramid: canvas, domino_factory: new DominoFactoryx()});
         stock = {control_name: "quarry-2"};
+
         create_domino_fromx = sinon.spy();
+        create_canvas_token = sinon.spy();
+        subscribe = sinon.spy();
     });
     describe('Subscribe', function () {
         beforeEach(function() {

@@ -34,9 +34,10 @@ define(['dojo/_base/declare'], (declare) => {
                 }
                 create_token(specification) {
                     this.clone(specification);
+                    this.unique_id = 'domino-' + this.id;
                 }
                 create_canvas_token() {
-                    this.unique_id = "domino-" + this.id;
+                    console.log (this);
                     this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
                         <div id="${this.unique_id}">
                     `);
@@ -44,6 +45,15 @@ define(['dojo/_base/declare'], (declare) => {
                     const id_horizontal = this.id % this.DOMINOES_PER_ROW;
                     const id_vertical = (this.id-id_horizontal) / this.DOMINOES_PER_ROW;
                     this.dojo.style(this.unique_id, 'backgroundPosition', '-' + this.PIXELS_PER_TILE * id_horizontal * 2 + 'px -' + this.PIXELS_PER_TILE * id_vertical + 'px');
+                }
+                subscribe(callback_object, callback_method) {
+                    this.callback_object = callback_object;
+                    this.callback_method = callback_method;
+                    this.dojo.addClass(this.unique_id, 'selectable');
+                    this.dojo.connect(this.game.get_element(this.unique_id), 'onclick', this, 'domino_selected');
+                }
+                domino_selected(selected_element_id) {
+                    this.callback_object[this.callback_method](this);
                 }
                 get_bounding_box() {
                     if (this.rotation == 0) {
@@ -68,6 +78,10 @@ define(['dojo/_base/declare'], (declare) => {
                     console.log(this.unique_id, this.element_id, this.x, this.y);
                     //this.game.placeOnObjectPos(this.unique_id, this.element_id, this.x, this.y);
                     this.game.slideToObjectPos(this.unique_id, this.element_id, this.x, this.y).play();
+                    if (this.rotation_class)
+                        this.dojo.removeClass(this.unique_id, this.rotation_class);
+                    this.rotation_class = 'domino_rotate' + this.rotation;
+                    this.dojo.addClass(this.unique_id, this.rotation_class);
                 }
                 clone(properties){
                     for (var property in properties) {
