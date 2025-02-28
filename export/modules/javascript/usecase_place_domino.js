@@ -29,7 +29,9 @@ define(['dojo/_base/declare'], (declare) => {
         quarry_selected(domino) {
             this.callback_object[this.callback_method](domino);
             Object.values(this.candidate_positions).forEach(candidate_position => {
-                this.domino_factory.create_domino_from();
+                candidate_domino = this.domino_factory.create_domino_from(domino);
+                candidate_domino.id = domino.id + candidate_position.horizontal + candidate_position.vertical;
+                this.pyramid.add(candidate_domino);
             });
         },
         placement_selected(domino) {

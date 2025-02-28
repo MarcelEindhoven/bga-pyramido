@@ -6,14 +6,19 @@ var sut_module = require('../export/modules/javascript/usecase_place_domino.js')
 class DominoFactoryx {
     create_domino_from(domino_specification) {
         create_domino_fromx(domino_specification);
-        return domino_specification;
+        domino = {};
+        for (var property in domino_specification) {
+            domino[property] = domino_specification[property];
+        }
+        return domino;
     }
 }
 
 describe('Use case choose place domino', function () {
     beforeEach(function() {
         market = {subscribe_to_quarry: sinon.spy(), unsubscribe: sinon.spy(),};
-        sut = new sut_module({market: market, domino_factory: new DominoFactoryx()});
+        canvas = {add: sinon.spy(), remove: sinon.spy(),};
+        sut = new sut_module({market: market, pyramid: canvas, domino_factory: new DominoFactoryx()});
         stock = {control_name: "quarry-2"};
         create_domino_fromx = sinon.spy();
     });
@@ -58,11 +63,31 @@ describe('Use case choose place domino', function () {
         });
         it('calls create_domino_from', function () {
             // Arrange
+            sut.set_candidate_positions([
+                {horizontal: 10, vertical: 10, rotation: 0},
+                {horizontal: 12, vertical: 10, rotation: 0},
+            ]);
+            // Act
+            act();
+            // Assert
+            sinon.assert.callCount(create_domino_fromx, 2);
+        });
+        it('calls create_domino_from with domino', function () {
+            // Arrange
             sut.set_candidate_positions([{horizontal: 10, vertical: 10, rotation: 0},]);
             // Act
             act();
             // Assert
-            sinon.assert.callCount(create_domino_fromx, 1);
+            assert.equal(create_domino_fromx.getCall(0).args[0].id, 'domino');
+        });
+        it('calls canvas add with domino id', function () {
+            // Arrange
+            sut.set_candidate_positions([{horizontal: 10, vertical: 11, rotation: 0},]);
+            // Act
+            act();
+            // Assert
+            candidate_domino = canvas.add.getCall(0).args[0];
+            assert.equal(candidate_domino.id, 'domino1011');
         });
     });
     describe('placement selected', function () {
