@@ -31,6 +31,9 @@ define(['dojo/_base/declare'], (declare) => {
             Object.values(this.candidate_positions).forEach(candidate_position => {
                 candidate_domino = this.domino_factory.create_domino_from(domino);
                 candidate_domino.id = domino.id + candidate_position.horizontal + candidate_position.vertical;
+                candidate_domino.horizontal = candidate_position.horizontal;
+                candidate_domino.vertical = candidate_position.vertical;
+                candidate_domino.rotation = candidate_position.rotation;
                 this.pyramid.add(candidate_domino);
             });
         },

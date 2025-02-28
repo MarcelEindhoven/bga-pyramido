@@ -80,7 +80,7 @@ describe('Use case choose place domino', function () {
             // Assert
             assert.equal(create_domino_fromx.getCall(0).args[0].id, 'domino');
         });
-        it('calls canvas add with domino id', function () {
+        it('calls canvas add with domino with unique id', function () {
             // Arrange
             sut.set_candidate_positions([{horizontal: 10, vertical: 11, rotation: 0},]);
             // Act
@@ -88,6 +88,17 @@ describe('Use case choose place domino', function () {
             // Assert
             candidate_domino = canvas.add.getCall(0).args[0];
             assert.equal(candidate_domino.id, 'domino1011');
+        });
+        it('calls canvas add with domino with position', function () {
+            // Arrange
+            sut.set_candidate_positions([{horizontal: 12, vertical: 11, rotation: 0},]);
+            // Act
+            act();
+            // Assert
+            candidate_domino = canvas.add.getCall(0).args[0];
+            assert.equal(candidate_domino.horizontal, 12);
+            assert.equal(candidate_domino.vertical, 11);
+            assert.equal(candidate_domino.rotation, 0);
         });
     });
     describe('placement selected', function () {

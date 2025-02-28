@@ -79,5 +79,20 @@ describe('Dominoes', function () {
             assert.equal(bounding_box.horizontal_max, 12);
             assert.equal(bounding_box.vertical_max, 14);
         });
+        it('returns updated bounding box after changing properties', function () {
+            // Arrange
+            // Act
+            bounding_box = act_default(2);
+            domino.horizontal = 16;
+            domino.vertical = 6;
+            domino.rotation = 3;
+            // Act
+            bounding_box = domino.get_bounding_box();
+            // Assert
+            assert.equal(bounding_box.horizontal_min, 16);
+            assert.equal(bounding_box.vertical_min, 4);
+            assert.equal(bounding_box.horizontal_max, 18);
+            assert.equal(bounding_box.vertical_max, 8);
+        });
     });
 });
