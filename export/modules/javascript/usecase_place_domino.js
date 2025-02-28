@@ -31,17 +31,21 @@ define(['dojo/_base/declare'], (declare) => {
             this.rotation = rotation;
         },
         quarry_selected(domino) {
-            this.callback_object[this.callback_method](domino);
+            console.log (this.candidate_positions);
             Object.values(this.candidate_positions)
             .filter(candidate_position => { if (candidate_position.rotation == this.rotation) return candidate_position;})
                 .forEach(candidate_position => {
                 candidate_domino = this.domino_factory.create_domino_from(domino);
-                candidate_domino.id = domino.id + candidate_position.horizontal + candidate_position.vertical;
+
+                candidate_domino.unique_id = domino.unique_id + candidate_position.horizontal + candidate_position.vertical;
                 candidate_domino.horizontal = candidate_position.horizontal;
                 candidate_domino.vertical = candidate_position.vertical;
                 candidate_domino.rotation = candidate_position.rotation;
+
+                candidate_domino.create_canvas_token();
                 this.pyramid.add(candidate_domino);
             });
+            this.ui.paint();
         },
         placement_selected(domino) {
             this.callback_object[this.callback_method](domino);

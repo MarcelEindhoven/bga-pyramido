@@ -10,6 +10,7 @@ class DominoFactoryx {
         for (var property in domino_specification) {
             domino[property] = domino_specification[property];
         }
+        domino.create_canvas_token = sinon.spy();
         return domino;
     }
 }
@@ -17,8 +18,9 @@ class DominoFactoryx {
 describe('Use case choose place domino', function () {
     beforeEach(function() {
         market = {subscribe_to_quarry: sinon.spy(), unsubscribe: sinon.spy(),};
-        canvas = {add: sinon.spy(), remove: sinon.spy(),};
-        sut = new sut_module({market: market, pyramid: canvas, domino_factory: new DominoFactoryx()});
+        canvas = {add: sinon.spy(), remove: sinon.spy(), };
+        ui = {paint: sinon.spy(), };
+        sut = new sut_module({ui: ui, market: market, pyramid: canvas, domino_factory: new DominoFactoryx()});
         stock = {control_name: "quarry-2"};
         create_domino_fromx = sinon.spy();
     });
@@ -50,7 +52,7 @@ describe('Use case choose place domino', function () {
             sut.subscribe(callback_object, 'domino_selected');
         });
         function act() {
-            domino = {id: 'domino'};
+            domino = {id: 33, unique_id: 'domino'};
             sut.quarry_selected(domino);
         };
         it('does not call create_domino_from without positions', function () {
@@ -78,7 +80,7 @@ describe('Use case choose place domino', function () {
             // Act
             act();
             // Assert
-            assert.equal(create_domino_fromx.getCall(0).args[0].id, 'domino');
+            assert.equal(create_domino_fromx.getCall(0).args[0].unique_id, 'domino');
         });
         it('calls canvas add with domino with unique id', function () {
             // Arrange
@@ -87,7 +89,7 @@ describe('Use case choose place domino', function () {
             act();
             // Assert
             candidate_domino = canvas.add.getCall(0).args[0];
-            assert.equal(candidate_domino.id, 'domino1011');
+            assert.equal(candidate_domino.unique_id, 'domino1011');
         });
         it('calls canvas add with domino with position', function () {
             // Arrange
@@ -114,7 +116,7 @@ describe('Use case choose place domino', function () {
             sinon.assert.callCount(canvas.add, 1);
 
             candidate_domino = canvas.add.getCall(0).args[0];
-            assert.equal(candidate_domino.id, 'domino1213');
+            assert.equal(candidate_domino.unique_id, 'domino1213');
         });
     });
     describe('placement selected', function () {

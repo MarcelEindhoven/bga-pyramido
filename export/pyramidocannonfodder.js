@@ -91,10 +91,14 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
             console.log( "Ending game setup" );
         },
         paint: function() {
+            console.log("paint" );
             Object.values(this.tile_containers).forEach(tile_container => {
                     tile_container.paint();
             });
-        },
+            Object.values(this.tile_containers).forEach(tile_container => {
+                tile_container.paint();
+        });
+    },
         experiment: function( gamedatas ) {
             this.placeOnObjectPos('tile-18', 'quarry-2', 0, 0);
             this.slideToObjectPos('tile-18', 'pyramid-2371153', -20, 0).play();
@@ -104,8 +108,6 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
          * Generic functions
          */
         get_element: function(html_id) {return $(html_id);},
-
-       
 
         ///////////////////////////////////////////////////
         //// Game & client states
@@ -121,7 +123,8 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
                 {
                 case 'selectFirstDomino':
                 case 'selectAndPlaceQuarry':
-                    this.usecase_place_domino = new usecase_place_domino({market: this.market, domino_factory: this.domino_factory});
+                    this.usecase_place_domino = new usecase_place_domino({ui: this, market: this.market, pyramid: this.tile_containers['pyramid-' + this.player_id], domino_factory: this.domino_factory});
+                    this.usecase_place_domino.set_candidate_positions(this.gamedatas.candidate_positions);
                     this.usecase_choose_domino = new usecase_choose_domino({market: this.market});
                     this.usecase_choose_domino.subscribe(this.usecase_place_domino, 'quarry_selected');
                     break;
