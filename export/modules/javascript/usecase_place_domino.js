@@ -15,6 +15,7 @@ define(['dojo/_base/declare'], (declare) => {
             this.candidate_positions = {};
             this.candidate_dominoes = {};
             this.rotation = 0;
+            this.is_toggled = false;
         },
         clone(properties){
             for (var property in properties) {
@@ -38,16 +39,32 @@ define(['dojo/_base/declare'], (declare) => {
                 this.ui.paint();
             }
         },
+        toggle_positions() {
+            this.destroy_candidate_dominoes();
+            this.is_toggled = !this.is_toggled;
+            this.create_candidate_dominoes();
+            this.ui.paint();
+        },
         quarry_selected(domino) {
             this.destroy_candidate_dominoes();
             this.selected_domino = domino;
             this.create_candidate_dominoes();
             this.ui.paint();
         },
+        is_toggle_for_value(value) {
+            if (this.is_toggled) return value % 4 < 2;
+            return value % 4>= 2;
+        },
+        is_toggle_for_position(candidate_position) {
+            if (candidate_position.rotation % 2 == 1)
+                return this.is_toggle_for_value(candidate_position.vertical);
+            return this.is_toggle_for_value(candidate_position.horizontal);
+        },
         create_candidate_dominoes() {
             Object.values(this.candidate_positions)
             .filter(candidate_position => { if (candidate_position.rotation == this.rotation) return candidate_position;})
-                .forEach(candidate_position => {
+                .filter(candidate_position => { if (this.is_toggle_for_position(candidate_position)) return candidate_position;})
+                    .forEach(candidate_position => {
                 candidate_domino = this.domino_factory.create_domino_from(this.selected_domino);
 
                 candidate_domino.unique_id = candidate_domino.unique_id + candidate_position.horizontal + candidate_position.vertical;

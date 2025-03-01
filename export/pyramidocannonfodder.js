@@ -204,7 +204,8 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
                 switch( stateName )
                 {
                     case 'selectAndPlaceQuarry':
-                            this.addActionButton('Rotate', _('Rotate'), () => this.rotate(), null, null, 'gray'); 
+                            this.addActionButton('Rotate', _('Rotate'), () => this.usecase_place_domino.rotate(), null, null, 'gray');
+                            this.addActionButton('Toggle', _('Toggle'), () => this.usecase_place_domino.toggle_positions(), null, null, 'gray');
                         break;
                     case 'playerTurn':
                     const playableCardsIds = args.playableCardsIds; // returned by the argPlayerTurn
