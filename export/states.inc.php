@@ -64,28 +64,6 @@ $machinestates = [
 
     // Note: ID=2 => your first state
 
-    2 => [
-        "name" => "selectFirstDomino",
-        "description" => clienttranslate('${actplayer} must play a card or pass'),
-        "descriptionmyturn" => clienttranslate('${you} must play a card or pass'),
-        "type" => "activeplayer",
-        "args" => "argPlayerTurn",
-        "possibleactions" => [
-            // these actions are called from the front with bgaPerformAction, and matched to the function on the game.php file
-            "action_domino_chosen_and_placed", 
-        ],
-        "transitions" => ["" => 11,]
-    ],
-
-    3 => [
-        "name" => "nextPlayer",
-        "description" => '',
-        "type" => "game",
-        "action" => "stNextPlayer",
-        "updateGameProgression" => true,
-        "transitions" => ["endGame" => 99, "nextPlayer" => 2]
-    ],
-
     10 => [
         "name" => "selectAndPlaceQuarry",
         "description" => clienttranslate('${actplayer} must place a domino'),

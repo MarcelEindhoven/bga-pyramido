@@ -58,12 +58,6 @@ class Actions {
         return $this;
     }
 
-    public function action_first_domino_chosen(string $quarry_index): void {
-        $update_domino = Infrastructure\UpdateDomino::create($this->decks['domino']);
-        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
-        FirstDominoChosen::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_get_current_data($get_current_data)->set_update_domino($update_domino)->set_quarry_index($quarry_index)->execute()->nextState();
-    }
-
     public function action_domino_chosen_and_placed(string $quarry_index, array $domino_specification): void {
         $update_domino = Infrastructure\UpdateDomino::create($this->decks['domino']);
         $domino_specification['stage'] = 1;

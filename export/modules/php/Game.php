@@ -63,12 +63,6 @@ class Game extends \Table
     /**
      * The framework demands that each action starts with the prefix "act"
      */
-    public function action_first_domino_chosen(string $quarry_index): void {
-        $this->initialise();
-
-        $this->actions->action_first_domino_chosen($quarry_index);
-    }
-
     public function action_domino_chosen_and_placed(string $quarry_index, int $horizontal, int $vertical, int $rotation): void {
         $this->initialise();
         $domino_specification = ['horizontal' => $horizontal, 'vertical' => $vertical, 'rotation' => $rotation, ];
