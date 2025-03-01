@@ -83,40 +83,40 @@ describe('Dominoes', function () {
             // Act
             bounding_box = act_default(0);
             // Assert
-            assert.equal(bounding_box.horizontal_min, 10);
-            assert.equal(bounding_box.vertical_min, 12);
-            assert.equal(bounding_box.horizontal_max, 14);
-            assert.equal(bounding_box.vertical_max, 14);
+            assert.equal(bounding_box.horizontal_min, 10 - 2);
+            assert.equal(bounding_box.vertical_min, 12 - 1);
+            assert.equal(bounding_box.horizontal_max, 10 + 2);
+            assert.equal(bounding_box.vertical_max, 12 + 1);
         });
         it('returns bounding box for rotation 1', function () {
             // Arrange
             // Act
             bounding_box = act_default(1);
             // Assert
-            assert.equal(bounding_box.horizontal_min, 10);
-            assert.equal(bounding_box.vertical_min, 12);
-            assert.equal(bounding_box.horizontal_max, 12);
-            assert.equal(bounding_box.vertical_max, 16);
+            assert.equal(bounding_box.horizontal_min, 10 - 2);
+            assert.equal(bounding_box.vertical_min, 12 - 1);
+            assert.equal(bounding_box.horizontal_max, 10 + 0);
+            assert.equal(bounding_box.vertical_max, 12 + 3);
         });
         it('returns bounding box for rotation 2', function () {
             // Arrange
             // Act
             bounding_box = act_default(2);
             // Assert
-            assert.equal(bounding_box.horizontal_min, 8);
-            assert.equal(bounding_box.vertical_min, 12);
-            assert.equal(bounding_box.horizontal_max, 12);
-            assert.equal(bounding_box.vertical_max, 14);
+            assert.equal(bounding_box.horizontal_min, 10 - 4);
+            assert.equal(bounding_box.vertical_min, 12 - 1);
+            assert.equal(bounding_box.horizontal_max, 10 + 0);
+            assert.equal(bounding_box.vertical_max, 12 + 1);
         });
         it('returns bounding box for rotation 3', function () {
             // Arrange
             // Act
             bounding_box = act_default(3);
             // Assert
-            assert.equal(bounding_box.horizontal_min, 10);
-            assert.equal(bounding_box.vertical_min, 10);
-            assert.equal(bounding_box.horizontal_max, 12);
-            assert.equal(bounding_box.vertical_max, 14);
+            assert.equal(bounding_box.horizontal_min, 10 - 2);
+            assert.equal(bounding_box.vertical_min, 12 - 3);
+            assert.equal(bounding_box.horizontal_max, 10 + 0);
+            assert.equal(bounding_box.vertical_max, 12 + 1);
         });
         it('returns updated bounding box after changing properties', function () {
             // Arrange
@@ -128,10 +128,10 @@ describe('Dominoes', function () {
             // Act
             bounding_box = domino.get_bounding_box();
             // Assert
-            assert.equal(bounding_box.horizontal_min, 16);
-            assert.equal(bounding_box.vertical_min, 4);
-            assert.equal(bounding_box.horizontal_max, 18);
-            assert.equal(bounding_box.vertical_max, 8);
+            assert.equal(bounding_box.horizontal_min, 16 - 2);
+            assert.equal(bounding_box.vertical_min, 6 - 3);
+            assert.equal(bounding_box.horizontal_max, 16 + 0);
+            assert.equal(bounding_box.vertical_max, 6 + 1);
         });
     });
 });

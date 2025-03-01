@@ -35,7 +35,8 @@ define(['dojo/_base/declare'], (declare) => {
          * get_bounding_box
          */
         add(paintable) {
-            bounding_box = paintable.get_bounding_box();
+            const bounding_box = paintable.get_bounding_box();
+
             this.resize_if_needed(this.getAbsoluteCoordinates(bounding_box.horizontal_min, bounding_box.vertical_min));
             this.resize_if_needed(this.getAbsoluteCoordinates(bounding_box.horizontal_max, bounding_box.vertical_max));
 
@@ -48,7 +49,6 @@ define(['dojo/_base/declare'], (declare) => {
         },
         paint: function() {
             Object.values(this.paintables).forEach(paintable => {
-                console.log (paintable);
                 paintable.paint();
             });
         },
@@ -86,13 +86,13 @@ define(['dojo/_base/declare'], (declare) => {
                 this.relocate(this.paintables[index]);
         },
         relocate(paintable) {
-            bounding_box = paintable.get_bounding_box();
+            const bounding_box = paintable.get_bounding_box();
             const [x, y] = this.getAbsoluteCoordinates(bounding_box.horizontal_min, bounding_box.vertical_min);
             paintable.move_to(this.element_id, x - this.x_minimum, y - this.y_minimum);
         },
         getAbsoluteCoordinates(horizontal, vertical) {
-            x = horizontal * this.PIXELS_PER_TILE / 2;
-            y = vertical * this.PIXELS_PER_TILE / 2;
+            const x = horizontal * this.PIXELS_PER_TILE / 2;
+            const y = vertical * this.PIXELS_PER_TILE / 2;
             return [x, y];
         },
         /**
