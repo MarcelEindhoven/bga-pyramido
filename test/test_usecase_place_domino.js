@@ -69,6 +69,18 @@ describe('Use case choose place domino', function () {
             // Assert
             sinon.assert.callCount(create_domino_fromx, 0);
         });
+        it('destroys previous candidates when new domino selected', function () {
+            // Arrange
+            sut.set_candidate_positions([
+                {horizontal: 10, vertical: 10, rotation: 0},
+                {horizontal: 12, vertical: 10, rotation: 0},
+            ]);
+            // Act
+            act();
+            act();
+            // Assert
+            sinon.assert.callCount(destroy_canvas_token, 2);
+        });
         it('calls create_domino_from', function () {
             // Arrange
             sut.set_candidate_positions([

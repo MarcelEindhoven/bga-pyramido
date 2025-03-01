@@ -39,6 +39,7 @@ define(['dojo/_base/declare'], (declare) => {
             }
         },
         quarry_selected(domino) {
+            this.destroy_candidate_dominoes();
             this.selected_domino = domino;
             this.create_candidate_dominoes();
             this.ui.paint();
