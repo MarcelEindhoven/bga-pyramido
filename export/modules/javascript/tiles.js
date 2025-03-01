@@ -41,7 +41,6 @@ define(['dojo/_base/declare'], (declare) => {
                     const id_horizontal = this.tile_id % this.TILES_PER_ROW;
                     const id_vertical = (this.tile_id-id_horizontal) / this.TILES_PER_ROW;
                     this.dojo.style(this.unique_id, 'backgroundPosition', '-' + this.PIXELS_PER_TILE * id_horizontal + 'px -' + this.PIXELS_PER_TILE * id_vertical + 'px');
-                    this.bounding_box = {horizontal_min: this.horizontal, vertical_min: this.vertical, horizontal_max: this.horizontal + 2, vertical_max: this.vertical + 2};
                 }
                 clone(properties){
                     for (var property in properties) {
@@ -63,7 +62,7 @@ define(['dojo/_base/declare'], (declare) => {
                     this.game.slideToObjectPos(this.unique_id, this.element_id, this.x, this.y).play();
                 }
                 get_bounding_box() {
-                    return this.bounding_box;
+                    return {horizontal_min: this.horizontal - 2, vertical_min: this.vertical - 1, horizontal_max: this.horizontal + 0, vertical_max: this.vertical + 1};
                 }
             }
             result = new Tile({document: this.document, dojo: this.dojo, game: this.game,});
