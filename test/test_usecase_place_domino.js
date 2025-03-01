@@ -120,6 +120,15 @@ describe('Use case choose place domino', function () {
             assert.equal(candidate_domino.vertical, 11);
             assert.equal(candidate_domino.rotation, 0);
         });
+        it('calls canvas add with highest stage', function () {
+            // Arrange
+            sut.set_candidate_positions([{horizontal: 12, vertical: 11, rotation: 0},]);
+            // Act
+            act();
+            // Assert
+            candidate_domino = canvas.add.getCall(0).args[0];
+            assert.ok(candidate_domino.stage >= 5);
+        });
         it('only for matching rotation', function () {
             // Arrange
             sut.set_candidate_positions([
@@ -237,6 +246,42 @@ describe('Use case choose place domino', function () {
             act();
             // Assert
             assert.equal(callback_object.domino_selected.getCall(0).args[0], domino);
+        });
+    });
+    describe('Unsubscribe', function () {
+        beforeEach(function() {
+            callback_object = {
+                domino_selected: sinon.spy(),
+            };
+            sut.subscribe(callback_object, 'domino_selected');
+            domino = {id: 33, unique_id: 'domino'};
+            sut.quarry_selected(domino);
+        });
+        function arrange() {
+            domino = {id: 33, unique_id: 'domino'};
+            sut.quarry_selected(domino);
+        };
+        function act() {
+            sut.unsubscribe();
+        };
+        it('unsubscribes from market', function () {
+            // Arrange
+            // Act
+            act();
+            // Assert
+            sinon.assert.callCount(market.unsubscribe, 1);
+        });
+        it('destroys previous candidates', function () {
+            // Arrange
+            sut.set_candidate_positions([
+                {horizontal: 10, vertical: 10, rotation: 0},
+                {horizontal: 12, vertical: 10, rotation: 0},
+            ]);
+            arrange();
+            // Act
+            act();
+            // Assert
+            sinon.assert.callCount(destroy_canvas_token, 2);
         });
     });
 });

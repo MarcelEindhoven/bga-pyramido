@@ -20,10 +20,11 @@ class UpdateDominoTest extends TestCase{
 
     protected string $player_id = '77';
     protected string $quarry_index = 'quarry-2';
-    protected int $stage_index = 4;
+    protected int $stage = 4;
     protected int $horizontal = 19;
     protected int $vertical = 18;
     protected int $rotation = 3;
+    protected array $domino_specification = ['stage' => 4, 'horizontal' => 19, 'vertical' => 18, 'rotation' => 3, ];
 
     protected function setUp(): void {
         $this->mock_cards = $this->createMock(FrameworkInterfaces\Deck::class);
@@ -34,10 +35,10 @@ class UpdateDominoTest extends TestCase{
         // Arrange
         $this->mock_cards->expects($this->exactly(1))->method('moveAllCardsInLocation')
         ->with('quarry', $this->player_id, 2
-        , $this->stage_index + 5 * $this->horizontal + 5*20* $this->vertical + 5*20*20* $this->rotation);
+        , $this->domino_specification['stage'] + 5 * $this->domino_specification['horizontal'] + 5*20* $this->domino_specification['vertical'] + 5*20*20* $this->domino_specification['rotation']);
 
         // Act
-        $this->sut->move($this->quarry_index, $this->player_id, $this->stage_index, $this->horizontal, $this->vertical, $this->rotation);
+        $this->sut->move($this->quarry_index, $this->player_id, $this->domino_specification);
         // Assert
     }
 }

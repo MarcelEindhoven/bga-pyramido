@@ -59,7 +59,7 @@ $machinestates = [
         "description" => "",
         "type" => "manager",
         "action" => "stGameSetup",
-        "transitions" => ["" => 2]
+        "transitions" => ["" => 10]
     ),
 
     // Note: ID=2 => your first state
@@ -72,7 +72,7 @@ $machinestates = [
         "args" => "argPlayerTurn",
         "possibleactions" => [
             // these actions are called from the front with bgaPerformAction, and matched to the function on the game.php file
-            "action_first_domino_chosen", 
+            "action_domino_chosen_and_placed", 
         ],
         "transitions" => ["" => 11,]
     ],
@@ -94,7 +94,7 @@ $machinestates = [
         "args" => "argPlayerTurn",
         "possibleactions" => [
             // these actions are called from the front with bgaPerformAction, and matched to the function on the game.php file
-            "action_first_domino_chosen", 
+            "action_domino_chosen_and_placed", 
         ],
         "transitions" => ["" => 11,]
     ],

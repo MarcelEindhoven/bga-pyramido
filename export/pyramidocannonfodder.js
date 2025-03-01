@@ -151,6 +151,14 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
         },
         domino_placed(domino) {
             console.log(domino);
+            this.call('domino_chosen_and_placed', {
+                quarry_index: this.usecase_place_domino.selected_domino.element_id,
+                horizontal: domino.horizontal,
+                vertical: domino.vertical,
+                rotation: domino.rotation,
+            });
+            this.usecase_choose_domino.unsubscribe();
+            this.usecase_place_domino.unsubscribe();
         },
         next_domino_chosen(domino) {
             console.log( "next_domino_chosen" );

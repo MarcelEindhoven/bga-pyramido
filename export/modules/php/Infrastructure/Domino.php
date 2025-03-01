@@ -74,13 +74,9 @@ class UpdateDomino extends CurrentTiles
         $object->set_deck_domino($deck_domino);
         return $object;
     }
-    public function move($quarry_index, $player_id, $stage_index, $horizontal, $vertical, $rotation): UpdateDomino {
+    public function move($quarry_index, $player_id, $domino_specification): UpdateDomino {
         $this->deck_domino->moveAllCardsInLocation(explode('-', $quarry_index)[0], $player_id, (int)explode('-', $quarry_index)[1]
-        , $stage_index
-        + CurrentTiles::FACTOR_STAGE * $horizontal
-        + CurrentTiles::FACTOR_STAGE * CurrentTiles::FACTOR_HORIZONTAL * $vertical
-        + CurrentTiles::FACTOR_STAGE * CurrentTiles::FACTOR_HORIZONTAL * CurrentTiles::FACTOR_VERTICAL * $rotation);
-
+        , $this->calculate_location_argument($domino_specification));
         return $this;
     }
 }
@@ -110,12 +106,15 @@ class CurrentTiles
 
         return $this;
     }
-    public function get_domino($player_id, $stage, $horizontal, $vertical, $rotation) {
-        $domino_array =  $this->deck_domino->getCardsInLocation(strval($player_id), $stage
-        + $horizontal * CurrentTiles::FACTOR_STAGE
-        + $vertical * CurrentTiles::FACTOR_STAGE * CurrentTiles::FACTOR_HORIZONTAL
-        + $rotation * CurrentTiles::FACTOR_STAGE * CurrentTiles::FACTOR_HORIZONTAL * CurrentTiles::FACTOR_VERTICAL);
+    public function get_domino($player_id, $domino_specification) {
+        $domino_array =  $this->deck_domino->getCardsInLocation(strval($player_id), $this->calculate_location_argument($domino_specification));
         return end($domino_array);
+    }
+    protected function calculate_location_argument($domino_specification) {
+        return  $domino_specification['stage']
+        + CurrentTiles::FACTOR_STAGE * $domino_specification['horizontal']
+        + CurrentTiles::FACTOR_STAGE * CurrentTiles::FACTOR_HORIZONTAL * $domino_specification['vertical']
+        + CurrentTiles::FACTOR_STAGE * CurrentTiles::FACTOR_HORIZONTAL * CurrentTiles::FACTOR_VERTICAL * $domino_specification['rotation'];
     }
 
     public function get(): array {

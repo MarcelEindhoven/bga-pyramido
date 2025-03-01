@@ -69,6 +69,13 @@ class Game extends \Table
         $this->actions->action_first_domino_chosen($quarry_index);
     }
 
+    public function action_domino_chosen_and_placed(string $quarry_index, int $horizontal, int $vertical, int $rotation): void {
+        $this->initialise();
+        $domino_specification = ['horizontal' => $horizontal, 'vertical' => $vertical, 'rotation' => $rotation, ];
+
+        $this->actions->action_domino_chosen_and_placed($quarry_index, $domino_specification);
+    }
+
     public function action_next_domino_chosen(string $next_index, string $quarry_index): void {
         $this->initialise();
 

@@ -51,9 +51,12 @@ define(['dojo/_base/declare'], (declare) => {
                 candidate_domino = this.domino_factory.create_domino_from(this.selected_domino);
 
                 candidate_domino.unique_id = candidate_domino.unique_id + candidate_position.horizontal + candidate_position.vertical;
+
                 candidate_domino.horizontal = candidate_position.horizontal;
                 candidate_domino.vertical = candidate_position.vertical;
                 candidate_domino.rotation = candidate_position.rotation;
+
+                candidate_domino.stage = 5;
 
                 candidate_domino.subscribe(this, 'placement_selected');
 
@@ -72,6 +75,7 @@ define(['dojo/_base/declare'], (declare) => {
             this.callback_object[this.callback_method](domino);
         },
         unsubscribe() {
+            this.destroy_candidate_dominoes();
             this.market.unsubscribe();
         },
     });
