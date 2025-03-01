@@ -47,9 +47,18 @@ class Pyramid
         $occupied = [];
         $neighbours = [];
         $candidate_positions = [];
+        $horizontal_min = 10;
+        $horizontal_max = 10;
+        $vertical_min = 10;
+        $vertical_max = 10;
         foreach ($this->tiles as $tile) {
             $horizontal = $tile['horizontal'];
             $vertical = $tile['vertical'];
+            if ($horizontal > $horizontal_max) $horizontal_max = $horizontal;
+            if ($horizontal < $horizontal_min) $horizontal_min = $horizontal;
+            if ($vertical > $vertical_max) $vertical_max = $vertical;
+            if ($vertical < $vertical_min) $vertical_min = $vertical;
+
             $occupied[$this->calculate_key($horizontal, $vertical)] = [$horizontal, $vertical];
 
             $neighbours[$this->calculate_key($horizontal - 2, $vertical)] = [$horizontal - 2, $vertical];
@@ -57,20 +66,30 @@ class Pyramid
             $neighbours[$this->calculate_key($horizontal, $vertical - 2)] = [$horizontal, $vertical - 2];
             $neighbours[$this->calculate_key($horizontal, $vertical + 2)] = [$horizontal, $vertical + 2];
         }
+        $allowed_size_vertical = $horizontal_max - $horizontal_min < 8? 10:8;
+        $allowed_size_horizontal = $vertical_max - $vertical_min < 8? 10:8;
+        print ($allowed_size_vertical);
+        print ($allowed_size_horizontal);
+        for ($i = 0; $i <= 21; $i++) {
+            $occupied[$this->calculate_key($i, $vertical_max - $allowed_size_vertical)] = 999;
+            $occupied[$this->calculate_key($i, $vertical_min + $allowed_size_vertical)] = 999;
+            $occupied[$this->calculate_key($horizontal_max - $allowed_size_horizontal, $i)] = 999;
+            $occupied[$this->calculate_key($horizontal_min + $allowed_size_horizontal, $i)] = 999;
+        }
         foreach ($neighbours as $position) {
             $horizontal = $position[0];
             $vertical = $position[1];
-            $candidate_key = $this->calculate_key($horizontal, $vertical) . 0;
-            if (!array_key_exists($candidate_key, $candidate_positions) &&
+            $candidate_key = $this->calculate_key($horizontal, $vertical);
+            if (!array_key_exists($candidate_key . 0, $candidate_positions) &&
             !array_key_exists($this->calculate_key($horizontal + 2, $vertical), $occupied) &&
-            !array_key_exists($this->calculate_key($horizontal, $vertical), $occupied)){
-                $candidate_positions[$candidate_key] = ['horizontal' => $horizontal, 'vertical' => $vertical, 'rotation' => 0];
+            !array_key_exists($candidate_key, $occupied)){
+                $candidate_positions[$candidate_key . 0] = ['horizontal' => $horizontal, 'vertical' => $vertical, 'rotation' => 0];
             }
-            $candidate_key = $this->calculate_key($horizontal - 2, $vertical) . 0;
-            if (!array_key_exists($candidate_key, $candidate_positions) &&
-            !array_key_exists($this->calculate_key($horizontal - 2, $vertical), $occupied) &&
+            $candidate_key = $this->calculate_key($horizontal - 2, $vertical);
+            if (!array_key_exists($candidate_key . 0, $candidate_positions) &&
+            !array_key_exists($candidate_key, $occupied) &&
             !array_key_exists($this->calculate_key($horizontal, $vertical), $occupied)){
-                $candidate_positions[$candidate_key] = ['horizontal' => $horizontal - 2, 'vertical' => $vertical, 'rotation' => 0];
+                $candidate_positions[$candidate_key . 0] = ['horizontal' => $horizontal - 2, 'vertical' => $vertical, 'rotation' => 0];
             }
             $candidate_key = $this->calculate_key($horizontal, $vertical);
             if (!array_key_exists($candidate_key . 1, $candidate_positions) &&
@@ -84,17 +103,17 @@ class Pyramid
             !array_key_exists($this->calculate_key($horizontal, $vertical), $occupied)){
                 $candidate_positions[$candidate_key . 1] = ['horizontal' => $horizontal, 'vertical' => $vertical - 2, 'rotation' => 1];
             }
-            $candidate_key = $this->calculate_key($horizontal, $vertical) . 2;
-            if (!array_key_exists($candidate_key, $candidate_positions) &&
+            $candidate_key = $this->calculate_key($horizontal, $vertical);
+            if (!array_key_exists($candidate_key . 2, $candidate_positions) &&
             !array_key_exists($this->calculate_key($horizontal - 2, $vertical), $occupied) &&
-            !array_key_exists($this->calculate_key($horizontal, $vertical), $occupied)){
-                $candidate_positions[$candidate_key] = ['horizontal' => $horizontal, 'vertical' => $vertical, 'rotation' => 2];
+            !array_key_exists($candidate_key, $occupied)){
+                $candidate_positions[$candidate_key . 2] = ['horizontal' => $horizontal, 'vertical' => $vertical, 'rotation' => 2];
             }
-            $candidate_key = $this->calculate_key($horizontal + 2, $vertical) . 2;
-            if (!array_key_exists($candidate_key, $candidate_positions) &&
-            !array_key_exists($this->calculate_key($horizontal + 2, $vertical), $occupied) &&
+            $candidate_key = $this->calculate_key($horizontal + 2, $vertical);
+            if (!array_key_exists($candidate_key . 2, $candidate_positions) &&
+            !array_key_exists($candidate_key, $occupied) &&
             !array_key_exists($this->calculate_key($horizontal, $vertical), $occupied)){
-                $candidate_positions[$candidate_key] = ['horizontal' => $horizontal + 2, 'vertical' => $vertical, 'rotation' => 2];
+                $candidate_positions[$candidate_key . 2] = ['horizontal' => $horizontal + 2, 'vertical' => $vertical, 'rotation' => 2];
             }
             $candidate_key = $this->calculate_key($horizontal, $vertical);
             if (!array_key_exists($candidate_key . 3, $candidate_positions) &&
