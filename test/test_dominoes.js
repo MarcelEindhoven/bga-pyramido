@@ -11,9 +11,9 @@ class Animation {
 }
 describe('Dominoes', function () {
     beforeEach(function() {
-        dojo = {style:sinon.spy(), addClass:sinon.spy(), removeClass:sinon.spy(), };
+        dojo = {style:sinon.spy(), connect:sinon.spy(), destroy:sinon.spy(), addClass:sinon.spy(), removeClass:sinon.spy(), };
         document = new Document();
-        game = {slideToObjectPos:sinon.stub().returns (new Animation ()) ,};
+        game = {get_element:sinon.stub().returns(44), slideToObjectPos:sinon.stub().returns (new Animation ()) ,};
         dependencies = {dojo: dojo, document: document, game:game, };
         sut = new sut_module(dependencies);
         domino_specification = {id: 0, stage: 0, horizontal: 10,vertical: 12, rotation: 0};
@@ -30,6 +30,45 @@ describe('Dominoes', function () {
             domino = sut.create_domino_from(domino_specification);
             // Assert
             assert.equal(domino.test_parameter, domino_specification.test_parameter);
+        });
+        it('creates unique ID', function () {
+            // Arrange
+            domino_specification.id = 33;
+            // Act
+            domino = sut.create_domino_from(domino_specification);
+            // Assert
+            assert.equal(domino.unique_id, 'domino-33');
+        });
+    });
+    describe('Subscribe', function () {
+        beforeEach(function() {
+            callback_object = {
+                domino_selected: sinon.spy(),
+            };
+            domino = sut.create_domino_from(domino_specification);
+        });
+        function act() {
+            domino.subscribe(callback_object, 'domino_selected');
+        };
+        it('connects', function () {
+            // Arrange
+            
+            // Act
+            act();
+            // Assert
+            sinon.assert.callCount(dojo.connect, 1);
+            assert.equal(dojo.connect.getCall(0).args[0], 44);
+        });
+    });
+    describe('Cleanup', function () {
+        it('uses the framework to destroy the UI token', function () {
+            // Arrange
+            domino_specification.id = 33;
+            domino = sut.create_domino_from(domino_specification);
+            // Act
+            domino.destroy_canvas_token();
+            // Assert
+            assert.equal(dojo.destroy.getCall(0).args[0], 'domino-33');
         });
     });
     describe('Bounding box', function () {

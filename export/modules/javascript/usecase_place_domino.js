@@ -12,6 +12,8 @@ define(['dojo/_base/declare'], (declare) => {
          */
         constructor(dependencies) {
             this.clone(dependencies);
+            this.candidate_positions = {};
+            this.candidate_dominoes = {};
             this.rotation = 0;
         },
         clone(properties){
@@ -30,25 +32,40 @@ define(['dojo/_base/declare'], (declare) => {
         rotate() {
             this.rotation = this.rotation + 1;
             if (this.rotation >3) this.rotation = 0;
+            if (this.selected_domino) {
+                this.destroy_candidate_dominoes();
+                this.create_candidate_dominoes();
+                this.ui.paint();
+            }
         },
         quarry_selected(domino) {
-            console.log (this.candidate_positions);
+            this.selected_domino = domino;
+            this.create_candidate_dominoes();
+            this.ui.paint();
+        },
+        create_candidate_dominoes() {
             Object.values(this.candidate_positions)
             .filter(candidate_position => { if (candidate_position.rotation == this.rotation) return candidate_position;})
                 .forEach(candidate_position => {
-                candidate_domino = this.domino_factory.create_domino_from(domino);
+                candidate_domino = this.domino_factory.create_domino_from(this.selected_domino);
 
                 candidate_domino.unique_id = domino.unique_id + candidate_position.horizontal + candidate_position.vertical;
                 candidate_domino.horizontal = candidate_position.horizontal;
                 candidate_domino.vertical = candidate_position.vertical;
                 candidate_domino.rotation = candidate_position.rotation;
 
-                candidate_domino.create_canvas_token();
                 candidate_domino.subscribe(this, 'placement_selected');
 
                 this.pyramid.add(candidate_domino);
+                this.candidate_dominoes[candidate_domino.unique_id] = candidate_domino;
             });
-            this.ui.paint();
+        },
+        destroy_candidate_dominoes() {
+            Object.values(this.candidate_dominoes).forEach(candidate_domino => {
+                this.pyramid.remove(candidate_domino);
+                candidate_domino.destroy_canvas_token();
+                delete this.candidate_dominoes[candidate_domino.unique_id];
+            });
         },
         placement_selected(domino) {
             this.callback_object[this.callback_method](domino);

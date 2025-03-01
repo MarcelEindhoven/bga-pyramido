@@ -11,6 +11,7 @@ class DominoFactoryx {
             domino[property] = domino_specification[property];
         }
         domino.create_canvas_token = create_canvas_token;
+        domino.destroy_canvas_token = destroy_canvas_token;
         domino.subscribe = subscribe;
         return domino;
     }
@@ -26,6 +27,7 @@ describe('Use case choose place domino', function () {
 
         create_domino_fromx = sinon.spy();
         create_canvas_token = sinon.spy();
+        destroy_canvas_token = sinon.spy();
         subscribe = sinon.spy();
     });
     describe('Subscribe', function () {
@@ -113,7 +115,7 @@ describe('Use case choose place domino', function () {
                 {horizontal: 12, vertical: 13, rotation: 1},
             ]);
             // Act
-            sut.set_rotation(1);
+            sut.rotate();
             act();
             // Assert
             sinon.assert.callCount(create_domino_fromx, 1);
@@ -121,6 +123,82 @@ describe('Use case choose place domino', function () {
 
             candidate_domino = canvas.add.getCall(0).args[0];
             assert.equal(candidate_domino.unique_id, 'domino1213');
+        });
+    });
+    describe('Rotate', function () {
+        beforeEach(function() {
+            callback_object = {
+                domino_selected: sinon.spy(),
+            };
+            sut.subscribe(callback_object, 'domino_selected');
+        });
+        function arrange_selected_domino() {
+            sut.subscribe(callback_object, 'domino_selected');
+            domino = {id: 33, unique_id: 'domino'};
+            sut.quarry_selected(domino);
+        };
+        function act() {
+            sut.rotate();
+        };
+        it('calls paint if domino has been selected', function () {
+            // Arrange
+            domino = {id: 33, unique_id: 'domino'};
+            sut.quarry_selected(domino);
+            // Act
+            act();
+            // Assert
+            sinon.assert.callCount(ui.paint, 1 + 1);
+        });
+        it('does not create dominoes if no domino was selected', function () {
+            // Arrange
+            sut.set_candidate_positions([
+                {horizontal: 12, vertical: 13, rotation: 1},
+            ]);
+            // Act
+            act();
+            // Assert
+            sinon.assert.callCount(canvas.add, 0);
+        });
+        it('creates domino if domino was selected', function () {
+            // Arrange
+            sut.set_candidate_positions([
+                {horizontal: 12, vertical: 13, rotation: 1},
+                {horizontal: 10, vertical: 13, rotation: 1},
+            ]);
+            arrange_selected_domino();
+            // Act
+            act();
+            // Assert
+            sinon.assert.callCount(canvas.add, 2);
+        });
+        it('destroys existing candidate dominoes', function () {
+            // Arrange
+            sut.set_candidate_positions([
+                {horizontal: 12, vertical: 13, rotation: 0},
+                {horizontal: 10, vertical: 13, rotation: 0},
+            ]);
+            arrange_selected_domino();
+            // Act
+            act();
+            // Assert
+            sinon.assert.callCount(canvas.remove, 2);
+            sinon.assert.callCount(destroy_canvas_token, 2);
+        });
+        it('removes existing candidate dominoes', function () {
+            // Arrange
+            sut.set_candidate_positions([
+                {horizontal: 12, vertical: 13, rotation: 0},
+                {horizontal: 12, vertical: 14, rotation: 0},
+                {horizontal: 12, vertical: 15, rotation: 0},
+                {horizontal: 12, vertical: 16, rotation: 0},
+                {horizontal: 12, vertical: 17, rotation: 0},
+            ]);
+            arrange_selected_domino();
+            // Act
+            act();
+            act();
+            // Assert
+            sinon.assert.callCount(canvas.remove, 5);
         });
     });
     describe('placement selected', function () {

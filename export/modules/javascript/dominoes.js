@@ -36,8 +36,14 @@ define(['dojo/_base/declare'], (declare) => {
                     this.clone(specification);
                     this.unique_id = 'domino-' + this.id;
                 }
+                subscribe(callback_object, callback_method) {
+                    this.create_canvas_token();
+                    this.callback_object = callback_object;
+                    this.callback_method = callback_method;
+                    this.dojo.addClass(this.unique_id, 'selectable');
+                    this.dojo.connect(this.game.get_element(this.unique_id), 'onclick', this, 'domino_selected');
+                }
                 create_canvas_token() {
-                    console.log (this);
                     this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
                         <div id="${this.unique_id}">
                     `);
@@ -46,11 +52,8 @@ define(['dojo/_base/declare'], (declare) => {
                     const id_vertical = (this.id-id_horizontal) / this.DOMINOES_PER_ROW;
                     this.dojo.style(this.unique_id, 'backgroundPosition', '-' + this.PIXELS_PER_TILE * id_horizontal * 2 + 'px -' + this.PIXELS_PER_TILE * id_vertical + 'px');
                 }
-                subscribe(callback_object, callback_method) {
-                    this.callback_object = callback_object;
-                    this.callback_method = callback_method;
-                    this.dojo.addClass(this.unique_id, 'selectable');
-                    this.dojo.connect(this.game.get_element(this.unique_id), 'onclick', this, 'domino_selected');
+                destroy_canvas_token() {
+                    this.dojo.destroy(this.unique_id);
                 }
                 domino_selected(selected_element_id) {
                     this.callback_object[this.callback_method](this);
