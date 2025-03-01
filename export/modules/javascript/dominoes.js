@@ -60,16 +60,16 @@ define(['dojo/_base/declare'], (declare) => {
                 }
                 get_bounding_box() {
                     if (this.rotation == 0) {
-                        return {horizontal_min: this.horizontal, vertical_min: this.vertical, horizontal_max: this.horizontal + 4, vertical_max: this.vertical + 2};
+                        return {horizontal_min: this.horizontal - 2, vertical_min: this.vertical - 1, horizontal_max: this.horizontal + 2, vertical_max: this.vertical + 1};
                     }
                     if (this.rotation == 1) {
-                        return {horizontal_min: this.horizontal, vertical_min: this.vertical, horizontal_max: this.horizontal + 2, vertical_max: this.vertical + 4};
+                        return {horizontal_min: this.horizontal - 2, vertical_min: this.vertical - 1, horizontal_max: this.horizontal + 0, vertical_max: this.vertical + 3};
                     }
                     if (this.rotation == 2) {
-                        return {horizontal_min: this.horizontal - 2, vertical_min: this.vertical, horizontal_max: this.horizontal + 2, vertical_max: this.vertical + 2};
+                        return {horizontal_min: this.horizontal - 4, vertical_min: this.vertical - 1, horizontal_max: this.horizontal + 0, vertical_max: this.vertical + 1};
                     }
                     if (this.rotation == 3) {
-                        return {horizontal_min: this.horizontal, vertical_min: this.vertical - 2, horizontal_max: this.horizontal + 2, vertical_max: this.vertical + 2};
+                        return {horizontal_min: this.horizontal - 2, vertical_min: this.vertical - 3, horizontal_max: this.horizontal + 0, vertical_max: this.vertical + 1};
                     }
                 }
                 move_to(element_id, x, y) {

@@ -3,9 +3,6 @@ var sinon = require('sinon');
 
 var sut_module = require('../export/modules/javascript/canvas.js');
 
-class Tile {
-    getElementById(element_id) {return {insertAdjacentHTML: sinon.spy(),};}
-}
 describe('Canvas class', function () {
     beforeEach(function() {
         id = 'HTML element ID ';
@@ -14,11 +11,15 @@ describe('Canvas class', function () {
         dependencies = {dojo: dojo, game:game, element_id: id,};
         sut = new sut_module(dependencies);
         tile = {tile_id: 0, stage: 0, horizontal: 10,vertical: 20,
+            unique_id: 'first ',
             move_to:sinon.spy(),
+            paint:sinon.spy(),
             get_bounding_box: function() { return {horizontal_min: this.horizontal, vertical_min: this.vertical, horizontal_max: this.horizontal + 2, vertical_max: this.vertical + 2};}
         };
         other_tile = {tile_id: 0, stage: 0, horizontal: 12,vertical: 17,
+            unique_id: 'second ',
             move_to:sinon.spy(),
+            paint:sinon.spy(),
             get_bounding_box: function() { return {horizontal_min: this.horizontal, vertical_min: this.vertical, horizontal_max: this.horizontal + 2, vertical_max: this.vertical + 2};}
         };
         element_id = 'HTML element ID ';
@@ -72,6 +73,22 @@ describe('Canvas class', function () {
             // Assert
             assert.equal(dojo.style.getCall(2).args[2], '' + sut.PIXELS_PER_TILE + 'px');
             assert.equal(dojo.style.getCall(3).args[2], '' + sut.PIXELS_PER_TILE + 'px');
+        });
+    });
+    describe('Remove paintables', function () {
+        beforeEach(function() {
+            sut.add(tile);
+        });
+        function act(tile) {
+            sut.remove(tile);
+        };
+        it('no paint when tile is removed', function () {
+            // Arrange
+            // Act
+            act(tile);
+            // Assert
+            sut.paint();
+            sinon.assert.callCount(tile.paint, 0);
         });
     });
     describe('Multiple paintables', function () {

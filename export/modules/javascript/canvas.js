@@ -14,7 +14,7 @@ define(['dojo/_base/declare'], (declare) => {
 
         constructor(dependencies) {
             this.clone(dependencies);
-            this.paintables = [];
+            this.paintables = {};
 
             this.x_minimum = 5000000;
             this.x_maximum = 0;
@@ -41,7 +41,10 @@ define(['dojo/_base/declare'], (declare) => {
 
             this.relocate(paintable);
 
-            this.paintables.push(paintable);
+            this.paintables[paintable.unique_id] = paintable;
+        },
+        remove(paintable) {
+            delete this.paintables[paintable.unique_id];
         },
         paint: function() {
             Object.values(this.paintables).forEach(paintable => {
@@ -83,7 +86,8 @@ define(['dojo/_base/declare'], (declare) => {
                 this.relocate(this.paintables[index]);
         },
         relocate(paintable) {
-            const [x, y] = this.getAbsoluteCoordinates(paintable.horizontal, paintable.vertical);
+            bounding_box = paintable.get_bounding_box();
+            const [x, y] = this.getAbsoluteCoordinates(bounding_box.horizontal_min, bounding_box.vertical_min);
             paintable.move_to(this.element_id, x - this.x_minimum, y - this.y_minimum);
         },
         getAbsoluteCoordinates(horizontal, vertical) {

@@ -34,7 +34,7 @@ define(['dojo/_base/declare'], (declare) => {
                     <div id="player-table-${player.id}">
                         <div style = "display: inline-block;"><strong>${player.name}</strong></div>
                         <div id="replacement-${player.id}" style = "display: inline-block; width: 80px ; height: 80px"></div>
-                        <div id="pyramid-${player.id}" style = "display: inline-block; width: 80px ; height: 80px"></div>
+                        <div id="pyramid-${player.id}" style = "display: inline-block; position: relative; width: 80px ; height: 80px"></div>
                     </div>
                 `);
                 element_id = 'pyramid-' + player.id;

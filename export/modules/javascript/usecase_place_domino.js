@@ -49,7 +49,7 @@ define(['dojo/_base/declare'], (declare) => {
                 .forEach(candidate_position => {
                 candidate_domino = this.domino_factory.create_domino_from(this.selected_domino);
 
-                candidate_domino.unique_id = domino.unique_id + candidate_position.horizontal + candidate_position.vertical;
+                candidate_domino.unique_id = candidate_domino.unique_id + candidate_position.horizontal + candidate_position.vertical;
                 candidate_domino.horizontal = candidate_position.horizontal;
                 candidate_domino.vertical = candidate_position.vertical;
                 candidate_domino.rotation = candidate_position.rotation;
