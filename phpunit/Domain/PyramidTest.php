@@ -52,15 +52,40 @@ class PyramidTest extends TestCase{
         $t10_12_0 = ['horizontal' => 10, 'vertical' => 12, 'rotation' => 0];
         $t12_12_0 = ['horizontal' => 12, 'vertical' => 12, 'rotation' => 0];
 
-        $t10_8_0 = ['horizontal' => 10, 'vertical' => 8, 'rotation' => 0];
+        $t10_6_1 = ['horizontal' => 10, 'vertical' => 6, 'rotation' => 1];
+        $t12_6_1 = ['horizontal' => 12, 'vertical' => 6, 'rotation' => 1];
+        $t8_8_1 = ['horizontal' => 8, 'vertical' => 8, 'rotation' => 1];
+        $t8_10_1 = ['horizontal' => 8, 'vertical' => 10, 'rotation' => 1];
+        $t14_8_1 = ['horizontal' => 14, 'vertical' => 8, 'rotation' => 1];
+        $t14_10_1 = ['horizontal' => 14, 'vertical' => 10, 'rotation' => 1];
+        $t10_12_1 = ['horizontal' => 10, 'vertical' => 12, 'rotation' => 1];
+        $t12_12_1 = ['horizontal' => 12, 'vertical' => 12, 'rotation' => 1];
+
+        $t10_8_2 = ['horizontal' => 10, 'vertical' => 8, 'rotation' => 2];
+        $t12_8_2 = ['horizontal' => 12, 'vertical' => 8, 'rotation' => 2];
+        $t14_8_2 = ['horizontal' => 14, 'vertical' => 8, 'rotation' => 2];
+        $t8_10_2 = ['horizontal' => 8, 'vertical' => 10, 'rotation' => 2];
+        $t16_10_2 = ['horizontal' => 16, 'vertical' => 10, 'rotation' => 2];
+        $t10_12_2 = ['horizontal' => 10, 'vertical' => 12, 'rotation' => 2];
+        $t12_12_2 = ['horizontal' => 12, 'vertical' => 12, 'rotation' => 2];
+        $t14_12_2 = ['horizontal' => 14, 'vertical' => 12, 'rotation' => 2];
+
+        $t10_8_3 = ['horizontal' => 10, 'vertical' => 8, 'rotation' => 3];
+        $t12_8_3 = ['horizontal' => 12, 'vertical' => 8, 'rotation' => 3];
+        $t8_10_3 = ['horizontal' => 8, 'vertical' => 10, 'rotation' => 3];
+        $t8_12_3 = ['horizontal' => 8, 'vertical' => 12, 'rotation' => 3];
+        $t14_10_3 = ['horizontal' => 14, 'vertical' => 10, 'rotation' => 3];
+        $t14_12_3 = ['horizontal' => 14, 'vertical' => 12, 'rotation' => 3];
+        $t10_14_3 = ['horizontal' => 10, 'vertical' => 14, 'rotation' => 3];
+        $t12_14_3 = ['horizontal' => 12, 'vertical' => 14, 'rotation' => 3];
 
         return [
             [[], [$initial0, $initial1, $initial2, $initial3]],
             [[$initial0, $initial01], [
                 $t8_8_0, $t10_8_0, $t12_8_0, $t6_10_0, $t14_10_0, $t8_12_0, $t10_12_0, $t12_12_0,
-            ]],
-            [[$initial0], [
-                $t8_8_0, $t10_8_0, $initial01, $t6_10_0, $t8_12_0, $t10_12_0,
+                $t10_6_1, $t12_6_1, $t8_8_1, $t8_10_1, $t14_8_1, $t14_10_1, $t10_12_1, $t12_12_1,
+                $t10_8_2, $t12_8_2, $t14_8_2, $t8_10_2, $t16_10_2, $t10_12_2, $t12_12_2, $t14_12_2,
+                $t10_8_3, $t12_8_3, $t8_10_3, $t8_12_3, $t14_10_3, $t14_12_3, $t10_14_3, $t12_14_3,
             ]],
         ];
     }
