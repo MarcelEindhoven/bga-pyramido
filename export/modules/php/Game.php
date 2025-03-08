@@ -185,6 +185,12 @@ class Game extends \Table
         $this->gamestate->nextState("nextDomino");
     }
 
+    public function stAISelectAndPlaceDomino(): void {
+        $this->initialise();
+
+        $this->actions->stAISelectAndPlaceDomino();
+    }
+
     /**
      * The action method of state `nextPlayer` is called everytime the current game state is set to `nextPlayer`.
      */
@@ -197,9 +203,9 @@ class Game extends \Table
         
         $this->activeNextPlayer();
 
-        // Go to another gamestate
-        // Here, we would detect if the game is over, and in this case use "endGame" transition instead 
-        $this->gamestate->nextState("nextPlayer");
+        $this->initialise();
+
+        $this->actions->stNextPlayer($this->getActivePlayerId());
     }
 
     /**

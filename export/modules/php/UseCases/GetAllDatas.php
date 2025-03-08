@@ -78,7 +78,7 @@ class GetAllDatas {
     protected function get_results_from_database(): array {
         $result = [];
         $result["players"] = $this->database->getCollectionFromDb(
-            "SELECT `player_id` `id`, `player_score` `score` FROM `player`"
+            "SELECT `player_id` `id`, `player_name` `name`, `player_score` `score` FROM `player`"
         );
         return $result;
     }

@@ -162,7 +162,7 @@ define(['dojo/_base/declare'], (declare) => {
             this.stocks[element_id] = hand;
         },
         get_card_type_id(row, i) {
-            return row * 90/this.image_items_per_row + i;
+            return row * this.image_items_per_row + i;
         },
     });
 });

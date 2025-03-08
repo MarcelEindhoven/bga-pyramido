@@ -14,10 +14,7 @@
             },
             "3": {
                 "name": "3 AI players",
-                "nobeginner": true
-            },
-            "4": {
-                "name": "4 AI players",
+                "nobeginner": false
             }
         },
         "default": 1

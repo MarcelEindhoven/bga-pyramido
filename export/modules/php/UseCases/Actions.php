@@ -15,6 +15,8 @@ namespace Bga\Games\PyramidoCannonFodder\UseCases;
 
 include_once(__DIR__.'/GetAllDatas.php');
 
+include_once(__DIR__.'/AIDominoChosenAndPlaced.php');
+
 include_once(__DIR__.'/DominoChosenAndPlaced.php');
 include_once(__DIR__.'/FirstDominoChosen.php');
 include_once(__DIR__.'/NextDominoChosen.php');
@@ -62,6 +64,20 @@ class Actions {
     public function set_player_id($player_id) : Actions {
         $this->player_id = $player_id;
         return $this;
+    }
+
+    public function stNextPlayer($active_player_id) {
+        $this->player_id = $active_player_id;
+
+        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
+        NextPlayer::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($active_player_id)->set_deck($this->decks['domino'])->set_get_current_data($get_current_data)->execute()->nextState();
+    }
+
+    public function stAISelectAndPlaceDomino(): void {
+        $update_domino = Infrastructure\UpdateDomino::create($this->decks['domino']);
+        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
+        AIDominoChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_domino($update_domino)->set_get_current_data($get_current_data)
+        ->execute()->nextState();
     }
 
     public function action_domino_chosen_and_placed(string $quarry_index, array $domino_specification): void {
