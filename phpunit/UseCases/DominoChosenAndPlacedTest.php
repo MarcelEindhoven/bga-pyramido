@@ -28,10 +28,10 @@ class DominoChosenAndPlacedTest extends TestCase{
     protected ?GetAllDatas $mock_get_current_data = null;
     protected ?Infrastructure\UpdateDomino $mock_update_domino = null;
 
-    protected string $player_id = '77';
+    protected int $player_id = 77;
     protected string $quarry_index = 'quarry-2';
 
-    protected array $current_data_first = ['market' => [2 => ['id' => 9, 'tiles'=> ['a', 'b']]]];
+    protected array $current_data = ['candidate_positions' => [2 => ['id' => 9, 'tiles'=> ['a', 'b']]]];
     protected array $domino_specification = ['stage' => 2, 'horizontal' => 12, 'vertical' => 14, 'rotation' => 3, ];
 
     protected function setUp(): void {
@@ -55,6 +55,8 @@ class DominoChosenAndPlacedTest extends TestCase{
 
     public function test_execute_moves_domino() {
         // Arrange
+        $this->arrange();
+
         $this->mock_update_domino->expects($this->exactly(1))->method('move')->with($this->quarry_index, $this->player_id, $this->domino_specification);
         // Act
         $this->act_default();
@@ -63,9 +65,7 @@ class DominoChosenAndPlacedTest extends TestCase{
 
     public function test_execute_notifies_players() {
         // Arrange
-        $this->mock_update_domino->expects($this->exactly(1))->method('get_domino')->with($this->player_id, $this->domino_specification)->willReturn('x');
-        $this->mock_update_domino->expects($this->exactly(1))->method('get_first_tile_for')->with('x')->willReturn('a');
-        $this->mock_update_domino->expects($this->exactly(1))->method('get_second_tile_for')->with('x')->willReturn('b');
+        $this->arrange();
 
         $this->mock_notifications->expects($this->exactly(1))->method('notifyAllPlayers')
         ->with('domino_placed', 'domino_placed', 
@@ -76,6 +76,25 @@ class DominoChosenAndPlacedTest extends TestCase{
         // Act
         $this->act_default();
         // Assert
+    }
+
+    public function test_execute_notifies_player() {
+        // Arrange
+        $this->arrange();
+
+        $this->mock_notifications->expects($this->exactly(1))->method('notifyPlayer')
+        ->with($this->player_id, 'candidate_positions', '', 
+        ['candidate_positions' => $this->current_data['candidate_positions']
+        ]);
+        // Act
+        $this->act_default();
+        // Assert
+    }
+    protected function arrange() {
+        $this->mock_update_domino->expects($this->exactly(1))->method('get_domino')->with($this->player_id, $this->domino_specification)->willReturn('x');
+        $this->mock_update_domino->expects($this->exactly(1))->method('get_first_tile_for')->with('x')->willReturn('a');
+        $this->mock_update_domino->expects($this->exactly(1))->method('get_second_tile_for')->with('x')->willReturn('b');
+        $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn($this->current_data);
     }
 
     protected function act_default() {

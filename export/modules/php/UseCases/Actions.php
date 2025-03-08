@@ -24,6 +24,7 @@ use Bga\Games\PyramidoCannonFodder\Infrastructure;
 
 class Actions {
     protected array $decks = [];
+    protected array $players = [];
 
     static public function create(): Actions {
         $object = new Actions();
@@ -37,6 +38,11 @@ class Actions {
 
     public function set_decks($decks) : Actions {
         $this->decks = $decks;
+        return $this;
+    }
+
+    public function set_players($players) : Actions {
+        $this->players = $players;
         return $this;
     }
 
@@ -61,7 +67,9 @@ class Actions {
     public function action_domino_chosen_and_placed(string $quarry_index, array $domino_specification): void {
         $update_domino = Infrastructure\UpdateDomino::create($this->decks['domino']);
         $domino_specification['stage'] = 1;
-        DominoChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_domino($update_domino)->set_quarry_index($quarry_index)->set_domino_specification($domino_specification)->execute()->nextState();
+        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
+        DominoChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_domino($update_domino)->set_get_current_data($get_current_data)
+        ->set_quarry_index($quarry_index)->set_domino_specification($domino_specification)->execute()->nextState();
     }
 
     public function action_next_domino_chosen(string $next_index, string $quarry_index): void {

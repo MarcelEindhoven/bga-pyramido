@@ -73,7 +73,7 @@ describe('Use case choose place domino', function () {
             // Arrange
             sut.set_candidate_positions([
                 {horizontal: 10, vertical: 10, rotation: 0},
-                {horizontal: 12, vertical: 10, rotation: 0},
+                {horizontal: 14, vertical: 10, rotation: 0},
             ]);
             // Act
             act();
@@ -85,7 +85,7 @@ describe('Use case choose place domino', function () {
             // Arrange
             sut.set_candidate_positions([
                 {horizontal: 10, vertical: 10, rotation: 0},
-                {horizontal: 12, vertical: 10, rotation: 0},
+                {horizontal: 14, vertical: 10, rotation: 0},
             ]);
             // Act
             act();
@@ -111,18 +111,18 @@ describe('Use case choose place domino', function () {
         });
         it('calls canvas add with domino with position', function () {
             // Arrange
-            sut.set_candidate_positions([{horizontal: 12, vertical: 11, rotation: 0},]);
+            sut.set_candidate_positions([{horizontal: 14, vertical: 11, rotation: 0},]);
             // Act
             act();
             // Assert
             candidate_domino = canvas.add.getCall(0).args[0];
-            assert.equal(candidate_domino.horizontal, 12);
+            assert.equal(candidate_domino.horizontal, 14);
             assert.equal(candidate_domino.vertical, 11);
             assert.equal(candidate_domino.rotation, 0);
         });
         it('calls canvas add with highest stage', function () {
             // Arrange
-            sut.set_candidate_positions([{horizontal: 12, vertical: 11, rotation: 0},]);
+            sut.set_candidate_positions([{horizontal: 14, vertical: 11, rotation: 0},]);
             // Act
             act();
             // Assert
@@ -133,7 +133,7 @@ describe('Use case choose place domino', function () {
             // Arrange
             sut.set_candidate_positions([
                 {horizontal: 10, vertical: 11, rotation: 0},
-                {horizontal: 12, vertical: 13, rotation: 1},
+                {horizontal: 14, vertical: 14, rotation: 1},
             ]);
             // Act
             sut.rotate();
@@ -143,7 +143,7 @@ describe('Use case choose place domino', function () {
             sinon.assert.callCount(canvas.add, 1);
 
             candidate_domino = canvas.add.getCall(0).args[0];
-            assert.equal(candidate_domino.unique_id, 'domino1213');
+            assert.equal(candidate_domino.unique_id, 'domino1414');
         });
     });
     describe('Rotate', function () {
@@ -183,8 +183,8 @@ describe('Use case choose place domino', function () {
         it('creates domino if domino was selected', function () {
             // Arrange
             sut.set_candidate_positions([
-                {horizontal: 12, vertical: 13, rotation: 1},
-                {horizontal: 10, vertical: 13, rotation: 1},
+                {horizontal: 12, vertical: 11, rotation: 1},
+                {horizontal: 10, vertical: 11, rotation: 1},
             ]);
             arrange_selected_domino();
             // Act
@@ -195,8 +195,8 @@ describe('Use case choose place domino', function () {
         it('destroys existing candidate dominoes', function () {
             // Arrange
             sut.set_candidate_positions([
-                {horizontal: 12, vertical: 13, rotation: 0},
-                {horizontal: 10, vertical: 13, rotation: 0},
+                {horizontal: 11, vertical: 11, rotation: 0},
+                {horizontal: 10, vertical: 11, rotation: 0},
             ]);
             arrange_selected_domino();
             // Act
@@ -208,11 +208,11 @@ describe('Use case choose place domino', function () {
         it('removes existing candidate dominoes', function () {
             // Arrange
             sut.set_candidate_positions([
-                {horizontal: 12, vertical: 13, rotation: 0},
-                {horizontal: 12, vertical: 14, rotation: 0},
-                {horizontal: 12, vertical: 15, rotation: 0},
-                {horizontal: 12, vertical: 16, rotation: 0},
-                {horizontal: 12, vertical: 17, rotation: 0},
+                {horizontal: 11, vertical: 11, rotation: 0},
+                {horizontal: 11, vertical: 14, rotation: 0},
+                {horizontal: 11, vertical: 15, rotation: 0},
+                {horizontal: 11, vertical: 18, rotation: 0},
+                {horizontal: 11, vertical: 19, rotation: 0},
             ]);
             arrange_selected_domino();
             // Act
@@ -275,7 +275,7 @@ describe('Use case choose place domino', function () {
             // Arrange
             sut.set_candidate_positions([
                 {horizontal: 10, vertical: 10, rotation: 0},
-                {horizontal: 12, vertical: 10, rotation: 0},
+                {horizontal: 11, vertical: 10, rotation: 0},
             ]);
             arrange();
             // Act

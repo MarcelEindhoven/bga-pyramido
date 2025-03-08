@@ -65,7 +65,7 @@ define(['dojo/_base/declare'], (declare) => {
             .filter(candidate_position => { if (candidate_position.rotation == this.rotation) return candidate_position;})
                 .filter(candidate_position => { if (this.is_toggle_for_position(candidate_position)) return candidate_position;})
                     .forEach(candidate_position => {
-                candidate_domino = this.domino_factory.create_domino_from(this.selected_domino);
+                let candidate_domino = this.domino_factory.create_domino_from(this.selected_domino);
 
                 candidate_domino.unique_id = candidate_domino.unique_id + candidate_position.horizontal + candidate_position.vertical;
 

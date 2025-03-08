@@ -43,7 +43,7 @@ class Game extends \Table
         $this->initGameStateLabels([
             "my_first_global_variable" => 10,
             "my_second_global_variable" => 11,
-            "my_first_game_variant" => 100,
+            "AI" => 100,
             "my_second_game_variant" => 101,
         ]);        
 
@@ -84,6 +84,7 @@ class Game extends \Table
 
         $this->actions->set_notifications($this);
         $this->actions->set_database($this);
+        $this->actions->set_players($this->loadPlayersBasicInfos());
 
         // Note: the following statement crashes in setup stage
         $this->actions->set_player_id(self::getCurrentPlayerId());
@@ -269,7 +270,7 @@ class Game extends \Table
         $this->trace('setupNewGame');
         $this->trace(phpversion());
 
-        NewGame\NewGame::create($this->decks)->setup();
+        NewGame\NewGame::create($this->decks)->set_number_ai_players($this->tableOptions->get(100))->setup($players);
 
         // Set the colors of the players with HTML color code. The default below is red/green/blue/orange/brown. The
         // number of colors defined here must correspond to the maximum number of players allowed for the gams.

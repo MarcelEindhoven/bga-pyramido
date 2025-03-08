@@ -40,10 +40,34 @@ class NewGame
         return $this;
     }
 
-    public function setup() : NewGame{
+    public function set_number_ai_players(int $number_ai_players) : NewGame {
+        $this->number_ai_players = $number_ai_players;
+        return $this;
+    }
+
+    public function setup(&$players): NewGame {
+        $keys = array_keys($players);
+        // Assign player slots to AI by overwriting the player name
+        for ($AI_index = 0; $AI_index < $this->number_ai_players; $AI_index++) {
+            // Interleave human players with AI players
+            $this->skipFirstKeyIfPossible($keys, $this->number_ai_players - $AI_index);
+            $this->assignPlayerAsAI($players[$keys[array_key_first($keys)]], $AI_index + 1);
+            unset($keys[array_key_first($keys)]);
+        }
+
         $this->setup_domino();
         $this->setup_market();
+
         return $this;
+    }
+    protected function skipFirstKeyIfPossible(& $keys, $remaining_AI) {
+        if ($remaining_AI < count($keys)) {
+            // First in the remaining list is a human player
+            unset($keys[array_key_first($keys)]);
+        }
+    }
+    protected function assignPlayerAsAI(& $player, $AI_sequence_number) {
+        $player['player_name'] = 'AI_' . ($AI_sequence_number);
     }
 
     public function setup_market() : NewGame{

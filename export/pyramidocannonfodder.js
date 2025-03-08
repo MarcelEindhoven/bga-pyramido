@@ -282,6 +282,17 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
 
             dojo.subscribe( 'next_domino_chosen', this, "notify_next_domino_chosen" );
             this.notifqueue.setSynchronous( 'next_domino_chosen', 300 );
+
+            dojo.subscribe( 'candidate_positions', this, "notify_candidate_positions" );
+            this.notifqueue.setSynchronous( 'candidate_positions', 300 );
+        },
+        
+        notify_candidate_positions: function( notif )
+        {
+            console.log( 'notify_candidate_positions' );
+            console.log( notif );
+
+            this.gamedatas.candidate_positions = notif.args.candidate_positions;
         },
         
         notify_next_domino_chosen: function( notif )
