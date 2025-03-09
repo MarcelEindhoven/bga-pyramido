@@ -191,6 +191,12 @@ class Game extends \Table
         $this->actions->stAISelectAndPlaceDomino();
     }
 
+    public function stAIChooseNextDomino(): void {
+        $this->initialise();
+
+        $this->actions->stAIChooseNextDomino();
+    }
+
     /**
      * The action method of state `nextPlayer` is called everytime the current game state is set to `nextPlayer`.
      */

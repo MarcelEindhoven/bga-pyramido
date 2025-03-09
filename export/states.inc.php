@@ -81,7 +81,6 @@ $machinestates = [
         "description" => '',
         "type" => "game",
         "action" => "stAfterDominoPlaced",
-        "updateGameProgression" => true,
         "transitions" => ["nextDomino" => 30,]
     ],
     30 => [
@@ -110,8 +109,14 @@ $machinestates = [
         "description" => 'AI selects and places domino',
         "type" => "game",
         "action" => "stAISelectAndPlaceDomino",
-        "updateGameProgression" => true,
-        "transitions" => ["" => 11, ]
+        "transitions" => ["" => 70, ]
+    ],
+    70 => [
+        "name" => "selectAndPlaceDominoAI",
+        "description" => 'AI chooses next domino',
+        "type" => "game",
+        "action" => "stAIChooseNextDomino",
+        "transitions" => ["" => 31, ]
     ],
     // Final state.
     // Please do not modify (and do not overload action/args methods).

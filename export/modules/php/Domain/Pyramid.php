@@ -68,8 +68,6 @@ class Pyramid
         }
         $allowed_size_vertical = $horizontal_max - $horizontal_min < 8? 10:8;
         $allowed_size_horizontal = $vertical_max - $vertical_min < 8? 10:8;
-        print ($allowed_size_vertical);
-        print ($allowed_size_horizontal);
         for ($i = 0; $i <= 21; $i++) {
             $occupied[$this->calculate_key($i, $vertical_max - $allowed_size_vertical)] = 999;
             $occupied[$this->calculate_key($i, $vertical_min + $allowed_size_vertical)] = 999;

@@ -16,6 +16,7 @@ namespace Bga\Games\PyramidoCannonFodder\UseCases;
 include_once(__DIR__.'/GetAllDatas.php');
 
 include_once(__DIR__.'/AIDominoChosenAndPlaced.php');
+include_once(__DIR__.'/AINextDominoChosen.php');
 
 include_once(__DIR__.'/DominoChosenAndPlaced.php');
 include_once(__DIR__.'/FirstDominoChosen.php');
@@ -91,6 +92,11 @@ class Actions {
     public function action_next_domino_chosen(string $next_index, string $quarry_index): void {
         $update_market = Infrastructure\UpdateMarket::create($this->decks['domino']);
         NextDominoChosen::create($this->gamestate)->set_notifications($this->notifications)->set_update_market($update_market)->set_next_index($next_index)->set_quarry_index($quarry_index)->execute()->nextState();
+    }
+
+    public function stAIChooseNextDomino(): void {
+        $update_market = Infrastructure\UpdateMarket::create($this->decks['domino']);
+        AINextDominoChosen::create($this->gamestate)->set_notifications($this->notifications)->set_update_market($update_market)->execute()->nextState();
     }
 }
 ?>

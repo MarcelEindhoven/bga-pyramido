@@ -13,24 +13,18 @@ declare(strict_types=1);
 
 namespace Bga\Games\PyramidoCannonFodder\UseCases;
 
-include_once(__DIR__.'/DominoChosenAndPlaced.php');
+include_once(__DIR__.'/../BGA/Action.php');
 
 #[\AllowDynamicProperties]
-class AIDominoChosenAndPlaced extends DominoChosenAndPlaced {
-    static public function create($gamestate): AIDominoChosenAndPlaced {
-        $object = new AIDominoChosenAndPlaced($gamestate);
+class AINextDominoChosen extends NextDominoChosen {
+    static public function create($gamestate): AINextDominoChosen {
+        $object = new AINextDominoChosen($gamestate);
         return $object;
     }
 
-    public function execute(): AIDominoChosenAndPlaced {
+    public function execute(): AINextDominoChosen {
+        parent::set_next_index('next-2');
         parent::set_quarry_index('quarry-2');
-        $horizontal = 10;
-        $vertical = 10;
-        $rotation = 0;
-        $domino_specification = ['horizontal' => $horizontal, 'vertical' => $vertical, 'rotation' => $rotation, ];
-        $domino_specification['stage'] = 1;
-
-        parent::set_domino_specification($domino_specification);
         parent::execute();
 
         return $this;
