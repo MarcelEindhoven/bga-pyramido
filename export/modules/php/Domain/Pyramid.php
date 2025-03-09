@@ -31,15 +31,15 @@ class Pyramid
 
     public function get_adjacent_positions_first_stage(): array {
         if (sizeof($this->tiles) == 0)
-        return $this->get_adjacent_positions_first_stage_initial();
+            return $this->get_adjacent_positions_first_stage_initial();
         return $this->get_adjacent_positions_first_stage_with_tiles();
     }
 
-    public function get_adjacent_positions_first_stage_initial(): array {
-        $initial0 = ['horizontal' => 10, 'vertical' => 10, 'rotation' => 0];
-        $initial1 = ['horizontal' => 10, 'vertical' => 10, 'rotation' => 1];
-        $initial2 = ['horizontal' => 10, 'vertical' => 10, 'rotation' => 2];
-        $initial3 = ['horizontal' => 10, 'vertical' => 10, 'rotation' => 3];
+    static public function get_adjacent_positions_first_stage_initial(): array {
+        $initial0 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0];
+        $initial1 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 1];
+        $initial2 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 2];
+        $initial3 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 3];
         return [$initial0, $initial1, $initial2, $initial3];
     }
 
@@ -59,77 +59,62 @@ class Pyramid
             if ($vertical > $vertical_max) $vertical_max = $vertical;
             if ($vertical < $vertical_min) $vertical_min = $vertical;
 
-            $occupied[$this->calculate_key($horizontal, $vertical)] = [$horizontal, $vertical];
+            $occupied[$this->calculate_key_horizontal_vertical([$horizontal, $vertical])] = [$horizontal, $vertical];
 
-            $neighbours[$this->calculate_key($horizontal - 2, $vertical)] = [$horizontal - 2, $vertical];
-            $neighbours[$this->calculate_key($horizontal + 2, $vertical)] = [$horizontal + 2, $vertical];
-            $neighbours[$this->calculate_key($horizontal, $vertical - 2)] = [$horizontal, $vertical - 2];
-            $neighbours[$this->calculate_key($horizontal, $vertical + 2)] = [$horizontal, $vertical + 2];
+            $neighbours[$this->calculate_key_horizontal_vertical([$horizontal - 2, $vertical])] = [$horizontal - 2, $vertical];
+            $neighbours[$this->calculate_key_horizontal_vertical([$horizontal + 2, $vertical])] = [$horizontal + 2, $vertical];
+            $neighbours[$this->calculate_key_horizontal_vertical([$horizontal, $vertical - 2])] = [$horizontal, $vertical - 2];
+            $neighbours[$this->calculate_key_horizontal_vertical([$horizontal, $vertical + 2])] = [$horizontal, $vertical + 2];
         }
         $allowed_size_vertical = $horizontal_max - $horizontal_min < 8? 10:8;
         $allowed_size_horizontal = $vertical_max - $vertical_min < 8? 10:8;
         for ($i = 0; $i <= 21; $i++) {
-            $occupied[$this->calculate_key($i, $vertical_max - $allowed_size_vertical)] = 999;
-            $occupied[$this->calculate_key($i, $vertical_min + $allowed_size_vertical)] = 999;
-            $occupied[$this->calculate_key($horizontal_max - $allowed_size_horizontal, $i)] = 999;
-            $occupied[$this->calculate_key($horizontal_min + $allowed_size_horizontal, $i)] = 999;
+            $occupied[$this->calculate_key_horizontal_vertical([$i, $vertical_max - $allowed_size_vertical])] = 999;
+            $occupied[$this->calculate_key_horizontal_vertical([$i, $vertical_min + $allowed_size_vertical])] = 999;
+            $occupied[$this->calculate_key_horizontal_vertical([$horizontal_max - $allowed_size_horizontal, $i])] = 999;
+            $occupied[$this->calculate_key_horizontal_vertical([$horizontal_min + $allowed_size_horizontal, $i])] = 999;
         }
         foreach ($neighbours as $position) {
-            $horizontal = $position[0];
-            $vertical = $position[1];
-            $candidate_key = $this->calculate_key($horizontal, $vertical);
-            if (!array_key_exists($candidate_key . 0, $candidate_positions) &&
-            !array_key_exists($this->calculate_key($horizontal + 2, $vertical), $occupied) &&
-            !array_key_exists($candidate_key, $occupied)){
-                $candidate_positions[$candidate_key . 0] = ['horizontal' => $horizontal, 'vertical' => $vertical, 'rotation' => 0];
-            }
-            $candidate_key = $this->calculate_key($horizontal - 2, $vertical);
-            if (!array_key_exists($candidate_key . 0, $candidate_positions) &&
-            !array_key_exists($candidate_key, $occupied) &&
-            !array_key_exists($this->calculate_key($horizontal, $vertical), $occupied)){
-                $candidate_positions[$candidate_key . 0] = ['horizontal' => $horizontal - 2, 'vertical' => $vertical, 'rotation' => 0];
-            }
-            $candidate_key = $this->calculate_key($horizontal, $vertical);
-            if (!array_key_exists($candidate_key . 1, $candidate_positions) &&
-            !array_key_exists($this->calculate_key($horizontal, $vertical + 2), $occupied) &&
-            !array_key_exists($candidate_key, $occupied)){
-                $candidate_positions[$candidate_key . 1] = ['horizontal' => $horizontal, 'vertical' => $vertical, 'rotation' => 1];
-            }
-            $candidate_key = $this->calculate_key($horizontal, $vertical - 2);
-            if (!array_key_exists($candidate_key . 1, $candidate_positions) &&
-            !array_key_exists($candidate_key, $occupied) &&
-            !array_key_exists($this->calculate_key($horizontal, $vertical), $occupied)){
-                $candidate_positions[$candidate_key . 1] = ['horizontal' => $horizontal, 'vertical' => $vertical - 2, 'rotation' => 1];
-            }
-            $candidate_key = $this->calculate_key($horizontal, $vertical);
-            if (!array_key_exists($candidate_key . 2, $candidate_positions) &&
-            !array_key_exists($this->calculate_key($horizontal - 2, $vertical), $occupied) &&
-            !array_key_exists($candidate_key, $occupied)){
-                $candidate_positions[$candidate_key . 2] = ['horizontal' => $horizontal, 'vertical' => $vertical, 'rotation' => 2];
-            }
-            $candidate_key = $this->calculate_key($horizontal + 2, $vertical);
-            if (!array_key_exists($candidate_key . 2, $candidate_positions) &&
-            !array_key_exists($candidate_key, $occupied) &&
-            !array_key_exists($this->calculate_key($horizontal, $vertical), $occupied)){
-                $candidate_positions[$candidate_key . 2] = ['horizontal' => $horizontal + 2, 'vertical' => $vertical, 'rotation' => 2];
-            }
-            $candidate_key = $this->calculate_key($horizontal, $vertical);
-            if (!array_key_exists($candidate_key . 3, $candidate_positions) &&
-            !array_key_exists($this->calculate_key($horizontal, $vertical - 2), $occupied) &&
-            !array_key_exists($candidate_key, $occupied)){
-                $candidate_positions[$candidate_key . 3] = ['horizontal' => $horizontal, 'vertical' => $vertical, 'rotation' => 3];
-            }
-            $candidate_key = $this->calculate_key($horizontal, $vertical + 2);
-            if (!array_key_exists($candidate_key . 3, $candidate_positions) &&
-            !array_key_exists($candidate_key, $occupied) &&
-            !array_key_exists($this->calculate_key($horizontal, $vertical), $occupied)){
-                $candidate_positions[$candidate_key . 3] = ['horizontal' => $horizontal, 'vertical' => $vertical + 2, 'rotation' => 3];
+            for ($rotation = 0; $rotation <= 3; $rotation++) {
+                $offset_second_tile = $this->get_offset_second_tile($rotation);
+                $candidate = $position;
+                $candidate[2] = $rotation;
+                if ($this->is_candidate_position_free($occupied, $candidate, $rotation))
+                    $this->register_candidate_position($candidate_positions, $candidate, $rotation);
+                $candidate[0] = $candidate[0] - $offset_second_tile[0];
+                $candidate[1] = $candidate[1] - $offset_second_tile[1];
+                if ($this->is_candidate_position_free($occupied, $candidate, $rotation))
+                    $this->register_candidate_position($candidate_positions, $candidate, $rotation);
             }
         }
         return $candidate_positions;
     }
-    protected function calculate_key($horizontal, $vertical) {
-        return '' . $horizontal . $vertical;
+    protected function register_candidate_position(& $candidate_positions, $position) {
+        if (array_key_exists($this->calculate_key_horizontal_vertical_rotation($position), $candidate_positions)) return;
+        $candidate_positions[$this->calculate_key_horizontal_vertical_rotation($position)] = ['horizontal' => $position[0], 'vertical' => $position[1], 'rotation' => $position[2], 'stage' => 1, ];
+    }
+
+    protected function is_candidate_position_free($occupied, $position, $rotation) {
+        if (array_key_exists($this->calculate_key_horizontal_vertical($position), $occupied)) return false;
+        return !array_key_exists($this->calculate_key_horizontal_vertical($this->get_position_second_tile($position, $rotation)), $occupied);
+    }
+    protected function get_position_second_tile($position_first_tile, $rotation) : array {
+        $offset_second_tile = $this->get_offset_second_tile($rotation);
+        return [$position_first_tile[0] + $offset_second_tile[0], $position_first_tile[1] + $offset_second_tile[1]];
+    }
+    protected function get_offset_second_tile($rotation) : array {
+        if ($rotation == 0) return [2,0];
+        if ($rotation == 1) return [0,2];
+        if ($rotation == 2) return [-2,0];
+        return [0, -2];
+    }
+
+    protected function calculate_key_horizontal_vertical_rotation($position) {
+        return $this->calculate_key_horizontal_vertical($position) . $position[2];
+    }
+
+    protected function calculate_key_horizontal_vertical($position) {
+        return '' . $position[0] . $position[1];
     }
 
 }

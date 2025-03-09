@@ -87,7 +87,7 @@ class Game extends \Table
         $this->actions->set_players($this->loadPlayersBasicInfos());
 
         // Note: the following statement crashes in setup stage
-        $this->actions->set_player_id(self::getCurrentPlayerId());
+        $this->actions->set_player_id((int)$this->getActivePlayerId());
     }
 
     /**

@@ -24,15 +24,24 @@ class AIDominoChosenAndPlaced extends DominoChosenAndPlaced {
 
     public function execute(): AIDominoChosenAndPlaced {
         parent::set_quarry_index('quarry-2');
-        $horizontal = 10;
-        $vertical = 10;
-        $rotation = 0;
-        $domino_specification = ['horizontal' => $horizontal, 'vertical' => $vertical, 'rotation' => $rotation, ];
-        $domino_specification['stage'] = 1;
 
-        parent::set_domino_specification($domino_specification);
+        parent::set_domino_specification($this->get_domino_specification());
+
         parent::execute();
 
         return $this;
+    }
+ 
+    protected function get_domino_specification(): array {
+        $candidate_positions = array_filter($this->get_current_data->get()['candidate_positions'],
+        function (array $candidate_position) {
+            return 
+            ($candidate_position['horizontal'] >= 10) && 
+            ($candidate_position['horizontal'] % 4 == 2) && 
+            ($candidate_position['vertical'] >= 10) && 
+            ($candidate_position['rotation'] == 0);
+        });
+
+        return array_shift($candidate_positions);
     }
 }
