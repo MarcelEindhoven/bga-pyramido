@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace Bga\Games\PyramidoCannonFodder\NewGame;
 
 require_once("DominoNewGame.php");
+require_once("MarkerNewGame.php");
+
+include_once(__DIR__.'/../Infrastructure/Marker.php');
 include_once(__DIR__.'/../Infrastructure/Domino.php');
 use Bga\Games\PyramidoCannonFodder\Infrastructure;
 
@@ -32,11 +35,17 @@ class NewGame
     public function set_decks($decks) : NewGame {
         $this->decks = $decks;
         $this->set_domino_factory(Infrastructure\DominoFactory::create($this->decks['domino']));
+        $this->set_marker_factory(Infrastructure\MarkerFactory::create($this->decks['marker']));
         return $this;
     }
 
     public function set_domino_factory($domino_factory) : NewGame {
         $this->domino_factory = $domino_factory;
+        return $this;
+    }
+
+    public function set_marker_factory($marker_factory) : NewGame {
+        $this->marker_factory = $marker_factory;
         return $this;
     }
 
@@ -57,6 +66,7 @@ class NewGame
 
         $this->setup_domino();
         $this->setup_market();
+        $this->setup_marker($players);
 
         return $this;
     }
@@ -76,7 +86,12 @@ class NewGame
     }
 
     public function setup_domino() : NewGame{
-        DominoNewGame::create($this->decks['domino'])->set_domino_factory($this->domino_factory)->setup();
+        DominoNewGame::create()->set_domino_factory($this->domino_factory)->setup();
+        return $this;
+    }
+
+    public function setup_marker($players) : NewGame{
+        MarkerNewGame::create()->set_players($players)->set_marker_factory($this->marker_factory)->setup();
         return $this;
     }
 }

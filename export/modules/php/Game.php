@@ -59,6 +59,12 @@ class Game extends \Table
 
         $this->decks['domino'] = self::getNew('module.common.deck');
         $this->decks['domino']->init('domino');
+
+        $this->decks['marker'] = self::getNew('module.common.deck');
+        $this->decks['marker']->init('marker');
+
+        $this->decks['resurfacing'] = self::getNew('module.common.deck');
+        $this->decks['resurfacing']->init('resurfacing');
     }
     /**
      * The framework demands that each action starts with the prefix "act"

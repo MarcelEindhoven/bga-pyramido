@@ -17,14 +17,12 @@ use Bga\Games\FrameworkInterfaces;
 class NewGameTest extends TestCase{
     protected ?NewGame $sut = null;
     protected ?FrameworkInterfaces\Deck $mock_cards = null;
-    //protected ?Infrastructure\DominoFactory $mock_domino_factory = null;
+    protected ?FrameworkInterfaces\Deck $mock_marker_cards = null;
 
     public function setup(): void {
-        //$this->mock_domino_factory = $this->createMock(Infrastructure\DominoFactory::class);
-        $this->sut = new NewGame();
         $this->mock_cards = $this->createMock(FrameworkInterfaces\Deck::class);
-        $this->sut = NewGame::create(['domino' => $this->mock_cards]);
-
+        $this->mock_marker_cards = $this->createMock(FrameworkInterfaces\Deck::class);
+        $this->sut = NewGame::create(['domino' => $this->mock_cards, 'marker' => $this->mock_marker_cards]);
     }
 
     /**
