@@ -41,7 +41,7 @@ define(['dojo/_base/declare'], (declare) => {
                         <div id="${this.unique_id}">
                     `);
                     this.dojo.addClass(this.unique_id,'marker');
-                    const id_horizontal = +this.colour + 1;
+                    const id_horizontal = +this.colour;
                     this.dojo.style(this.unique_id, 'backgroundPosition', '-' + (this.PIXELS_PER_TILE * id_horizontal) + 'px -0px');
                 }
                 clone(properties){

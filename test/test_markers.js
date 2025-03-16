@@ -35,27 +35,27 @@ describe('Markers', function () {
         });
     });
     describe('Position within marker window for stage 0', function () {
-        it('sets horizontal and vertical for colour 1', function () {
+        it('sets horizontal and vertical for top left colour', function () {
             // Arrange
-            marker_specification.colour = 1;
+            marker_specification.colour = 0;
             // Act
             marker = sut.create_from(marker_specification);
             // Assert
             assert.equal(marker.horizontal, 0);
             assert.equal(marker.vertical, 0);
         });
-        it('sets horizontal and vertical for colour 2', function () {
+        it('sets horizontal and vertical for top right colour', function () {
             // Arrange
-            marker_specification.colour = 2;
+            marker_specification.colour = 1;
             // Act
             marker = sut.create_from(marker_specification);
             // Assert
             assert.equal(marker.horizontal, 2);
             assert.equal(marker.vertical, 0);
         });
-        it('sets horizontal and vertical for colour 6', function () {
+        it('sets horizontal and vertical for bottom right colour', function () {
             // Arrange
-            marker_specification.colour = 6;
+            marker_specification.colour = 5;
             // Act
             marker = sut.create_from(marker_specification);
             // Assert
