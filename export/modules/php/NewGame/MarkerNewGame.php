@@ -35,7 +35,7 @@ class MarkerNewGame
 
     public function setup() : MarkerNewGame {
         foreach ($this->players as $player_id => $player) {
-            for ($i = 1; $i <= 6; $i++)
+            for ($i = 0; $i <= 5; $i++)
                 $this->marker_factory->add($i);
             $this->marker_factory->flush($player_id);
         }

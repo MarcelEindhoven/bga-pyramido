@@ -41,8 +41,8 @@ define(['dojo/_base/declare'], (declare) => {
                         <div id="${this.unique_id}">
                     `);
                     this.dojo.addClass(this.unique_id,'marker');
-                    const id_horizontal = this.colour;
-                    this.dojo.style(this.unique_id, 'backgroundPosition', '-' + this.PIXELS_PER_TILE * id_horizontal + 'px -0px');
+                    const id_horizontal = +this.colour + 1;
+                    this.dojo.style(this.unique_id, 'backgroundPosition', '-' + (this.PIXELS_PER_TILE * id_horizontal) + 'px -0px');
                 }
                 clone(properties){
                     for (var property in properties) {
@@ -50,8 +50,8 @@ define(['dojo/_base/declare'], (declare) => {
                     }
                 }
                 set_position_for_marker_window() {
-                    this.horizontal = 2 * ((this.colour - 1) % 2);
-                    this.vertical = 2 * ((this.colour - 1 - ((this.colour - 1) % 2)) / 2);
+                    this.horizontal = 2 * (this.colour % 2);
+                    this.vertical = 2 * ((this.colour - (this.colour % 2)) / 2);
                 }
                 move_to(element_id, x, y) {
                     this.element_id = element_id;
