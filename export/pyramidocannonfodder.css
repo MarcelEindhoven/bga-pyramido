@@ -76,6 +76,11 @@
     width: 160px;
     height: 80px;
 }
+.marker {
+    background-image: url('img/markersx60.png');
+    width: 60px;
+    height: 60px;
+}
 .rotate0 {
     transform: rotate(0deg);
 }

@@ -10,7 +10,7 @@ define(['dojo/_base/declare'], (declare) => {
         /**
          * Use case creation:
          */
-        PIXELS_PER_TILE: 80,
+        DEFAULT_PIXELS_PER_TILE: 80,
 
         constructor(dependencies) {
             this.clone(dependencies);
@@ -20,6 +20,9 @@ define(['dojo/_base/declare'], (declare) => {
             this.x_maximum = 0;
             this.y_minimum = 5000000;
             this.y_maximum = 0;
+
+            this.pixels_per_tile = this.DEFAULT_PIXELS_PER_TILE;
+            this.margin_between_tiles = 0;
         },
         clone(properties){
             for (var property in properties) {
@@ -34,6 +37,8 @@ define(['dojo/_base/declare'], (declare) => {
          * vertical
          * get_bounding_box
          */
+        set_margin_between_tiles(margin) {this.margin_between_tiles = margin;},
+        set_pixels_per_tile(pixels_per_tile) {this.pixels_per_tile = pixels_per_tile;},
         add(paintable) {
             const bounding_box = paintable.get_bounding_box();
 
@@ -91,8 +96,8 @@ define(['dojo/_base/declare'], (declare) => {
             paintable.move_to(this.element_id, x - this.x_minimum, y - this.y_minimum);
         },
         getAbsoluteCoordinates(horizontal, vertical) {
-            const x = horizontal * this.PIXELS_PER_TILE / 2;
-            const y = vertical * this.PIXELS_PER_TILE / 2;
+            const x = horizontal * (this.pixels_per_tile + this.margin_between_tiles)/ 2;
+            const y = vertical * (this.pixels_per_tile + this.margin_between_tiles) / 2;
             return [x, y];
         },
         /**

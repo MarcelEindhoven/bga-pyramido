@@ -76,28 +76,29 @@ class CurrentMarkers
     }
 
     public function get(): array {
-        $tiles_per_player = [];
+        $markers_per_player = [];
         foreach ($this->players as $player_id => $player)
-            $tiles_per_player[strval($player_id)] = $this->get_tiles_for($player_id);
+            $markers_per_player[strval($player_id)] = $this->get_markers_for($player_id);
 
-        return $tiles_per_player;
+        return $markers_per_player;
     }
 
-    public function get_tiles_for($player_id) {
-        $tiles_per_player = [];
-        $dominoes = $this->deck->getCardsInLocation(strval($player_id));
-        foreach ($dominoes as $domino) {
-            $tiles_per_player[] = $this->get_first_tile_for($domino);
+    public function get_markers_for($player_id) {
+        $markers_per_player = [];
+        $markers = $this->deck->getCardsInLocation(strval($player_id));
+        foreach ($markers as $marker_specification) {
+            $markers_per_player[] = $this->get_first_marker_for($marker_specification);
         }
-        return $tiles_per_player;
+        return $markers_per_player;
     }
 
-    public function get_first_tile_for($domino) {
-        $tile = ['id' => '1', 'colour' => 0, 'stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0];
+    public function get_first_marker_for($marker_specification) {
+        $marker = ['id' => '1', 'colour' => 0, 'stage' => 0, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0];
 
-        $tile['colour'] = $domino['type'];
+        $marker['colour'] = $marker_specification['type'];
+        $marker['id'] = $marker_specification['id'];
 
-        return $tile;
+        return $marker;
     }
 }
 

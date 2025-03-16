@@ -21,6 +21,7 @@ define([
     g_gamethemeurl + 'modules/javascript/canvas.js',
     g_gamethemeurl + 'modules/javascript/dominoes.js',
     g_gamethemeurl + 'modules/javascript/tiles.js',
+    g_gamethemeurl + 'modules/javascript/markers.js',
     g_gamethemeurl + 'modules/javascript/usecase_setup.js',
     g_gamethemeurl + 'modules/javascript/usecase_choose_domino.js',
     g_gamethemeurl + 'modules/javascript/usecase_place_domino.js',
@@ -29,7 +30,7 @@ define([
     "ebg/counter",
     "ebg/stock",
 ],
-function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase_choose_domino, usecase_place_domino, usecase_choose_next_domino) {
+function (dojo, declare, market, canvas, dominoes, tiles, markers, usecase_setup, usecase_choose_domino, usecase_place_domino, usecase_choose_next_domino) {
     return declare("bgagame.pyramidocannonfodder", ebg.core.gamegui, {
         constructor: function(){
             console.log('pyramidocannonfodder constructor');
@@ -63,6 +64,11 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
                 document: document,
                 dojo: dojo, 
             });
+            this.marker_factory = new markers({
+                game: this,
+                document: document,
+                dojo: dojo, 
+            });
             this.domino_factory = new dominoes({
                 game: this,
                 document: document,
@@ -74,12 +80,13 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
                 document: document,
                 market: this.market,
                 dojo: dojo, 
+                marker_factory: this.marker_factory,
                 tile_factory: this.tile_factory,
                 canvas_class: canvas,
                 stock_class: ebg.stock, gamethemeurl: g_gamethemeurl, domino_factory: this.domino_factory,
             });
             this.usecase_setup.setup(gamedatas);
-            this.tile_containers = this.usecase_setup.tile_containers;
+            this.token_containers = this.usecase_setup.token_containers;
 
             // Setup game notifications to handle (see "setupNotifications" method below)
             this.setupNotifications();
@@ -92,10 +99,10 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
         },
         paint: function() {
             console.log("paint" );
-            Object.values(this.tile_containers).forEach(tile_container => {
+            Object.values(this.token_containers).forEach(tile_container => {
                     tile_container.paint();
             });
-            Object.values(this.tile_containers).forEach(tile_container => {
+            Object.values(this.token_containers).forEach(tile_container => {
                 tile_container.paint();
         });
     },
@@ -122,7 +129,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
                 switch( stateName )
                 {
                 case 'selectAndPlaceQuarry':
-                    this.usecase_place_domino = new usecase_place_domino({ui: this, market: this.market, pyramid: this.tile_containers['pyramid-' + this.player_id], domino_factory: this.domino_factory});
+                    this.usecase_place_domino = new usecase_place_domino({ui: this, market: this.market, pyramid: this.token_containers['pyramid-' + this.player_id], domino_factory: this.domino_factory});
                     this.usecase_place_domino.set_candidate_positions(this.gamedatas.candidate_positions);
                     this.usecase_place_domino.subscribe(this, 'domino_placed');
 
@@ -315,7 +322,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, usecase_setup, usecase
 
             Object.values(notif.args.tiles).forEach(tile_specification => {
                 let tile = this.tile_factory.create_tile_from(tile_specification);
-                this.tile_containers['pyramid-' + notif.args.player_id].add(tile);
+                this.token_containers['pyramid-' + notif.args.player_id].add(tile);
             });
             this.paint();
             this.paint();

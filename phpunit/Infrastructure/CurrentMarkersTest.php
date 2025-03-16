@@ -76,6 +76,33 @@ class CurrentMarkersTest extends TestCase{
         $this->assertEquals(reset($markers)['colour'], $colour);
     }
 
+    public function test_get_unique_id() {
+        // Arrange
+        $this->sut->set_players(['77' => [],]);
+        $id = 3;
+        $this->default_marker['id'] = $id;
+        $this->mock_cards->expects($this->exactly(1))->method('getCardsInLocation')->with('77')->willReturn(
+            [$this->default_marker]);
+
+        // Act
+        $markers = $this->act_default();
+        // Assert
+        $this->assertEquals(reset($markers)['id'], $id);
+    }
+
+    public function test_get_stage_default_0() {
+        // Arrange
+        $this->sut->set_players(['77' => [],]);
+        $stage = 0;
+        $this->mock_cards->expects($this->exactly(1))->method('getCardsInLocation')->with('77')->willReturn(
+            [$this->default_marker]);
+
+        // Act
+        $markers = $this->act_default();
+        // Assert
+        $this->assertEquals(reset($markers)['stage'], $stage);
+    }
+
     protected function act_default() {
         return $this->sut->get()[$this->player_id];
     }

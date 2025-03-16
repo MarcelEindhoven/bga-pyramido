@@ -71,8 +71,8 @@ describe('Canvas class', function () {
             // Act
             act(tile);            
             // Assert
-            assert.equal(dojo.style.getCall(2).args[2], '' + sut.PIXELS_PER_TILE + 'px');
-            assert.equal(dojo.style.getCall(3).args[2], '' + sut.PIXELS_PER_TILE + 'px');
+            assert.equal(dojo.style.getCall(2).args[2], '' + sut.DEFAULT_PIXELS_PER_TILE + 'px');
+            assert.equal(dojo.style.getCall(3).args[2], '' + sut.DEFAULT_PIXELS_PER_TILE + 'px');
         });
     });
     describe('Remove paintables', function () {
@@ -124,8 +124,8 @@ describe('Canvas class', function () {
             // Act
             act(other_tile);            
             // Assert
-            assert.equal(dojo.style.getCall(6).args[2], '' + ((12-10+2)/2*sut.PIXELS_PER_TILE) + 'px');
-            assert.equal(dojo.style.getCall(7).args[2], '' + ((20-17+2)/2*sut.PIXELS_PER_TILE) + 'px');
+            assert.equal(dojo.style.getCall(6).args[2], '' + ((12-10+2)/2*sut.DEFAULT_PIXELS_PER_TILE) + 'px');
+            assert.equal(dojo.style.getCall(7).args[2], '' + ((20-17+2)/2*sut.DEFAULT_PIXELS_PER_TILE) + 'px');
         });
         it('also moves existing tiles when resizing', function () {
             // Arrange
@@ -139,7 +139,7 @@ describe('Canvas class', function () {
             // Act
             act(other_tile);            
             // Assert
-            assert.equal(other_tile.move_to.getCall(0).args[1], 1 * sut.PIXELS_PER_TILE);
+            assert.equal(other_tile.move_to.getCall(0).args[1], 1 * sut.DEFAULT_PIXELS_PER_TILE);
             assert.equal(other_tile.move_to.getCall(0).args[2], 0);
         });
         it('moves existing tile with original data', function () {
@@ -148,7 +148,26 @@ describe('Canvas class', function () {
             act(other_tile);            
             // Assert
             assert.equal(tile.move_to.getCall(1).args[1], 0);
-            assert.equal(tile.move_to.getCall(1).args[2], 1.5 * sut.PIXELS_PER_TILE);
+            assert.equal(tile.move_to.getCall(1).args[2], 1.5 * sut.DEFAULT_PIXELS_PER_TILE);
+        });
+    });
+    describe('Multiple paintables with margin between tiles', function () {
+        function act(tile) {
+            sut.add(tile);
+        };
+        it('takes into account margin between tiles', function () {
+            // Arrange
+            sut.set_margin_between_tiles(10);
+            other_tile.horizontal = tile.horizontal + 2;
+            other_tile.vertical = tile.vertical - 4;
+            // Act
+            act(tile);
+            act(other_tile);
+            // Assert
+            assert.equal(tile.move_to.getCall(1).args[1], 0);
+            assert.equal(tile.move_to.getCall(1).args[2], 2 * sut.DEFAULT_PIXELS_PER_TILE + 2 * 10);
+            assert.equal(other_tile.move_to.getCall(0).args[1], 1 * sut.DEFAULT_PIXELS_PER_TILE+ 1 * 10);
+            assert.equal(other_tile.move_to.getCall(0).args[2], 0);
         });
     });
 });
