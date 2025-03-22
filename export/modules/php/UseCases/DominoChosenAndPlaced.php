@@ -43,6 +43,9 @@ class DominoChosenAndPlaced extends \NieuwenhovenGames\BGA\Action {
     }
 
     public function execute(): DominoChosenAndPlaced {
+        // Last-placed domino is first located on highest stage to distinguish it from other dominoes
+        $this->domino_specification['stage'] = 4;
+
         $this->update_domino->move($this->quarry_index, $this->player_id, $this->domino_specification);
 
         $domino = $this->update_domino->get_domino($this->player_id, $this->domino_specification);

@@ -24,7 +24,7 @@ class UpdateDominoTest extends TestCase{
     protected int $horizontal = 19;
     protected int $vertical = 18;
     protected int $rotation = 3;
-    protected array $domino_specification = ['stage' => 4, 'horizontal' => 19, 'vertical' => 18, 'rotation' => 3, ];
+    protected array $domino_specification = ['stage' => 0, 'horizontal' => 19, 'vertical' => 18, 'rotation' => 3, ];
 
     protected function setUp(): void {
         $this->mock_cards = $this->createMock(FrameworkInterfaces\Deck::class);

@@ -35,7 +35,7 @@ class AIDominoChosenAndPlacedTest extends TestCase{
     protected string $quarry_index = 'quarry-2';
 
     protected array $current_data = ['candidate_positions' => []];
-    protected array $expected_domino_specification = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0, ];
+    protected array $expected_domino_specification = ['stage' => 4, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0, ];
 
     protected function setUp(): void {
         $this->mock_gamestate = $this->createMock(FrameworkInterfaces\GameState::class);
@@ -69,7 +69,7 @@ class AIDominoChosenAndPlacedTest extends TestCase{
         $initial_right = ['horizontal' => 12, 'vertical' => 10, 'rotation' => 0];
         $pyramid = Domain\Pyramid::create([$initial_right]);
         $this->current_data['candidate_positions'] = $pyramid->get_adjacent_positions_first_stage();
-        $this->expected_domino_specification = ['stage' => 1, 'horizontal' => 14, 'vertical' => 10, 'rotation' => 0, ];
+        $this->expected_domino_specification = ['stage' => 4, 'horizontal' => 14, 'vertical' => 10, 'rotation' => 0, ];
         $this->arrange();
 
         $this->mock_update_domino->expects($this->exactly(1))->method('move')->with($this->quarry_index, $this->player_id, $this->expected_domino_specification);

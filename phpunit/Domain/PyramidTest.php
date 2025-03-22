@@ -24,6 +24,35 @@ class PyramidTest extends TestCase{
     /**
      * @dataProvider adjacent_positions_provider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('stage_next_domino_provider')]
+    public function test_current_stage($tiles, $expected_stage) {
+        // Arrange
+        $this->sut = Pyramid::create($tiles);
+
+        // Act
+        $stage = $this->sut->stage_next_domino();
+
+        // Assert
+        $this->assertEquals($expected_stage, $stage);
+    }
+    static public function stage_next_domino_provider(): array {
+        $stage3_0 = ['stage' => 3,];
+        $stage2_0 = ['stage' => 2,];
+        $stage1_0 = ['stage' => 1,];
+        return [
+            [[], 1],
+            [[$stage1_0, $stage1_0, $stage1_0, $stage1_0, $stage1_0, $stage1_0, $stage1_0, $stage1_0, $stage1_0, $stage1_0, 
+            $stage1_0, $stage1_0, $stage1_0, $stage1_0, $stage1_0, $stage1_0, $stage1_0, $stage1_0, $stage1_0, $stage1_0, 
+                ], 2],
+            [[$stage2_0, $stage2_0, $stage2_0, $stage2_0, $stage2_0, $stage2_0, 
+            $stage2_0, $stage2_0, $stage2_0, $stage2_0, $stage2_0, $stage2_0, $stage3_0, $stage3_0], 3],
+            [[$stage3_0, $stage3_0, $stage3_0, $stage3_0, $stage3_0, $stage3_0], 4],
+        ];
+    }
+
+    /**
+     * @dataProvider adjacent_positions_provider
+     */
     #[\PHPUnit\Framework\Attributes\DataProvider('adjacent_positions_provider')]
     public function test_get_adjacent_positions($tiles, $expected_positions) {
         // Arrange

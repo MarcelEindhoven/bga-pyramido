@@ -29,6 +29,16 @@ class Pyramid
         return $this;
     }
 
+    public function stage_next_domino(): int {
+        if (6 == count(array_filter($this->tiles, function($tile) {return 3 == $tile['stage'];})))
+            return 4;
+        if (12 == count(array_filter($this->tiles, function($tile) {return 2 == $tile['stage'];})))
+            return 3;
+        if (20 == count(array_filter($this->tiles, function($tile) {return 1 == $tile['stage'];})))
+            return 2;
+        return 1;
+    }
+
     public function get_adjacent_positions_first_stage(): array {
         if (sizeof($this->tiles) == 0)
             return $this->get_adjacent_positions_first_stage_initial();
