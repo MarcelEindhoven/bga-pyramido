@@ -26,14 +26,15 @@ class DominoFactoryTest extends TestCase{
     // Test creation of Domino tokens
     public function test_Domino_is_created() {
         // Arrange
-        $first_colour = 0;
+        $order_index = 7;
+        $first_colour = 1;
         $second_colour = 5;
-        $expected_definition = array( 'type' => $first_colour, 'type_arg' => $second_colour, 'nbr' => 1);
+        $expected_definition = array( 'type' => $order_index, 'type_arg' => $first_colour + 6 * $second_colour, 'nbr' => 1);
 
         $this->mock_cards->expects($this->exactly(1))->method('createCards')->with([$expected_definition]);
 
         // Act
-        $this->sut->add($first_colour, $second_colour);
+        $this->sut->add($order_index, $first_colour, $second_colour);
         $this->sut->flush();
         // Assert
     }

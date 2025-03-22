@@ -185,14 +185,14 @@ class CurrentTilesTest extends TestCase{
 
     public function test_second_tile_tile_id() {
         // Arrange
-        $this->default_domino['id'] = 1;
+        $this->default_domino['type'] = 1;
         $this->arrange_rotation(3);
 
         // Act
         $second_tile = $this->act_second_tile();
 
         // Assert
-        $this->assertEquals($this->default_domino['id'] * 2 - 1, $second_tile['tile_id']);
+        $this->assertEquals($this->default_domino['type'] * 2 + 1, $second_tile['tile_id']);
     }
 
     public function test_tile_id_first_tile() {
@@ -200,7 +200,7 @@ class CurrentTilesTest extends TestCase{
         $stage = 1;
         $this->default_domino['location_arg'] = $stage;
 
-        $this->default_domino['id'] = 90;
+        $this->default_domino['type'] = 90;
         
         $this->arrange_default_domino();
 
@@ -209,7 +209,38 @@ class CurrentTilesTest extends TestCase{
         $first_tile = $tiles[0];
 
         // Assert
-        $this->assertEquals($this->default_domino['id'] * 2 - 2, $first_tile['tile_id']);
+        $this->assertEquals($this->default_domino['type'] * 2, $first_tile['tile_id']);
+    }
+
+    public function test_first_tile_colour() {
+        // Arrange
+        $stage = 1;
+        $this->default_domino['location_arg'] = $stage;
+
+        $colour = 5;
+        $this->default_domino['type_arg'] = $colour + 6 * 5;
+
+        $this->arrange_default_domino();
+
+        // Act
+        $tiles = $this->act_default($stage);
+        $first_tile = $tiles[0];
+
+        // Assert
+        $this->assertEquals($colour, $first_tile['colour']);
+    }
+
+    public function test_second_tile_colour() {
+        // Arrange
+        $colour = 3;
+        $this->default_domino['type_arg'] = 5 + 6 * $colour;
+        $this->arrange_rotation(3);
+
+        // Act
+        $second_tile = $this->act_second_tile();
+
+        // Assert
+        $this->assertEquals($colour, $second_tile['colour']);
     }
 
     protected function arrange_default_domino() {

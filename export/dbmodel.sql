@@ -34,9 +34,9 @@
 -- ALTER TABLE `player` ADD `player_my_custom_field` INT UNSIGNED NOT NULL DEFAULT '0';
 
 -- Each domino consists of two tiles
--- The ID specifies the position of the domino in the image
+-- The type specifies the manufacturer order, which is also the position of the domino in the image
 -- The type specifies the first tile, the type argument specifies the second tile
--- A type number is composed of colour (6 possibilities) and the presence/absence of a jewel icon in each of the 4 corners
+-- A type argument is composed of colour (6 possibilities) of first and second tile and the presence/absence of a jewel icon in each of the 4 corners
 -- Location is 'deck', 'quarry', 'next', player ID
 -- Location argument for quarry and next is the index, starting from 1
 -- Location argument for player ID is the stage (0-4), horizontal and vertical of the first tile (0-19) and rotation (0-3)

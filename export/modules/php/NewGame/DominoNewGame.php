@@ -132,9 +132,8 @@ class DominoNewGame
     }
 
     public function setup() : DominoNewGame {
-        foreach (DominoNewGame::DOMINO_SPECIFICATION as $specification) {
-            $this->domino_factory->add($specification[0], $specification[1]);
-        }
+        for ($i = 0; $i < count(DominoNewGame::DOMINO_SPECIFICATION); $i++) 
+            $this->domino_factory->add($i, DominoNewGame::DOMINO_SPECIFICATION[$i][0], DominoNewGame::DOMINO_SPECIFICATION[$i][1]);
         $this->domino_factory->flush();
         return $this;
     }

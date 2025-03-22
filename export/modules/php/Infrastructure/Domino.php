@@ -28,8 +28,8 @@ class DominoFactory
         $this->deck = $deck;
     }
 
-    public function add($first_colour, $second_colour) {
-        $this->definitions[] = array( 'type' => $first_colour, 'type_arg' => $second_colour, 'nbr' => 1);
+    public function add($order_index, $first_colour, $second_colour) {
+        $this->definitions[] = array( 'type' => $order_index, 'type_arg' => $first_colour + 6 * $second_colour, 'nbr' => 1);
     }
     public function flush() {
         $this->deck->createCards($this->definitions);
@@ -136,13 +136,15 @@ class CurrentTiles
     public function get_first_tile_for($domino) {
         $tile = $this->get_tile_common($domino);
 
-        $tile['tile_id'] = ($domino['id'] - 1) * 2;
+        $tile['tile_id'] = $domino['type'] * 2;
+        $tile['colour'] = $domino['type_arg'] % 6;
 
         return $tile;
     }
     public function get_second_tile_for($domino) {
         $tile = $this->get_tile_common($domino);
-        $tile['tile_id'] = ($domino['id'] - 1) * 2 + 1;
+        $tile['tile_id'] = $domino['type'] * 2 + 1;
+        $tile['colour'] = (int) (($domino['type_arg'] % (6 * 6)) / 6);
 
         if ($tile['rotation'] == 0)
             $tile['horizontal'] = $tile['horizontal'] + 2;
@@ -225,7 +227,7 @@ class CurrentMarket
         $cards = $this->deck->getCardsInLocation($category);
         foreach ($cards as $card) {
             $dominoes[$card['location_arg']] = [
-                'id' => $card['id'] - 1,
+                'id' => $card['type'],
                 'index' => $card['location_arg'],
                 'element_id' => $card['location'] . '-' . $card['location_arg'],
             ];
