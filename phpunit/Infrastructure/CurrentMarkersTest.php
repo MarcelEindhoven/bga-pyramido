@@ -92,7 +92,7 @@ class CurrentMarkersTest extends TestCase{
 
     public function test_get_stage_default_0() {
         // Arrange
-        $this->sut->set_players(['77' => [],]);
+        $this->sut->set_players([77 => [],]);
         $stage = 0;
         $this->mock_cards->expects($this->exactly(1))->method('getCardsInLocation')->with('77')->willReturn(
             [$this->default_marker]);
@@ -101,6 +101,29 @@ class CurrentMarkersTest extends TestCase{
         $markers = $this->act_default();
         // Assert
         $this->assertEquals(reset($markers)['stage'], $stage);
+    }
+
+    public function test_get_pyramid_location() {
+        // Arrange
+        $this->sut->set_players(['77' => [],]);
+
+        $stage = 3;
+        $horizontal = 10;
+        $vertical = 12;
+        $this->default_marker['location_arg'] = $stage
+         + $horizontal * CurrentTiles::FACTOR_STAGE
+          + $vertical * CurrentTiles::FACTOR_STAGE * CurrentTiles::FACTOR_HORIZONTAL;
+
+        $this->mock_cards->expects($this->exactly(1))->method('getCardsInLocation')->with('77')->willReturn(
+            [$this->default_marker]);
+
+        // Act
+        $markers = $this->act_default();
+        $marker = reset($markers);
+        // Assert
+        $this->assertEquals($marker['stage'], $stage);
+        $this->assertEquals($marker['horizontal'], $horizontal);
+        $this->assertEquals($marker['vertical'], $vertical);
     }
 
     protected function act_default() {

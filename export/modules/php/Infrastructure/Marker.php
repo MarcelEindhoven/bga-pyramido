@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Bga\Games\PyramidoCannonFodder\Infrastructure;
 
+include_once(__DIR__.'/Domino.php');
+
 #[\AllowDynamicProperties]
 class MarkerFactory
 {
@@ -98,6 +100,7 @@ class CurrentMarkers
         $marker['colour'] = $marker_specification['type'];
         $marker['id'] = $marker_specification['id'];
 
+        CurrentTiles::convert_location_argument($marker, 0 + $marker_specification['location_arg']);
         return $marker;
     }
 }

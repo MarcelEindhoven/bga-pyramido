@@ -188,7 +188,12 @@ class CurrentTiles
     protected function get_tile_common($domino) {
         $tile = ['id' => '1', 'colour' => 0, 'stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0];
 
-        $location_arg = 0 + $domino['location_arg'];
+        $this->convert_location_argument($tile, 0 + $domino['location_arg']);
+
+        return $tile;
+    }
+
+    static function convert_location_argument(& $tile, $location_arg) {
         $tile['stage'] = $location_arg % CurrentTiles::FACTOR_STAGE;
 
         $remaining = intdiv($location_arg, CurrentTiles::FACTOR_STAGE);
@@ -199,9 +204,6 @@ class CurrentTiles
 
         $remaining = intdiv($remaining, CurrentTiles::FACTOR_VERTICAL);
         $tile['rotation'] = $remaining % CurrentTiles::FACTOR_ROTATION;
-
-        return $tile;
-
     }
 }
 
