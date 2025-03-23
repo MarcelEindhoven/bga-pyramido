@@ -78,7 +78,7 @@ define(['dojo/_base/declare'], (declare) => {
                     this.y = y;
                 }
                 paint() {
-                    console.log(this.unique_id, this.element_id, this.x, this.y);
+                    //console.log(this.unique_id, this.element_id, this.x, this.y);
                     //this.game.placeOnObjectPos(this.unique_id, this.element_id, this.x, this.y);
                     this.game.slideToObjectPos(this.unique_id, this.element_id, this.x, this.y).play();
                     if (this.rotation_class)

@@ -34,11 +34,20 @@ class AfterTurnFinished extends \NieuwenhovenGames\BGA\Action {
 
     public function execute(): AfterTurnFinished {
         $current_stage = $this->get_current_data->get()['current_stage'];
-        $domino_stage_4 = end(
-            array_filter($this->update_domino->get_dominoes($this->player_id)
-            , function($domino) {return 4 == $domino['stage'];})
-        );
+
+        $dominoes_stage_4 = array_filter($this->update_domino->get_dominoes($this->player_id)
+            , function(array $domino) {return 4 == $domino['stage'];});
+        $domino_stage_4 = end($dominoes_stage_4);
+
         $this->update_domino->move_stage($this->player_id, $domino_stage_4, $current_stage);
+        $domino_stage_4['stage'] = $current_stage;
+
+        $domino = $this->update_domino->get_domino($this->player_id, $domino_stage_4);
+        $this->notifications->notifyAllPlayers('domino_new_stage', '',
+        [
+        'player_id' => $this->player_id, 
+        'tiles' => [$this->update_domino->get_first_tile_for($domino), $this->update_domino->get_second_tile_for($domino), ],
+        ]);
 
         return $this;
     }

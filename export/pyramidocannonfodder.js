@@ -10,7 +10,7 @@
  * pyramidocannonfodder.js
  *
  * PyramidoCannonFodder user interface script
- * 
+ *
  * In this file, you are describing the logic of your user interface, in Javascript language.
  *
  */
@@ -34,26 +34,26 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, usecase_setup
     return declare("bgagame.pyramidocannonfodder", ebg.core.gamegui, {
         constructor: function(){
             console.log('pyramidocannonfodder constructor');
-              
+
             // Here, you can init the global variables of your user interface
             // Example:
             // this.myGlobalValue = 0;
 
         },
-        
+
         /*
             setup:
-            
+
             This method must set up the game user interface according to current game situation specified
             in parameters.
-            
+
             The method is called each time the game interface is displayed to a player, ie:
             _ when the game starts
             _ when a player refreshes the game page (F5)
-            
+
             "gamedatas" argument contains all datas retrieved by your "getAllDatas" PHP method.
         */
-        
+
         setup: function( gamedatas )
         {
             console.log( "Starting game setup" );
@@ -62,24 +62,24 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, usecase_setup
             this.tile_factory = new tiles({
                 game: this,
                 document: document,
-                dojo: dojo, 
+                dojo: dojo,
             });
             this.marker_factory = new markers({
                 game: this,
                 document: document,
-                dojo: dojo, 
+                dojo: dojo,
             });
             this.domino_factory = new dominoes({
                 game: this,
                 document: document,
-                dojo: dojo, 
+                dojo: dojo,
             });
             this.market = new market({dojo: dojo, document: document, game: this, stock_class: ebg.stock, gamethemeurl: g_gamethemeurl, domino_factory: this.domino_factory,});
             this.usecase_setup = new usecase_setup({
                 game: this,
                 document: document,
                 market: this.market,
-                dojo: dojo, 
+                dojo: dojo,
                 marker_factory: this.marker_factory,
                 tile_factory: this.tile_factory,
                 canvas_class: canvas,
@@ -118,7 +118,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, usecase_setup
 
         ///////////////////////////////////////////////////
         //// Game & client states
-        
+
         // onEnteringState: this method is called each time we are entering into a new game state.
         //                  You can use this method to perform some user interface changes at this moment.
         //
@@ -140,7 +140,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, usecase_setup
                     this.usecase_choose_next_domino = new usecase_choose_next_domino({market: this.market});
                     this.usecase_choose_next_domino.subscribe(this, 'next_domino_chosen');
                     break;
-                
+
                 case 'dummy':
                     break;
                 }
@@ -179,35 +179,35 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, usecase_setup
         onLeavingState: function( stateName )
         {
             console.log( 'Leaving state: '+stateName );
-            
+
             switch( stateName )
             {
-            
+
             /* Example:
-            
+
             case 'myGameState':
-            
+
                 // Hide the HTML block we are displaying only during this game state
                 dojo.style( 'my_html_block_id', 'display', 'none' );
-                
+
                 break;
            */
-           
-           
+
+
             case 'dummy':
                 break;
-            }               
-        }, 
+            }
+        },
 
         // onUpdateActionButtons: in this method you can manage "action buttons" that are displayed in the
         //                        action status bar (ie: the HTML links in the status bar).
-        //        
+        //
         onUpdateActionButtons: function( stateName, args )
         {
             console.log( 'onUpdateActionButtons: '+stateName, args );
-                      
+
             if( this.isCurrentPlayerActive() )
-            {            
+            {
                 switch( stateName )
                 {
                     case 'selectAndPlaceQuarry':
@@ -220,65 +220,65 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, usecase_setup
                     // Add test action buttons in the action status bar, simulating a card click:
                     playableCardsIds.forEach(
                         cardId => this.addActionButton(`actPlayCard${cardId}-btn`, _('Play card with id ${card_id}').replace('${card_id}', cardId), () => this.onCardClick(cardId))
-                    ); 
+                    );
 
-                    this.addActionButton('actPass-btn', _('Pass'), () => this.bgaPerformAction("actPass"), null, null, 'gray'); 
+                    this.addActionButton('actPass-btn', _('Pass'), () => this.bgaPerformAction("actPass"), null, null, 'gray');
                     break;
                 }
             }
-        },        
+        },
 
         ///////////////////////////////////////////////////
         //// Utility methods
-        
+
         /*
-        
+
             Here, you can defines some utility methods that you can use everywhere in your javascript
             script.
-        
+
         */
 
 
         ///////////////////////////////////////////////////
         //// Player's action
-        
+
         /*
-        
-            Here, you are defining methods to handle player's action (ex: results of mouse click on 
+
+            Here, you are defining methods to handle player's action (ex: results of mouse click on
             game objects).
-            
+
             Most of the time, these methods:
             _ check the action is possible at this game state.
             _ make a call to the game server
-        
+
         */
-        
+
         // Example:
-        
+
         onCardClick: function( card_id )
         {
             console.log( 'onCardClick', card_id );
 
-            this.bgaPerformAction("actPlayCard", { 
+            this.bgaPerformAction("actPlayCard", {
                 card_id,
-            }).then(() =>  {                
+            }).then(() =>  {
                 // What to do after the server call if it succeeded
                 // (most of the time, nothing, as the game will react to notifs / change of state instead)
-            });        
-        },    
+            });
+        },
 
-        
+
         ///////////////////////////////////////////////////
         //// Reaction to cometD notifications
 
         /*
             setupNotifications:
-            
+
             In this method, you associate each of your game notifications with your local method to handle it.
-            
+
             Note: game notification names correspond to "notifyAllPlayers" and "notifyPlayer" calls in
                   your pyramidocannonfodder.game.php file.
-        
+
         */
         setupNotifications: function()
         {
@@ -287,13 +287,16 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, usecase_setup
             dojo.subscribe( 'domino_placed', this, "notify_domino_placed" );
             this.notifqueue.setSynchronous( 'domino_placed', 300 );
 
+            dojo.subscribe( 'domino_new_stage', this, "notify_domino_new_stage" );
+            this.notifqueue.setSynchronous( 'domino_new_stage', 300 );
+
             dojo.subscribe( 'next_domino_chosen', this, "notify_next_domino_chosen" );
             this.notifqueue.setSynchronous( 'next_domino_chosen', 300 );
 
             dojo.subscribe( 'candidate_positions', this, "notify_candidate_positions" );
             this.notifqueue.setSynchronous( 'candidate_positions', 300 );
         },
-        
+
         notify_candidate_positions: function( notif )
         {
             console.log( 'notify_candidate_positions' );
@@ -301,7 +304,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, usecase_setup
 
             this.gamedatas.candidate_positions = notif.args.candidate_positions;
         },
-        
+
         notify_next_domino_chosen: function( notif )
         {
             console.log( 'notify_next_domino_chosen' );
@@ -313,7 +316,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, usecase_setup
             this.market.move(next_index, quarry_index);
             this.market.fill(next_index, notif.args.next_domino);
         },
-        
+
         notify_domino_placed: function( notif )
         {
             console.log( 'notify_domino_placed' );
@@ -327,15 +330,31 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, usecase_setup
             this.paint();
             this.paint();
             // Note: notif.args contains the arguments specified during you "notifyAllPlayers" / "notifyPlayer" PHP call
-            
+
             // TODO: play the card in the user interface.
-        },    
+        },
+        notify_domino_new_stage: function( notif )
+        {
+            console.log( 'notify_domino_new_stage' );
+            console.log( notif );
+
+            Object.values(notif.args.tiles).forEach(tile_specification => {
+                let tile = this.tile_factory.create_tile_from(tile_specification);
+                this.token_containers['pyramid-' + notif.args.player_id].remove(tile);
+                this.token_containers['pyramid-' + notif.args.player_id].add(tile);
+            });
+            this.paint();
+            this.paint();
+            // Note: notif.args contains the arguments specified during you "notifyAllPlayers" / "notifyPlayer" PHP call
+
+            // TODO: play the card in the user interface.
+        },
         // TODO: from this point and below, you can write your game notifications handling methods
-        
+
         /*
         Example:
-        
-        
+
+
         */
-   });             
+   });
 });
