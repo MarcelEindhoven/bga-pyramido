@@ -81,7 +81,25 @@ $machinestates = [
         "description" => '',
         "type" => "game",
         "action" => "stAfterDominoPlaced",
-        "transitions" => ["nextDomino" => 30,]
+        "transitions" => ["" => 30,]
+    ],
+    20 => [
+        "name" => "selectMarkerTile",
+        "description" => clienttranslate('${actplayer} must select tile to place marker'),
+        "descriptionmyturn" => clienttranslate('${you} must select tile to place marker'),
+        "type" => "activeplayer",
+        "args" => "argPlayerTurn",
+        "possibleactions" => [
+            "action_tile_to_place_marker_chosen", 
+        ],
+        "transitions" => ["" => 21,]
+    ],
+    21 => [
+        "name" => "afterMarkerPlaced",
+        "description" => '',
+        "type" => "game",
+        "action" => "stAfterMarkerPlaced",
+        "transitions" => ["" => 30,]
     ],
     30 => [
         "name" => "selectNextDomino",

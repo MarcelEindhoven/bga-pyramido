@@ -82,6 +82,9 @@ class Actions {
         ->execute()->nextState();
     }
 
+    public function action_tile_to_place_marker_chosen(array $tile_specification): void {
+    }
+
     public function action_domino_chosen_and_placed(string $quarry_index, array $domino_specification): void {
         $update_domino = Infrastructure\UpdateDomino::create($this->decks['domino']);
         $domino_specification['stage'] = 1;

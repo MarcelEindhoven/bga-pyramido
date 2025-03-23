@@ -160,6 +160,14 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, usecase_setup
             this.usecase_choose_domino.unsubscribe();
             this.usecase_place_domino.unsubscribe();
         },
+        tile_to_place_marker_chosen(tile) {
+            console.log(tile);
+            this.call('tile_to_place_marker_chosen', {
+                horizontal: tile.horizontal,
+                vertical: tile.vertical,
+            });
+            this.usecase_choose_tile_to_place_marker.unsubscribe();
+        },
         next_domino_chosen(domino) {
             console.log( "next_domino_chosen" );
             console.log( domino);
