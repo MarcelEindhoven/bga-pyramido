@@ -21,9 +21,6 @@ class PyramidTest extends TestCase{
     protected function setUp(): void {
     }
 
-    /**
-     * @dataProvider adjacent_positions_provider
-     */
     #[\PHPUnit\Framework\Attributes\DataProvider('get_stage_next_domino_provider')]
     public function test_current_stage($tiles, $expected_stage) {
         // Arrange
@@ -50,9 +47,34 @@ class PyramidTest extends TestCase{
         ];
     }
 
-    /**
-     * @dataProvider adjacent_positions_provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('get_candidate_tiles_for_marker')]
+    public function test_get_candidate_tiles_for_marker($tiles, $markers, $expected_tiles) {
+        // Arrange
+        $this->sut = Pyramid::create($tiles);
+
+        // Act
+        $candidate_tiles_for_marker = $this->sut->get_candidate_tiles_for_marker($markers);
+
+        // Assert
+        $this->assertEquals($expected_tiles, $candidate_tiles_for_marker);
+    }
+    static public function get_candidate_tiles_for_marker(): array {
+        $stage4_5 = ['stage' => 4, 'colour' => 5,];
+        $stage4_4 = ['stage' => 4, 'colour' => 4,];
+        $stage2_0 = ['stage' => 2, 'colour' => 3,];
+        $stage1_0 = ['stage' => 1, 'colour' => 2,];
+        $marker_stage_0 = ['stage' => 0, 'colour' => 5,];
+        $marker_stage_1_4 = ['stage' => 1, 'colour' => 4,];
+        $marker_stage_4 = ['stage' => 4, 'colour' => 0,];
+        return [
+            [[], [], []],
+            [[$stage4_5], [$marker_stage_0, $marker_stage_1_4, $marker_stage_4], [$stage4_5]],
+            [[$stage4_5, $stage2_0], [$marker_stage_0, $marker_stage_4], [$stage4_5]],
+            [[$stage4_5, $stage4_4], [$marker_stage_0, $marker_stage_4], [$stage4_5]],
+            [[$stage4_5, $stage4_4], [$marker_stage_0, $marker_stage_1_4], [$stage4_5]],
+        ];
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('adjacent_positions_provider')]
     public function test_get_adjacent_positions($tiles, $expected_positions) {
         // Arrange

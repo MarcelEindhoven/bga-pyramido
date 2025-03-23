@@ -39,6 +39,17 @@ class Pyramid
         return 1;
     }
 
+    public function get_candidate_tiles_for_marker($markers): array {
+        $tiles_stage_4 =  array_filter($this->tiles, function($tile) {return 4 == $tile['stage'];});
+        $markers_stage_0 =  array_filter($markers, function($marker) {return 0 == $marker['stage'];});
+        return array_filter($tiles_stage_4, function($tile) use ($markers_stage_0){
+            foreach ($markers_stage_0 as $marker) {
+                if (($marker['colour'] == $tile['colour'])) return true;
+            }
+            return false;
+        });
+    }
+
     public function get_adjacent_positions_first_stage(): array {
         if (sizeof($this->tiles) == 0)
             return $this->get_adjacent_positions_first_stage_initial();
