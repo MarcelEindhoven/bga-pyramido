@@ -29,7 +29,7 @@ class Pyramid
         return $this;
     }
 
-    public function stage_next_domino(): int {
+    public function get_stage_next_domino(): int {
         if (6 == count(array_filter($this->tiles, function($tile) {return 3 == $tile['stage'];})))
             return 4;
         if (12 == count(array_filter($this->tiles, function($tile) {return 2 == $tile['stage'];})))

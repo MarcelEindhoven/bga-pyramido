@@ -21,6 +21,7 @@ include_once(__DIR__.'/AINextDominoChosen.php');
 include_once(__DIR__.'/DominoChosenAndPlaced.php');
 include_once(__DIR__.'/FirstDominoChosen.php');
 include_once(__DIR__.'/NextDominoChosen.php');
+include_once(__DIR__.'/AfterTurnFinished.php');
 
 include_once(__DIR__.'/../Infrastructure/Domino.php');
 use Bga\Games\PyramidoCannonFodder\Infrastructure;
@@ -97,6 +98,12 @@ class Actions {
     public function stAIChooseNextDomino(): void {
         $update_market = Infrastructure\UpdateMarket::create($this->decks['domino']);
         AINextDominoChosen::create($this->gamestate)->set_notifications($this->notifications)->set_update_market($update_market)->execute()->nextState();
+    }
+
+    public function stAfterTurnFinished(): void {
+        $update_domino = Infrastructure\UpdateDomino::create($this->decks['domino']);
+        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
+        AfterTurnFinished::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_domino($update_domino)->set_get_current_data($get_current_data)->execute()->nextState();
     }
 }
 ?>

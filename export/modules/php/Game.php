@@ -191,6 +191,12 @@ class Game extends \Table
         $this->gamestate->nextState("nextDomino");
     }
 
+    public function stAfterTurnFinished(): void {
+        $this->initialise();
+
+        $this->actions->stAfterTurnFinished();
+    }
+
     public function stAISelectAndPlaceDomino(): void {
         $this->initialise();
 

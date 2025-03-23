@@ -74,6 +74,7 @@ class GetAllDatas {
         $pyramid->set_tiles($results['tiles'][$this->current_player_id]);
         $pyramid->get_adjacent_positions_first_stage();
         $results['candidate_positions'] = Domain\Pyramid::create($results['tiles'][$this->current_player_id])->get_adjacent_positions_first_stage();
+        $results['current_stage'] = Domain\Pyramid::create($results['tiles'][$this->current_player_id])->get_stage_next_domino();
 
         return $results;
     }

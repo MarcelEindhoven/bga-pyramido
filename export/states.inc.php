@@ -96,6 +96,13 @@ $machinestates = [
         "transitions" => ["" => 31,]
     ],
     31 => [
+        "name" => "afterTurnFinished",
+        "description" => '',
+        "type" => "game",
+        "action" => "stAfterTurnFinished",
+        "transitions" => ["" => 35,]
+    ],
+    35 => [
         "name" => "nextPlayer",
         "description" => 'Choosing next player',
         "type" => "game",
@@ -112,7 +119,7 @@ $machinestates = [
         "transitions" => ["" => 70, ]
     ],
     70 => [
-        "name" => "selectAndPlaceDominoAI",
+        "name" => "chooseNextDominoAI",
         "description" => 'AI chooses next domino',
         "type" => "game",
         "action" => "stAIChooseNextDomino",

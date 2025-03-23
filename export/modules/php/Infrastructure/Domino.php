@@ -74,8 +74,18 @@ class UpdateDomino extends CurrentTiles
         $object->set_deck_domino($deck_domino);
         return $object;
     }
+
     public function move($quarry_index, $player_id, $domino_specification): UpdateDomino {
-        $this->deck_domino->moveAllCardsInLocation(explode('-', $quarry_index)[0], $player_id, (int)explode('-', $quarry_index)[1]
+        $this->deck_domino->moveAllCardsInLocation(explode('-', $quarry_index)[0], strval($player_id), (int)explode('-', $quarry_index)[1]
+        , $this->calculate_location_argument($domino_specification));
+        return $this;
+    }
+
+    public function move_stage($player_id, $domino_specification, $stage): UpdateDomino {
+        $old_location_argument = $this->calculate_location_argument($domino_specification);
+        $domino_specification['stage'] = $stage;
+        $this->deck_domino->moveAllCardsInLocation(strval($player_id), strval($player_id)
+        , $old_location_argument
         , $this->calculate_location_argument($domino_specification));
         return $this;
     }
@@ -106,10 +116,25 @@ class CurrentTiles
 
         return $this;
     }
+
     public function get_domino($player_id, $domino_specification) {
         $domino_array =  $this->deck_domino->getCardsInLocation(strval($player_id), $this->calculate_location_argument($domino_specification));
         return end($domino_array);
     }
+
+    public function get_dominoes($player_id) {
+        $dominoes = [];
+        $cards =  $this->deck_domino->getCardsInLocation(strval($player_id));
+        foreach ($cards as $card) {
+            $dominoes[] = $this->get_tile_common($card);
+        }
+        return $dominoes;
+    }
+
+    protected function calculate_player_domino_specification($card) {
+
+    }
+
     protected function calculate_location_argument($domino_specification) {
         return  $domino_specification['stage']
         + CurrentTiles::FACTOR_STAGE * $domino_specification['horizontal']
