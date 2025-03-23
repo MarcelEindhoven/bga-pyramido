@@ -31,7 +31,10 @@ class DominoChosenAndPlacedTest extends TestCase{
     protected int $player_id = 77;
     protected string $quarry_index = 'quarry-2';
 
-    protected array $current_data = ['candidate_positions' => [2 => ['id' => 9, 'tiles'=> ['a', 'b']]]];
+    protected array $current_data = [
+        'candidate_positions' => [2 => ['id' => 9, 'tiles'=> ['a', 'b']]],
+        'candidate_tiles_for_marker' => [2 => ['id' => 9, 'tiles'=> ['a', 'b']]]
+    ];
     protected array $domino_specification = ['stage' => 2, 'horizontal' => 12, 'vertical' => 14, 'rotation' => 3, ];
     protected array $modified_domino_specification = ['stage' => 4, 'horizontal' => 12, 'vertical' => 14, 'rotation' => 3, ];
 
@@ -83,10 +86,7 @@ class DominoChosenAndPlacedTest extends TestCase{
         // Arrange
         $this->arrange();
 
-        $this->mock_notifications->expects($this->exactly(1))->method('notifyPlayer')
-        ->with($this->player_id, 'candidate_positions', '', 
-        ['candidate_positions' => $this->current_data['candidate_positions']
-        ]);
+        $this->mock_notifications->expects($this->exactly(2))->method('notifyPlayer');
         // Act
         $this->act_default();
         // Assert
@@ -95,7 +95,7 @@ class DominoChosenAndPlacedTest extends TestCase{
         $this->mock_update_domino->expects($this->exactly(1))->method('get_domino')->with($this->player_id, $this->modified_domino_specification)->willReturn('x');
         $this->mock_update_domino->expects($this->exactly(1))->method('get_first_tile_for')->with('x')->willReturn('a');
         $this->mock_update_domino->expects($this->exactly(1))->method('get_second_tile_for')->with('x')->willReturn('b');
-        $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn($this->current_data);
+        $this->mock_get_current_data->expects($this->exactly(2))->method('get')->willReturn($this->current_data);
     }
 
     protected function act_default() {

@@ -34,7 +34,7 @@ class AIDominoChosenAndPlacedTest extends TestCase{
     protected int $player_id = 77;
     protected string $quarry_index = 'quarry-2';
 
-    protected array $current_data = ['candidate_positions' => []];
+    protected array $current_data = ['candidate_positions' => [], 'candidate_tiles_for_marker' => []];
     protected array $expected_domino_specification = ['stage' => 4, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0, ];
 
     protected function setUp(): void {
@@ -82,7 +82,7 @@ class AIDominoChosenAndPlacedTest extends TestCase{
         $this->mock_update_domino->expects($this->exactly(1))->method('get_domino')->with($this->player_id, $this->expected_domino_specification)->willReturn('x');
         $this->mock_update_domino->expects($this->exactly(1))->method('get_first_tile_for')->with('x')->willReturn('a');
         $this->mock_update_domino->expects($this->exactly(1))->method('get_second_tile_for')->with('x')->willReturn('b');
-        $this->mock_get_current_data->expects($this->exactly(2))->method('get')->willReturn($this->current_data);
+        $this->mock_get_current_data->expects($this->exactly(3))->method('get')->willReturn($this->current_data);
     }
 
     protected function act_default() {

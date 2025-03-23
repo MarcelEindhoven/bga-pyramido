@@ -58,6 +58,9 @@ class DominoChosenAndPlaced extends \NieuwenhovenGames\BGA\Action {
         $this->notifications->notifyPlayer($this->player_id, 'candidate_positions', '',
         ['candidate_positions' => $this->get_current_data->get()['candidate_positions']]);
 
+        $this->notifications->notifyPlayer($this->player_id, 'candidate_tiles_for_marker', '',
+        ['candidate_tiles_for_marker' => $this->get_current_data->get()['candidate_tiles_for_marker']]);
+
         return $this;
     }
 }
