@@ -11,9 +11,9 @@ class Animation {
 }
 describe('Tiles', function () {
     beforeEach(function() {
-        dojo = {style:sinon.spy(), addClass:sinon.spy(), removeClass:sinon.spy(), };
+        dojo = {style:sinon.spy(), addClass:sinon.spy(), removeClass:sinon.spy(), connect:sinon.spy(), };
         document = new Document();
-        game = {slideToObjectPos:sinon.stub().returns (new Animation ()) ,};
+        game = {get_element:sinon.stub().returns(44), slideToObjectPos:sinon.stub().returns (new Animation ()) ,};
         dependencies = {dojo: dojo, document: document, game:game, };
         sut = new sut_module(dependencies);
         tile_specification = {tile_id: 0, stage: 0, horizontal: 0,vertical: 0,};
@@ -30,6 +30,73 @@ describe('Tiles', function () {
             tile = sut.create_tile_from(tile_specification);
             // Assert
             assert.equal(tile.test_parameter, tile_specification.test_parameter);
+        });
+        it('creates predictable ID', function () {
+            // Arrange
+            tile_specification.tile_id = 179;
+            // Act
+            tile = sut.create_tile_from(tile_specification);
+            // Assert
+            assert.equal(tile.unique_id, "tile-179");
+        });
+        it('connects with unique ID', function () {
+            // Arrange
+            tile_specification.tile_id = 179;
+            // Act
+            tile = sut.create_tile_from(tile_specification);
+            // Assert
+            sinon.assert.callCount(dojo.connect, 1);
+            assert.equal(dojo.connect.getCall(0).args[0], 44);
+            assert.equal(dojo.connect.getCall(0).args[1], 'onclick');
+        });
+    });
+    describe('Unique ID', function () {
+        it('creates predictable ID', function () {
+            // Arrange
+            tile_specification.tile_id = 179;
+            // Act
+            id = sut.get_unique_id(tile_specification);
+            // Assert
+            assert.equal(id, "tile-179");
+        });
+    });
+    describe('Subscribe', function () {
+        beforeEach(function() {
+            callback_object = {
+                tile_selected: sinon.spy(),
+            };
+        });
+        function act() {
+            tile.subscribe(callback_object, 'tile_selected');
+        };
+        it('makes selectable', function () {
+            // Arrange
+            tile_specification.tile_id = 179;            
+            tile = sut.create_tile_from(tile_specification);
+            // Act
+            act();
+            // Assert
+            sinon.assert.callCount(dojo.addClass, 1 + 1);
+            assert.equal(dojo.addClass.getCall(1).args[0], "tile-179");
+            assert.equal(dojo.addClass.getCall(1).args[1], "selectable");
+        });
+    });
+    describe('Stop subscription', function () {
+        beforeEach(function() {
+            tile_specification.tile_id = 179;            
+            tile = sut.create_tile_from(tile_specification);
+        });
+        function act() {
+            tile.unsubscribe();
+        };
+        it('makes unselectable in UI', function () {
+            // Arrange
+            // Act
+            act();
+            // Assert
+            sinon.assert.callCount(dojo.removeClass, 1);
+            assert.equal(dojo.removeClass.getCall(0).args[0], "tile-179");
+            assert.equal(dojo.removeClass.getCall(0).args[1], "selectable");
         });
     });
     describe('Paint', function () {
