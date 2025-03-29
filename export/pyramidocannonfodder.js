@@ -150,7 +150,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers,
                         console.log( this.gamedatas.candidate_tiles_for_marker[key] );
                     });
                     this.usecase_place_marker.set_candidate_tile_specifications(this.gamedatas.candidate_tiles_for_marker);
-                    this.usecase_place_marker.subscribe(this, 'marker_tile_chosen');
+                    this.usecase_place_marker.subscribe(this, 'tile_to_place_marker_chosen');
                     break;
     
                 case 'dummy':
@@ -172,13 +172,15 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers,
             this.usecase_choose_domino.unsubscribe();
             this.usecase_place_domino.unsubscribe();
         },
-        tile_to_place_marker_chosen(tile) {
+        tile_to_place_marker_chosen(element) {
+            console.log(element.target.id);
+            tile = this.token_containers['pyramid-' + this.player_id].get(element.target.id);
             console.log(tile);
             this.call('tile_to_place_marker_chosen', {
                 horizontal: tile.horizontal,
                 vertical: tile.vertical,
             });
-            this.usecase_choose_tile_to_place_marker.unsubscribe();
+            this.usecase_place_marker.unsubscribe();
         },
         next_domino_chosen(domino) {
             console.log( "next_domino_chosen" );
@@ -186,13 +188,6 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers,
             console.log(this.usecase_choose_next_domino.quarry_missing_element);
             this.call('next_domino_chosen', {next_index: domino.element_id, quarry_index: this.usecase_choose_next_domino.quarry_missing_element});
             this.usecase_choose_next_domino.unsubscribe();
-        },
-        marker_tile_chosen(tile) {
-            console.log( "marker_tile_chosen" );
-            console.log( tile);
-            console.log(this.usecase_place_marker.quarry_missing_element);
-            this.call('tile_to_place_marker_chosen', {unique_id: tile.unique_id});
-            this.usecase_place_marker.unsubscribe();
         },
         call: function(action, args, handler) {
             console.log(action);
