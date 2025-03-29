@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Bga\Games\PyramidoCannonFodder\Infrastructure;
 
-include_once(__DIR__.'/Domino.php');
+include_once(__DIR__.'/Marker.php');
 
 #[\AllowDynamicProperties]
 class MarkerFactory
@@ -36,6 +36,22 @@ class MarkerFactory
     public function flush($player_id) {
         $this->deck->createCards($this->definitions, '' . $player_id, 0);
         $this->definitions = [];
+    }
+}
+
+#[\AllowDynamicProperties]
+class UpdateMarker extends CurrentMarkers
+{
+    static public function create($deck): UpdateMarker {
+        $object = new UpdateMarker();
+        $object->set_deck($deck);
+        return $object;
+    }
+
+    public function move($player_id, $domino_specification): UpdateMarker {
+        $this->deck->moveAllCardsInLocation(explode('-', $quarry_index)[0], strval($player_id), (int)explode('-', $quarry_index)[1]
+        , $this->calculate_location_argument($domino_specification));
+        return $this;
     }
 }
 
