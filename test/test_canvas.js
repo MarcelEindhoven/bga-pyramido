@@ -91,6 +91,21 @@ describe('Canvas class', function () {
             sinon.assert.callCount(tile.paint, 0);
         });
     });
+    describe('Get paintable', function () {
+        beforeEach(function() {
+            sut.add(tile);
+        });
+        function act(unique_id) {
+            return sut.get(unique_id);
+        };
+        it('moves paintable to itself', function () {
+            // Arrange
+            // Act
+            retrieved_tile = act(tile.unique_id);            
+            // Assert
+            assert.equal(retrieved_tile.unique_id, tile.unique_id);
+        });
+    });
     describe('Multiple paintables', function () {
         beforeEach(function() {
             sut.add(tile);

@@ -52,6 +52,7 @@ define(['dojo/_base/declare'], (declare) => {
         remove(paintable) {
             delete this.paintables[paintable.unique_id];
         },
+        get (unique_id) {return this.paintables[unique_id];},
         paint: function() {
             Object.values(this.paintables).forEach(paintable => {
                 paintable.paint();

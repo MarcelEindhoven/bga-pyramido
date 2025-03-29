@@ -35,12 +35,14 @@ define(['dojo/_base/declare'], (declare) => {
                 create_token(specification) {
                     this.clone(specification);
                     this.unique_id = this.get_unique_id(specification);
+
                     this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
                         <div id="${this.unique_id}">
                     `);
                     this.dojo.addClass(this.unique_id,'tile');
                     const id_horizontal = this.tile_id % this.TILES_PER_ROW;
                     const id_vertical = (this.tile_id-id_horizontal) / this.TILES_PER_ROW;
+
                     this.dojo.style(this.unique_id, 'backgroundPosition', '-' + this.PIXELS_PER_TILE * id_horizontal + 'px -' + this.PIXELS_PER_TILE * id_vertical + 'px');
 
                     this.dojo.connect(this.game.get_element(this.unique_id), 'onclick', this, 'tile_selected');
@@ -57,6 +59,9 @@ define(['dojo/_base/declare'], (declare) => {
                 }
                 unsubscribe() {
                     this.dojo.removeClass(this.unique_id, 'selectable');
+                }
+                tile_selected(tile) {
+                    this.callback_object[this.callback_method](tile);
                 }
                 move_to(element_id, x, y) {
                     this.element_id = element_id;

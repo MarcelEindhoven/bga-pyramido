@@ -26,11 +26,13 @@ define([
     g_gamethemeurl + 'modules/javascript/usecase_choose_domino.js',
     g_gamethemeurl + 'modules/javascript/usecase_place_domino.js',
     g_gamethemeurl + 'modules/javascript/usecase_choose_next_domino.js',
+    g_gamethemeurl + 'modules/javascript/usecase_place_marker.js',
     "ebg/core/gamegui",
     "ebg/counter",
     "ebg/stock",
 ],
-function (dojo, declare, market, canvas, dominoes, tiles, markers, usecase_setup, usecase_choose_domino, usecase_place_domino, usecase_choose_next_domino) {
+function (dojo, declare, market, canvas, dominoes, tiles, markers, 
+    usecase_setup, usecase_choose_domino, usecase_place_domino, usecase_choose_next_domino, usecase_place_marker) {
     return declare("bgagame.pyramidocannonfodder", ebg.core.gamegui, {
         constructor: function(){
             console.log('pyramidocannonfodder constructor');
@@ -140,7 +142,17 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, usecase_setup
                     this.usecase_choose_next_domino = new usecase_choose_next_domino({market: this.market});
                     this.usecase_choose_next_domino.subscribe(this, 'next_domino_chosen');
                     break;
-
+                case 'selectMarkerTile':
+                    this.usecase_place_marker = new usecase_place_marker({ui: this, pyramid: this.token_containers['pyramid-' + this.player_id]});
+                    Object.keys(this.gamedatas.candidate_tiles_for_marker).forEach(key => {
+                        console.log( key );
+                        this.gamedatas.candidate_tiles_for_marker[key].unique_id = this.tile_factory.get_unique_id(this.gamedatas.candidate_tiles_for_marker[key]);
+                        console.log( this.gamedatas.candidate_tiles_for_marker[key] );
+                    });
+                    this.usecase_place_marker.set_candidate_tile_specifications(this.gamedatas.candidate_tiles_for_marker);
+                    this.usecase_place_marker.subscribe(this, 'marker_tile_chosen');
+                    break;
+    
                 case 'dummy':
                     break;
                 }
@@ -174,6 +186,13 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, usecase_setup
             console.log(this.usecase_choose_next_domino.quarry_missing_element);
             this.call('next_domino_chosen', {next_index: domino.element_id, quarry_index: this.usecase_choose_next_domino.quarry_missing_element});
             this.usecase_choose_next_domino.unsubscribe();
+        },
+        marker_tile_chosen(tile) {
+            console.log( "marker_tile_chosen" );
+            console.log( tile);
+            console.log(this.usecase_place_marker.quarry_missing_element);
+            this.call('tile_to_place_marker_chosen', {unique_id: tile.unique_id});
+            this.usecase_place_marker.unsubscribe();
         },
         call: function(action, args, handler) {
             console.log(action);
