@@ -31,11 +31,12 @@ class MarkerChosenAndPlacedTest extends TestCase{
     protected int $player_id = 77;
 
     protected array $current_data = [
-        'candidate_positions' => [2 => ['id' => 9, 'tiles'=> ['a', 'b']]],
-        'candidate_tiles_for_marker' => [2 => ['id' => 9, 'tiles'=> ['a', 'b']]]
+        'tiles' => [77 => [22 => ['colour'=> 3]]],
     ];
-    protected array $marker_specification = ['stage' => 2, 'horizontal' => 12, 'vertical' => 14, 'rotation' => 3, ];
-    protected array $modified_marker_specification = ['stage' => 4, 'horizontal' => 12, 'vertical' => 14, 'rotation' => 3, ];
+    protected array $marker_specification = ['horizontal' => 12, 'vertical' => 14, ];
+    protected array $modified_marker_specification = ['stage' => 4, 'horizontal' => 12, 'vertical' => 14,];
+    protected array $tile_specification = ['horizontal' => 12, 'vertical' => 14, 'rotation' => 3, ];
+    protected array $modified_tile_specification = ['stage' => 4, 'horizontal' => 12, 'vertical' => 14, 'rotation' => 3, ];
 
     protected function setUp(): void {
         $this->mock_gamestate = $this->createMock(FrameworkInterfaces\GameState::class);
@@ -50,7 +51,7 @@ class MarkerChosenAndPlacedTest extends TestCase{
         $this->mock_update_marker = $this->createMock(Infrastructure\UpdateMarker::class);
         $this->sut->set_update_marker($this->mock_update_marker);
 
-        $this->sut->set_marker_specification($this->marker_specification);
+        $this->sut->set_tile_specification($this->tile_specification);
 
         $this->sut->set_player_id($this->player_id);
     }
@@ -59,7 +60,7 @@ class MarkerChosenAndPlacedTest extends TestCase{
         // Arrange
         $this->arrange();
 
-        $this->mock_update_marker->expects($this->exactly(1))->method('move')->with($this->player_id, $this->modified_marker_specification);
+        $this->mock_update_marker->expects($this->exactly(1))->method('move')->with($this->player_id, ['colour'=> 3]);
         // Act
         $this->act_default();
         // Assert
@@ -80,7 +81,9 @@ class MarkerChosenAndPlacedTest extends TestCase{
     }
 
     protected function arrange() {
-        $this->mock_update_marker->expects($this->exactly(1))->method('get_marker')->with($this->player_id, $this->modified_marker_specification)->willReturn('x');
+        $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn($this->current_data);
+        $this->mock_update_marker->expects($this->exactly(1))->method('calculate_location_argument')->with($this->modified_tile_specification)->willReturn(22);
+        $this->mock_update_marker->expects($this->exactly(1))->method('get_marker')->with($this->player_id, ['colour'=> 3])->willReturn('x');
     }
 
     protected function act_default() {

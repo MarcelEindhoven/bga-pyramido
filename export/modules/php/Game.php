@@ -76,9 +76,9 @@ class Game extends \Table
         $this->actions->action_domino_chosen_and_placed($quarry_index, $domino_specification);
     }
 
-    public function action_tile_to_place_marker_chosen(int $horizontal, int $vertical): void {
+    public function action_tile_to_place_marker_chosen(int $horizontal, int $vertical, int $rotation): void {
         $this->initialise();
-        $tile_specification = ['horizontal' => $horizontal, 'vertical' => $vertical, 'rotation' => 0];
+        $tile_specification = ['horizontal' => $horizontal, 'vertical' => $vertical, 'rotation' => $rotation];
 
         $this->actions->action_tile_to_place_marker_chosen($tile_specification);
     }

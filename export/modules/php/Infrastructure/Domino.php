@@ -131,15 +131,15 @@ class CurrentTiles
         return $dominoes;
     }
 
-    protected function calculate_player_domino_specification($card) {
-
-    }
-
-    protected function calculate_location_argument($domino_specification) {
+    public function calculate_location_argument($domino_specification) {
         return  $domino_specification['stage']
         + CurrentTiles::FACTOR_STAGE * $domino_specification['horizontal']
         + CurrentTiles::FACTOR_STAGE * CurrentTiles::FACTOR_HORIZONTAL * $domino_specification['vertical']
         + CurrentTiles::FACTOR_STAGE * CurrentTiles::FACTOR_HORIZONTAL * CurrentTiles::FACTOR_VERTICAL * $domino_specification['rotation'];
+    }
+
+    public function get_tile($player_id, $tile_specification): array {
+        return $this->get_tiles_for($player_id)[$this->calculate_location_argument($tile_specification)];
     }
 
     public function get(): array {
@@ -153,8 +153,10 @@ class CurrentTiles
         $tiles_per_player = [];
         $dominoes = $this->deck_domino->getCardsInLocation(strval($player_id));
         foreach ($dominoes as $domino) {
-            $tiles_per_player[] = $this->get_first_tile_for($domino);
-            $tiles_per_player[] = $this->get_second_tile_for($domino);
+            $tile = $this->get_first_tile_for($domino);
+            $tiles_per_player[$this->calculate_location_argument($tile)] = $tile;
+            $tile = $this->get_second_tile_for($domino);
+            $tiles_per_player[$this->calculate_location_argument($tile)] = $tile;
         }
         return $tiles_per_player;
     }

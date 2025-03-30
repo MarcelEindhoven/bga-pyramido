@@ -32,18 +32,18 @@ class MarkerChosenAndPlaced extends \NieuwenhovenGames\BGA\Action {
         return $this;
     }
 
-    public function set_marker_specification($marker_specification) : MarkerChosenAndPlaced {
-        $this->marker_specification = $marker_specification;
+    public function set_tile_specification($tile_specification) : MarkerChosenAndPlaced {
+        $this->tile_specification = $tile_specification;
         return $this;
     }
 
     public function execute(): MarkerChosenAndPlaced {
-        // Last-placed marker is first located on highest stage to distinguish it from other markeres
-        $this->marker_specification['stage'] = 4;
+        $this->tile_specification['stage'] = 4;
 
-        $this->update_marker->move($this->player_id, $this->marker_specification);
+        $tile = $this->get_current_data->get()['tiles'][$this->player_id][$this->update_marker->calculate_location_argument($this->tile_specification)];
+        $this->update_marker->move($this->player_id, $tile);
 
-        $marker = $this->update_marker->get_marker($this->player_id, $this->marker_specification);
+        $marker = $this->update_marker->get_marker($this->player_id, $tile);
         $this->notifications->notifyAllPlayers('marker_placed', 'marker_placed',
         ['player_id' => $this->player_id, 
         'marker_specification' => $marker,

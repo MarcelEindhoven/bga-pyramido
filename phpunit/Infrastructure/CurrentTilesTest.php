@@ -80,8 +80,7 @@ class CurrentTilesTest extends TestCase{
         $this->arrange_default_domino();
 
         // Act
-        $tiles = $this->act_default($stage);
-        $first_tile = $tiles[0];
+        $first_tile = $this->act_first_tile();
         // Assert
         $this->assertEquals($horizontal, $first_tile['horizontal']);
     }
@@ -98,8 +97,7 @@ class CurrentTilesTest extends TestCase{
         $this->arrange_default_domino();
 
         // Act
-        $tiles = $this->act_default($stage);
-        $first_tile = $tiles[0];
+        $first_tile = $this->act_first_tile();
         // Assert
         $this->assertEquals($horizontal, $first_tile['horizontal']);
         $this->assertEquals($vertical, $first_tile['vertical']);
@@ -119,8 +117,7 @@ class CurrentTilesTest extends TestCase{
         $this->arrange_default_domino();
 
         // Act
-        $tiles = $this->act_default($stage);
-        $first_tile = $tiles[0];
+        $first_tile = $this->act_first_tile();
         // Assert
         $this->assertEquals($horizontal, $first_tile['horizontal']);
         $this->assertEquals($vertical, $first_tile['vertical']);
@@ -141,8 +138,7 @@ class CurrentTilesTest extends TestCase{
         $this->arrange_default_domino();
 
         // Act
-        $tiles = $this->act_default($stage);
-        $second_tile = $tiles[1];
+        $second_tile = $this->act_second_tile();
         // Assert
         $this->assertEquals($rotation, $second_tile['rotation']);
     }
@@ -217,8 +213,7 @@ class CurrentTilesTest extends TestCase{
         $this->arrange_default_domino();
 
         // Act
-        $tiles = $this->act_default($stage);
-        $first_tile = $tiles[0];
+        $first_tile = $this->act_first_tile();
 
         // Assert
         $this->assertEquals($this->default_domino['type'] * 2, $first_tile['tile_id']);
@@ -235,8 +230,7 @@ class CurrentTilesTest extends TestCase{
         $this->arrange_default_domino();
 
         // Act
-        $tiles = $this->act_default($stage);
-        $first_tile = $tiles[0];
+        $first_tile = $this->act_first_tile();
 
         // Assert
         $this->assertEquals($colour, $first_tile['colour']);
@@ -269,12 +263,22 @@ class CurrentTilesTest extends TestCase{
           + $rotation * CurrentTiles::FACTOR_STAGE * CurrentTiles::FACTOR_HORIZONTAL * CurrentTiles::FACTOR_VERTICAL;
         $this->mock_dominoes->expects($this->exactly(1))->method('getCardsInLocation')->with('77')->willReturn([$this->default_domino]);
     }
-
-    protected function act_second_tile() {
-        return $this->sut->get()[$this->player_id][1];
+    protected function calculate_location_argument_second_tile($domino) {
+        return $this->sut->calculate_location_argument($this->sut->get_second_tile_for($domino));
+    }
+    protected function calculate_location_argument_first_tile($domino) {
+        return $this->sut->calculate_location_argument($this->sut->get_first_tile_for($domino));
     }
 
-    protected function act_default($expected_stage) {
+    protected function act_second_tile() {
+        return $this->sut->get()[$this->player_id][$this->calculate_location_argument_second_tile($this->default_domino)];
+    }
+
+    protected function act_first_tile() {
+        return $this->sut->get()[$this->player_id][$this->calculate_location_argument_first_tile($this->default_domino)];
+    }
+
+    protected function act_default() {
         return $this->sut->get()[$this->player_id];
     }
 }

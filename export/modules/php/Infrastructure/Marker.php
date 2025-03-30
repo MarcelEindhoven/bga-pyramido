@@ -86,7 +86,7 @@ class CurrentMarkers
         return end($marker_array);
     }
 
-    protected function calculate_location_argument($marker_specification) {
+    public function calculate_location_argument($marker_specification) {
         return  $marker_specification['stage']
         + CurrentMarkers::FACTOR_STAGE * $marker_specification['horizontal']
         + CurrentMarkers::FACTOR_STAGE * CurrentMarkers::FACTOR_HORIZONTAL * $marker_specification['vertical']

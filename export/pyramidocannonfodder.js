@@ -179,6 +179,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers,
             this.call('tile_to_place_marker_chosen', {
                 horizontal: tile.horizontal,
                 vertical: tile.vertical,
+                rotation: tile.rotation,
             });
             this.usecase_place_marker.unsubscribe();
         },
