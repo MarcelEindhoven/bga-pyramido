@@ -204,6 +204,13 @@ class Game extends \Table
         $this->actions->stAfterTurnFinished();
     }
 
+    public function stAfterMarkerPlaced(): void {
+        $this->initialise();
+
+        $this->gamestate->nextState("");
+//        $this->actions->stAfterMarkerPlaced();
+    }
+
     public function stAISelectAndPlaceDomino(): void {
         $this->initialise();
 

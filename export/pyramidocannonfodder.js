@@ -310,6 +310,9 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers,
             dojo.subscribe( 'domino_placed', this, "notify_domino_placed" );
             this.notifqueue.setSynchronous( 'domino_placed', 300 );
 
+            dojo.subscribe( 'marker_placed', this, "notify_marker_placed" );
+            this.notifqueue.setSynchronous( 'marker_placed', 300 );
+
             dojo.subscribe( 'domino_new_stage', this, "notify_domino_new_stage" );
             this.notifqueue.setSynchronous( 'domino_new_stage', 300 );
 
@@ -349,6 +352,14 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers,
 
             this.market.move(next_index, quarry_index);
             this.market.fill(next_index, notif.args.next_domino);
+        },
+
+        notify_marker_placed: function( notif )
+        {
+            console.log( 'notify_marker_placed' );
+            console.log( notif );
+
+            this.paint();
         },
 
         notify_domino_placed: function( notif )

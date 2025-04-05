@@ -48,9 +48,12 @@ class UpdateMarker extends CurrentMarkers
         return $object;
     }
 
-    public function move($player_id, $domino_specification): UpdateMarker {
-        $this->deck->moveAllCardsInLocation(explode('-', $quarry_index)[0], strval($player_id), (int)explode('-', $quarry_index)[1]
-        , $this->calculate_location_argument($domino_specification));
+    public function move($player_id, $tile): UpdateMarker {
+        $cards = $this->deck->getCardsInLocation(strval($player_id), 0);
+        $colour = $tile['colour'];
+        $this->deck->moveCard(current(array_filter($cards, function($card) use($colour){return $colour == $card['type'];}))['id']
+        , strval($player_id), $this->calculate_location_argument($tile));
+
         return $this;
     }
 }
@@ -89,8 +92,7 @@ class CurrentMarkers
     public function calculate_location_argument($marker_specification) {
         return  $marker_specification['stage']
         + CurrentMarkers::FACTOR_STAGE * $marker_specification['horizontal']
-        + CurrentMarkers::FACTOR_STAGE * CurrentMarkers::FACTOR_HORIZONTAL * $marker_specification['vertical']
-        + CurrentMarkers::FACTOR_STAGE * CurrentMarkers::FACTOR_HORIZONTAL * CurrentMarkers::FACTOR_VERTICAL * $marker_specification['rotation'];
+        + CurrentMarkers::FACTOR_STAGE * CurrentMarkers::FACTOR_HORIZONTAL * $marker_specification['vertical'];
     }
 
     public function get(): array {

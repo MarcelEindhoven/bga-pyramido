@@ -20,10 +20,12 @@ include_once(__DIR__.'/AINextDominoChosen.php');
 
 include_once(__DIR__.'/DominoChosenAndPlaced.php');
 include_once(__DIR__.'/FirstDominoChosen.php');
+include_once(__DIR__.'/MarkerChosenAndPlaced.php');
 include_once(__DIR__.'/NextDominoChosen.php');
 include_once(__DIR__.'/AfterTurnFinished.php');
 
 include_once(__DIR__.'/../Infrastructure/Domino.php');
+include_once(__DIR__.'/../Infrastructure/Marker.php');
 use Bga\Games\PyramidoCannonFodder\Infrastructure;
 
 class Actions {
@@ -83,6 +85,10 @@ class Actions {
     }
 
     public function action_tile_to_place_marker_chosen(array $tile_specification): void {
+        $update_marker = Infrastructure\UpdateMarker::create($this->decks['marker']);
+        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
+        MarkerChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_marker($update_marker)->set_get_current_data($get_current_data)->set_tile_specification($tile_specification)
+        ->execute()->nextState();
     }
 
     public function action_domino_chosen_and_placed(string $quarry_index, array $domino_specification): void {
