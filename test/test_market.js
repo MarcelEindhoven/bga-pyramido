@@ -178,15 +178,15 @@ describe('Market', function () {
         });
     });
     describe('Move domino from next to quarry', function () {
-        function act(from, to) {
-            sut.move(from, to);
+        function act() {
+            sut.move('next-1', 'quarry-1');
         };
         it('uses the domino ID', function () {
             // Arrange
             gamedatas= {quarry: {}, next: {1: {id: 5, element_id: 'next-1'},},};
             sut.setup(setup_dependencies, gamedatas);
             // Act
-            act('next-1', 'quarry-1');
+            act();
             // Assert
             assert.equal(addToStockWithId.getCall(0).args[0], gamedatas.next[1].id);
         });
@@ -195,16 +195,16 @@ describe('Market', function () {
             gamedatas= {quarry: {}, next: {1: {id: 5, element_id: 'next-1'},},};
             sut.setup(setup_dependencies, gamedatas);
             // Act
-            act('next-1', 'quarry-1');
+            act();
             // Assert
             assert.equal(removeFromStockById.getCall(0).args[0], addToStockWithId.getCall(0).args[1]);
         });
-        it('updates element ID', function () {
+        it('updates element ID because element ID is used outside the market', function () {
             // Arrange
             gamedatas= {quarry: {}, next: {1: {id: 5, element_id: 'next-1'},},};
             sut.setup(setup_dependencies, gamedatas);
             // Act
-            act('next-1', 'quarry-1');
+            act();
             // Assert
             callback_object = {
                 quarry_selected: sinon.spy(),

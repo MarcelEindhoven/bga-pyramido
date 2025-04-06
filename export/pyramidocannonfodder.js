@@ -357,7 +357,19 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers,
         notify_marker_placed: function( notif )
         {
             console.log( 'notify_marker_placed' );
-            console.log( notif );
+            console.log( notif.args );
+
+            specification = notif.args.marker_specification;
+            id = this.marker_factory.get_unique_id(specification);
+            marker = this.token_containers['marker-' + notif.args.player_id].get(id);
+
+            this.token_containers['marker-' + notif.args.player_id].remove(marker);
+
+            marker.stage = specification.stage;
+            marker.horizontal = specification.horizontal;
+            marker.vertical = specification.vertical;
+
+            this.token_containers['pyramid-' + notif.args.player_id].add(marker);
 
             this.paint();
         },

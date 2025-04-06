@@ -54,7 +54,7 @@ define(['dojo/_base/declare'], (declare) => {
                 Object.values(markers_per_player[player_id]).forEach(marker_specification => {
                     marker = this.marker_factory.create_from(marker_specification);
                     this.paintables[marker.stage][marker.unique_id] = marker;
-                    this.token_containers['marker-' + player_id].add(marker);
+                    this.token_containers[(marker.stage > 0 ? 'pyramid-' : 'marker-') + player_id].add(marker);
                 });
             });
         },

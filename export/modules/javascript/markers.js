@@ -17,9 +17,10 @@ define(['dojo/_base/declare'], (declare) => {
                 this[property] = properties[property];
             }
         },
+        get_unique_id(tile_specification){return "marker-" + tile_specification.id;},
         /**
          * specification:
-         * marker_id
+         * id
          * stage
          * horizontal
          * vertical
@@ -34,9 +35,10 @@ define(['dojo/_base/declare'], (declare) => {
                 }
                 create_token(specification) {
                     this.clone(specification);
-                    this.set_position_for_marker_window();
+                    if (this.stage == 0)
+                        this.set_position_for_marker_window();
 
-                    this.unique_id = "marker-" + this.id;
+                    this.unique_id = this.get_unique_id(specification);
                     this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
                         <div id="${this.unique_id}">
                     `);
@@ -71,7 +73,7 @@ define(['dojo/_base/declare'], (declare) => {
                     return {horizontal_min: this.horizontal - 2, vertical_min: this.vertical - 1, horizontal_max: this.horizontal + 0, vertical_max: this.vertical + 1};
                 }
             }
-            result = new Marker({document: this.document, dojo: this.dojo, game: this.game,});
+            result = new Marker({document: this.document, dojo: this.dojo, game: this.game, get_unique_id: this.get_unique_id,});
             result.create_token(specification);
             return result;
         },
