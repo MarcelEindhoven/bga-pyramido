@@ -15,7 +15,8 @@ class Stock {
         create(game, element, width, height);
     }
     addItemType(game, element, width, height) {addItemType(game, element, width, height);}
-    addToStockWithId(domino_id, card_id) {}
+    removeFromStockById(domino_id, card_id) {removeFromStockById(domino_id, card_id);}
+    addToStockWithId(domino_id, card_id) {addToStockWithId(domino_id, card_id);}
     count() {
         count(this.element);
         if (this.element == 'quarry-1')
@@ -37,6 +38,8 @@ describe('Market', function () {
         create = sinon.spy();
         addItemType = sinon.spy();
         count = sinon.spy();
+        removeFromStockById = sinon.spy();
+        addToStockWithId = sinon.spy();
         
         game = {get_element:sinon.stub().returnsArg(0), };
         dojo = {connect:sinon.spy(), addClass:sinon.spy(), removeClass:sinon.spy(), };
@@ -172,6 +175,43 @@ describe('Market', function () {
             sut.domino_selected(selected_element_id);
             // Assert
             sinon.assert.callCount(callback_object.quarry_selected, 0);
+        });
+    });
+    describe('Move domino from next to quarry', function () {
+        function act(from, to) {
+            sut.move(from, to);
+        };
+        it('uses the domino ID', function () {
+            // Arrange
+            gamedatas= {quarry: {}, next: {1: {id: 5, element_id: 'next-1'},},};
+            sut.setup(setup_dependencies, gamedatas);
+            // Act
+            act('next-1', 'quarry-1');
+            // Assert
+            assert.equal(addToStockWithId.getCall(0).args[0], gamedatas.next[1].id);
+        });
+        it('uses a fixed stock ID', function () {
+            // Arrange
+            gamedatas= {quarry: {}, next: {1: {id: 5, element_id: 'next-1'},},};
+            sut.setup(setup_dependencies, gamedatas);
+            // Act
+            act('next-1', 'quarry-1');
+            // Assert
+            assert.equal(removeFromStockById.getCall(0).args[0], addToStockWithId.getCall(0).args[1]);
+        });
+        it('updates element ID', function () {
+            // Arrange
+            gamedatas= {quarry: {}, next: {1: {id: 5, element_id: 'next-1'},},};
+            sut.setup(setup_dependencies, gamedatas);
+            // Act
+            act('next-1', 'quarry-1');
+            // Assert
+            callback_object = {
+                quarry_selected: sinon.spy(),
+            };
+            sut.subscribe_to_quarry(callback_object, 'quarry_selected');
+            sut.domino_selected('quarry-1');
+            assert.equal(callback_object.quarry_selected.getCall(0).args[0].element_id, 'quarry-1');
         });
     });
     describe('Domino quarry selected', function () {

@@ -86,7 +86,7 @@ class CurrentMarkers
 
     public function get_marker($player_id, $marker_specification) {
         $marker_array =  $this->deck->getCardsInLocation(strval($player_id), $this->calculate_location_argument($marker_specification));
-        return end($marker_array);
+        return $this->get_marker_for(end($marker_array));
     }
 
     public function calculate_location_argument($marker_specification) {
@@ -107,12 +107,12 @@ class CurrentMarkers
         $markers_per_player = [];
         $markers = $this->deck->getCardsInLocation(strval($player_id));
         foreach ($markers as $marker_specification) {
-            $markers_per_player[] = $this->get_first_marker_for($marker_specification);
+            $markers_per_player[$marker_specification['type']] = $this->get_marker_for($marker_specification);
         }
         return $markers_per_player;
     }
 
-    public function get_first_marker_for($marker_specification) {
+    public function get_marker_for($marker_specification) {
         $marker = ['id' => '1', 'colour' => 0, 'stage' => 0, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0];
 
         $marker['colour'] = $marker_specification['type'];

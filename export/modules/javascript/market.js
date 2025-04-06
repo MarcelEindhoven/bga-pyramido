@@ -69,6 +69,7 @@ define(['dojo/_base/declare'], (declare) => {
             this.stocks[to].addToStockWithId(this.dominoes[from].id, 1);
 
             this.dominoes[to] = this.dominoes[from];
+            this.dominoes[to].element_id = to;
         },
         delete(element_id) {
             this.stocks[element_id].removeFromStockById(1);
