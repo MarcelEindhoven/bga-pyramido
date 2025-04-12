@@ -11,18 +11,23 @@ See: http://en.doc.boardgamearena.com/Game_art:_img_directory for more details.
 The GitHub archive does not contain any original art.
 
 Image processing is done with the image magic program.
-magick montage tokens\*.png -geometry 80x80 -tile x1 markersx80.png
+magick montage tokens\*.png -geometry 80x80 -tile x1 markers.png
+magick  -fuzz 0% markers.png -transparent white markersx80.png
+
 magick montage dominoes\*.png -rotate 90 -geometry 160x80 -tile 10x dominoesx80.png
 magick montage resurfaces\*Front*.png -geometry 80x80 -tile x1 Front.png
 magick montage resurfaces\*Back*.png -geometry 80x80 -tile x1 Back.png
 magick montage Front.png Back.png  -geometry 240x80 -tile 1x resurfacesx80.png
 
-magick montage tokens\*.png -geometry 60x60 -tile x1 markersx60.png
+magick montage tokens\*.png -geometry 60x60 -tile x1 markers.png
+magick  -fuzz 0% markers.png -transparent white markersx60.png
+
 magick montage dominoes\*.png -rotate 90 -geometry 120x60 -tile 10x dominoesx60.png
 magick montage resurfaces\*Front*.png -geometry 60x60 -tile x1 frontx60.png
 magick montage resurfaces\*Back*.png -geometry 60x60 -tile x1 backx60.png
 magick montage frontx60.png backx60.png  -geometry 180x60 -tile 1x resurfacesx60.png
 
-magick montage tokens\*.png -geometry 40x40 -tile x1 markersx40.png
+magick montage tokens\*.png -transparent white -geometry 40x40 -tile x1 markers.png
+magick markers.png -fuzz 0% -transparent white markersx40.png
 
 cp *.png ..\Pyramido\export\img\
