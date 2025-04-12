@@ -20,7 +20,9 @@ magick montage resurfaces\*Back*.png -geometry 80x80 -tile x1 Back.png
 magick montage Front.png Back.png  -geometry 240x80 -tile 1x resurfacesx80.png
 
 magick montage tokens\*.png -geometry 60x60 -tile x1 markers.png
-magick  -fuzz 0% markers.png -transparent white markersx60.png
+magick  -fuzz 40% markers.png -transparent white markersx.png
+magick  markersx.png -morphology EdgeOut Square:1 markerse.png
+magick convert -evaluate-sequence add markerse.png  markersx.png markersx60.png
 
 magick montage dominoes\*.png -rotate 90 -geometry 120x60 -tile 10x dominoesx60.png
 magick montage resurfaces\*Front*.png -geometry 60x60 -tile x1 frontx60.png
