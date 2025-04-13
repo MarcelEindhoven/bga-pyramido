@@ -195,7 +195,13 @@ class Game extends \Table
         // Retrieve the active player ID.
         $player_id = (int)$this->getActivePlayerId();
 
-        $this->gamestate->nextState("");
+        $this->actions->stAfterDominoPlaced();
+    }
+
+    public function stAutomaticallyPlaceMarker(): void {
+        $this->initialise();
+
+        $this->actions->stAutomaticallyPlaceMarker();
     }
 
     public function stAfterTurnFinished(): void {

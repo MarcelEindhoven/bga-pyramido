@@ -83,6 +83,13 @@ $machinestates = [
         "action" => "stAfterDominoPlaced",
         "transitions" => ["" => 20,]
     ],
+    12 => [
+        "name" => "automaticallyPlaceMarker",
+        "description" => '',
+        "type" => "game",
+        "action" => "stAutomaticallyPlaceMarker",
+        "transitions" => ["" => 30,]
+    ],
     20 => [
         "name" => "selectMarkerTile",
         "description" => clienttranslate('${actplayer} must select tile to place marker'),
