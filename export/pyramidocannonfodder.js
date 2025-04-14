@@ -385,7 +385,6 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers,
                 this.token_containers['pyramid-' + notif.args.player_id].add(tile);
             });
             this.paint();
-            this.paint();
             // Note: notif.args contains the arguments specified during you "notifyAllPlayers" / "notifyPlayer" PHP call
 
             // TODO: play the card in the user interface.
@@ -400,7 +399,6 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers,
                 this.token_containers['pyramid-' + notif.args.player_id].remove(tile);
                 this.token_containers['pyramid-' + notif.args.player_id].add(tile);
             });
-            this.paint();
             this.paint();
             // Note: notif.args contains the arguments specified during you "notifyAllPlayers" / "notifyPlayer" PHP call
 

@@ -57,7 +57,29 @@ class AfterDominoPlacedTest extends TestCase{
         $this->act_default();
         $transition_name = $this->sut->get_transition_name();
         // Assert
-        $this->assertEquals($transition_name, 'no_marker_placed');
+        $this->assertEquals($transition_name, 'no_candidate_tile');
+    }
+
+    public function test_transition_name_single_candidate_tile() {
+        // Arrange
+        $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn(['candidate_tiles_for_marker' => [1]]);
+
+        // Act
+        $this->act_default();
+        $transition_name = $this->sut->get_transition_name();
+        // Assert
+        $this->assertEquals($transition_name, 'single_candidate_tile');
+    }
+
+    public function test_transition_name_double_candidate_tile() {
+        // Arrange
+        $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn(['candidate_tiles_for_marker' => [1, 2]]);
+
+        // Act
+        $this->act_default();
+        $transition_name = $this->sut->get_transition_name();
+        // Assert
+        $this->assertEquals($transition_name, 'double_candidate_tile');
     }
 
     protected function act_default() {

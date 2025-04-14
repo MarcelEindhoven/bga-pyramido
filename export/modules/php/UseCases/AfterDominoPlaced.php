@@ -33,12 +33,17 @@ class AfterDominoPlaced extends \NieuwenhovenGames\BGA\Action {
     }
 
     public function execute(): AfterDominoPlaced {
-        $candidate_tiles_for_marker = $this->get_current_data->get()['candidate_tiles_for_marker'];
 
         return $this;
     }
 
     public function get_transition_name() : string {
-        return 'no_marker_placed';
+        $candidate_tiles_for_marker = $this->get_current_data->get()['candidate_tiles_for_marker'];
+
+        if (count($candidate_tiles_for_marker) == 0)
+            return 'no_candidate_tile';
+        if (count($candidate_tiles_for_marker) == 1)
+            return 'single_candidate_tile';
+        return 'double_candidate_tile';
     }
 }
