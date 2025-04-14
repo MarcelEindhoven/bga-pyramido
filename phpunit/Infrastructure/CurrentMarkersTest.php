@@ -29,8 +29,10 @@ class CurrentMarkersTest extends TestCase{
     public function test_get_markers_for_player() {
         // Arrange
         $this->sut->set_players(['77' => [],]);
+        $marker2 = $this->default_marker;
+        $marker2['type'] = 5;
         $this->mock_cards->expects($this->exactly(1))->method('getCardsInLocation')->with('77')->willReturn(
-            [$this->default_marker, $this->default_marker]);
+            [$this->default_marker, $marker2]);
 
         // Act
         $markers = $this->act_default();
@@ -52,9 +54,13 @@ class CurrentMarkersTest extends TestCase{
 
     public function test_get_3markers_per_player() {
         // Arrange
+        $marker2 = $this->default_marker;
+        $marker2['type'] = 2;
+        $marker3 = $this->default_marker;
+        $marker3['type'] = 3;
         $this->sut->set_players($this->players);
         $this->mock_cards->expects($this->exactly(2))->method('getCardsInLocation')->willReturn(
-            [$this->default_marker, $this->default_marker, $this->default_marker]);
+            [$this->default_marker, $marker2, $marker3]);
 
         // Act
         $markers = $this->act_default();
