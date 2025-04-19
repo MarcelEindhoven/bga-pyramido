@@ -22,11 +22,6 @@ class AfterDominoPlaced extends \NieuwenhovenGames\BGA\Action {
         return $object;
     }
 
-    public function set_update_domino($update_domino) : AfterDominoPlaced {
-        $this->update_domino = $update_domino;
-        return $this;
-    }
-
     public function set_player_id($player_id) : AfterDominoPlaced {
         $this->player_id = $player_id;
         return $this;

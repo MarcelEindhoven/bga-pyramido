@@ -54,6 +54,7 @@ define(['dojo/_base/declare'], (declare) => {
         },
         get(unique_id) {return this.paintables[unique_id];},
         paint: function() {
+            console.log (this.element_id);
             Object.values(this.paintables).forEach(paintable => {
                 console.log (paintable.unique_id);
                 paintable.paint();

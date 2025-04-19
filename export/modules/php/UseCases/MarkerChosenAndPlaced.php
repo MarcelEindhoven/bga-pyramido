@@ -52,3 +52,20 @@ class MarkerChosenAndPlaced extends \NieuwenhovenGames\BGA\Action {
         return $this;
     }
 }
+
+#[\AllowDynamicProperties]
+class MarkerAutomaticallyChosenAndPlaced extends MarkerChosenAndPlaced {
+    static public function create($gamestate): MarkerAutomaticallyChosenAndPlaced {
+        $object = new MarkerAutomaticallyChosenAndPlaced($gamestate);
+        return $object;
+    }
+
+    public function execute(): MarkerAutomaticallyChosenAndPlaced {
+        $candidate_tiles_for_marker = $this->get_current_data->get()['candidate_tiles_for_marker'];
+
+        $this->set_tile_specification(end($candidate_tiles_for_marker));
+
+        return parent::execute();
+    }
+
+}

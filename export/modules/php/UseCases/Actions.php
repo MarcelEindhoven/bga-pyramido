@@ -92,6 +92,13 @@ class Actions {
         ->execute()->nextState();
     }
 
+    public function stAutomaticallyPlaceMarker(): void {
+        $update_marker = Infrastructure\UpdateMarker::create($this->decks['marker']);
+        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
+        MarkerAutomaticallyChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_marker($update_marker)->set_get_current_data($get_current_data)->set_tile_specification($tile_specification)
+        ->execute()->nextState();
+    }
+
     public function action_domino_chosen_and_placed(string $quarry_index, array $domino_specification): void {
         $update_domino = Infrastructure\UpdateDomino::create($this->decks['domino']);
         $domino_specification['stage'] = 1;
@@ -117,9 +124,8 @@ class Actions {
     }
 
     public function stAfterDominoPlaced(): void {
-        $update_domino = Infrastructure\UpdateDomino::create($this->decks['domino']);
         $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
-        AfterDominoPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_domino($update_domino)->set_get_current_data($get_current_data)->execute()->nextState();
+        AfterDominoPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_get_current_data($get_current_data)->execute()->nextState();
     }
 }
 ?>

@@ -26,7 +26,6 @@ class AfterDominoPlacedTest extends TestCase{
     protected ?FrameworkInterfaces\Deck $mock_cards = null;
     protected ?FrameworkInterfaces\Table $mock_notifications = null;
     protected ?GetAllDatas $mock_get_current_data = null;
-    protected ?Infrastructure\UpdateDomino $mock_update_domino = null;
 
     protected int $player_id = 77;
 
@@ -42,9 +41,6 @@ class AfterDominoPlacedTest extends TestCase{
 
         $this->mock_get_current_data = $this->createMock(GetAllDatas::class);
         $this->sut->set_get_current_data($this->mock_get_current_data);
-
-        $this->mock_update_domino = $this->createMock(Infrastructure\UpdateDomino::class);
-        $this->sut->set_update_domino($this->mock_update_domino);
 
         $this->sut->set_player_id($this->player_id);
     }
