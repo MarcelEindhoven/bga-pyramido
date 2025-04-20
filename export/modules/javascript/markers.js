@@ -57,6 +57,7 @@ define(['dojo/_base/declare'], (declare) => {
                 }
                 move_to(element_id, x, y) {
                     this.element_id = element_id;
+                    //this.game.attachToNewParent(this.unique_id, this.element_id);
                     this.x = x;
                     this.y = y;
                 }
@@ -66,11 +67,13 @@ define(['dojo/_base/declare'], (declare) => {
                  */
                 paint() {
                     console.log(this.unique_id, this.element_id, this.x, this.y);
-                    //this.game.placeOnObjectPos(this.unique_id, this.element_id, this.x, this.y);
-                    this.game.slideToObjectPos(this.unique_id, this.element_id, this.x, this.y).play();
+                    this.game.slideToObjectPos(this.unique_id, this.element_id, this.x, this.y, 3000, 0).play();
                 }
                 get_bounding_box() {
                     return {horizontal_min: this.horizontal - 2, vertical_min: this.vertical - 1, horizontal_max: this.horizontal + 0, vertical_max: this.vertical + 1};
+                }
+                destroy() {
+                    this.dojo.destroy(this.unique_id);
                 }
             }
             result = new Marker({document: this.document, dojo: this.dojo, game: this.game, get_unique_id: this.get_unique_id,});

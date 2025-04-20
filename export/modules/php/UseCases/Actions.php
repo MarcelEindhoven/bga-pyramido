@@ -95,7 +95,7 @@ class Actions {
     public function stAutomaticallyPlaceMarker(): void {
         $update_marker = Infrastructure\UpdateMarker::create($this->decks['marker']);
         $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
-        MarkerAutomaticallyChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_marker($update_marker)->set_get_current_data($get_current_data)->set_tile_specification($tile_specification)
+        MarkerAutomaticallyChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_marker($update_marker)->set_get_current_data($get_current_data)
         ->execute()->nextState();
     }
 

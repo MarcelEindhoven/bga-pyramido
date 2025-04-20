@@ -368,8 +368,10 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers,
             marker.stage = specification.stage;
             marker.horizontal = specification.horizontal;
             marker.vertical = specification.vertical;
+            dojo.destroy(marker.unique_id);
+            new_marker = this.marker_factory.create_from(marker);
 
-            this.token_containers['pyramid-' + notif.args.player_id].add(marker);
+            this.token_containers['pyramid-' + notif.args.player_id].add(new_marker);
 
             this.paint();
         },

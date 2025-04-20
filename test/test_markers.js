@@ -11,7 +11,7 @@ class Animation {
 }
 describe('Markers', function () {
     beforeEach(function() {
-        dojo = {style:sinon.spy(), addClass:sinon.spy(), removeClass:sinon.spy(), };
+        dojo = {style:sinon.spy(), addClass:sinon.spy(), removeClass:sinon.spy(), destroy:sinon.spy(), };
         document = new Document();
         game = {slideToObjectPos:sinon.stub().returns (new Animation ()) ,};
         dependencies = {dojo: dojo, document: document, game:game, };
@@ -83,6 +83,18 @@ describe('Markers', function () {
             assert.equal(game.slideToObjectPos.getCall(0).args[1], element_id);
             assert.equal(game.slideToObjectPos.getCall(0).args[2], x);
             assert.equal(game.slideToObjectPos.getCall(0).args[3], y);
+        });
+    });
+    describe('Destroy', function () {
+        beforeEach(function() {
+            marker = sut.create_from(marker_specification);
+        });
+        it('removes from HTML', function () {
+            // Arrange
+            // Act
+            marker.destroy();
+            // Assert
+            assert.equal(dojo.destroy.getCall(0).args[0], marker.unique_id);
         });
     });
 });
