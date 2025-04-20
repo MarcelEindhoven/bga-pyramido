@@ -28,13 +28,18 @@ define(['dojo/_base/declare'], (declare) => {
         create_from(specification) {
             class Marker {
                 TILES_PER_ROW = 6;
-                PIXELS_PER_TILE = 60;
+                PIXELS_PER_TILE = 80;
+                PIXELS_PER_MARKER = 40;
                 MARGIN_BETWEEN_TOKENS = 10;
                 constructor(dependencies) {
                     this.clone(dependencies);
                 }
                 create_token(specification) {
                     this.clone(specification);
+
+                    this.horizontal = this.horizontal + this.PIXELS_PER_MARKER/this.PIXELS_PER_TILE;
+                    this.vertical = this.vertical + this.PIXELS_PER_MARKER/this.PIXELS_PER_TILE;
+
                     if (this.stage == 0)
                         this.set_position_for_marker_window();
 
@@ -42,9 +47,9 @@ define(['dojo/_base/declare'], (declare) => {
                     this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
                         <div id="${this.unique_id}">
                     `);
-                    this.dojo.addClass(this.unique_id,'marker');
+                    this.dojo.addClass(this.unique_id,'marker40');
                     const id_horizontal = +this.colour;
-                    this.dojo.style(this.unique_id, 'backgroundPosition', '-' + (this.PIXELS_PER_TILE * id_horizontal) + 'px -0px');
+                    this.dojo.style(this.unique_id, 'backgroundPosition', '-' + (this.PIXELS_PER_MARKER * id_horizontal) + 'px -0px');
                 }
                 clone(properties){
                     for (var property in properties) {
@@ -67,10 +72,10 @@ define(['dojo/_base/declare'], (declare) => {
                  */
                 paint() {
                     console.log(this.unique_id, this.element_id, this.x, this.y);
-                    this.game.slideToObjectPos(this.unique_id, this.element_id, this.x, this.y, 3000, 0).play();
+                    this.game.slideToObjectPos(this.unique_id, this.element_id, this.x, this.y, 0, 0).play();
                 }
                 get_bounding_box() {
-                    return {horizontal_min: this.horizontal - 2, vertical_min: this.vertical - 1, horizontal_max: this.horizontal + 0, vertical_max: this.vertical + 1};
+                    return {horizontal_min: this.horizontal - 2, vertical_min: this.vertical - 1, horizontal_max: this.horizontal + 0 - 1, vertical_max: this.vertical + 1 - 1};
                 }
                 destroy() {
                     this.dojo.destroy(this.unique_id);

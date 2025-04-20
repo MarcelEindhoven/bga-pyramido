@@ -29,7 +29,9 @@ magick montage resurfaces\*Front*.png -geometry 60x60 -tile x1 frontx60.png
 magick montage resurfaces\*Back*.png -geometry 60x60 -tile x1 backx60.png
 magick montage frontx60.png backx60.png  -geometry 180x60 -tile 1x resurfacesx60.png
 
-magick montage tokens\*.png -transparent white -geometry 40x40 -tile x1 markers.png
-magick markers.png -fuzz 0% -transparent white markersx40.png
+magick montage tokens\*.png -geometry 40x40 -tile x1 markers.png
+magick  -fuzz 40% markers.png -transparent white markersx.png
+magick  markersx.png -morphology EdgeOut Square:1 markerse.png
+magick convert -evaluate-sequence add markerse.png  markersx.png markersx40.png
 
 cp *.png ..\Pyramido\export\img\
