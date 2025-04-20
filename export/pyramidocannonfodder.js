@@ -308,7 +308,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers,
             console.log( 'notifications subscriptions setup' );
 
             dojo.subscribe( 'domino_placed', this, "notify_domino_placed" );
-            this.notifqueue.setSynchronous( 'domino_placed', 300 );
+            this.notifqueue.setSynchronous( 'domino_placed', 3000 );
 
             dojo.subscribe( 'marker_placed', this, "notify_marker_placed" );
             this.notifqueue.setSynchronous( 'marker_placed', 300 );

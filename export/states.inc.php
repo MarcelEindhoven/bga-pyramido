@@ -141,6 +141,13 @@ $machinestates = [
         "description" => 'AI selects and places domino',
         "type" => "game",
         "action" => "stAISelectAndPlaceDomino",
+        "transitions" => ["" => 60, ]
+    ],
+    60 => [
+        "name" => "selectAndPlaceMarkerAI",
+        "description" => 'AI selects and places marker',
+        "type" => "game",
+        "action" => "stAISelectAndPlaceMarker",
         "transitions" => ["" => 70, ]
     ],
     70 => [

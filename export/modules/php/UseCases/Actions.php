@@ -16,6 +16,7 @@ namespace Bga\Games\PyramidoCannonFodder\UseCases;
 include_once(__DIR__.'/GetAllDatas.php');
 
 include_once(__DIR__.'/AIDominoChosenAndPlaced.php');
+include_once(__DIR__.'/AIMarkerChosenAndPlaced.php');
 include_once(__DIR__.'/AINextDominoChosen.php');
 
 include_once(__DIR__.'/DominoChosenAndPlaced.php');
@@ -82,6 +83,13 @@ class Actions {
         $update_domino = Infrastructure\UpdateDomino::create($this->decks['domino']);
         $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
         AIDominoChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_domino($update_domino)->set_get_current_data($get_current_data)
+        ->execute()->nextState();
+    }
+
+    public function stAISelectAndPlaceMarker(): void {
+        $update_marker = Infrastructure\UpdateMarker::create($this->decks['marker']);
+        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
+        AIMarkerChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_marker($update_marker)->set_get_current_data($get_current_data)
         ->execute()->nextState();
     }
 

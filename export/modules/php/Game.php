@@ -223,6 +223,12 @@ class Game extends \Table
         $this->actions->stAISelectAndPlaceDomino();
     }
 
+    public function stAISelectAndPlaceMarker(): void {
+        $this->initialise();
+
+        $this->actions->stAISelectAndPlaceMarker();
+    }
+
     public function stAIChooseNextDomino(): void {
         $this->initialise();
 
