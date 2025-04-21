@@ -30,13 +30,17 @@ class Pyramid
     }
 
     public function get_stage_next_domino(): int {
-        if (6 == count(array_filter($this->tiles, function($tile) {return 3 == $tile['stage'];})))
+        if (6 == count($this->get_tiles_for_stage(3)))
             return 4;
-        if (12 == count(array_filter($this->tiles, function($tile) {return 2 == $tile['stage'];})))
+        if (12 == count($this->get_tiles_for_stage(2)))
             return 3;
-        if (20 == count(array_filter($this->tiles, function($tile) {return 1 == $tile['stage'];})))
+        if (20 == count($this->get_tiles_for_stage(1)))
             return 2;
         return 1;
+    }
+
+    public function get_tiles_for_stage($stage): array {
+        return array_filter($this->tiles, function($tile) use ($stage) {return $stage == $tile['stage'];});
     }
 
     public function get_candidate_tiles_for_marker($markers): array {
