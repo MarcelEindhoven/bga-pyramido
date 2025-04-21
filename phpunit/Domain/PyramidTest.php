@@ -59,19 +59,24 @@ class PyramidTest extends TestCase{
         $this->assertEquals($expected_tiles, $candidate_tiles_for_marker);
     }
     static public function get_candidate_tiles_for_marker(): array {
-        $stage4_5 = ['stage' => 4, 'colour' => 5,];
-        $stage4_4 = ['stage' => 4, 'colour' => 4,];
-        $stage2_0 = ['stage' => 2, 'colour' => 3,];
-        $stage1_0 = ['stage' => 1, 'colour' => 2,];
+        $stage4_5 = ['stage' => 4, 'colour' => 5, 'jewels' => [1]];
+        $stage4_5no_jewels = ['stage' => 4, 'colour' => 5, 'jewels' => []];
+        $stage4_4 = ['stage' => 4, 'colour' => 4, 'jewels' => [1]];
+        $stage2_0 = ['stage' => 2, 'colour' => 3, 'jewels' => [1]];
+        $stage1_0 = ['stage' => 1, 'colour' => 2, 'jewels' => [1]];
         $marker_stage_0 = ['stage' => 0, 'colour' => 5,];
         $marker_stage_1_4 = ['stage' => 1, 'colour' => 4,];
         $marker_stage_4 = ['stage' => 4, 'colour' => 0,];
+        $marker4_stage_0 = ['stage' => 0, 'colour' => 4,];
         return [
             [[], [], []],
             [[$stage4_5], [$marker_stage_0, $marker_stage_1_4, $marker_stage_4], [$stage4_5]],
             [[$stage4_5, $stage2_0], [$marker_stage_0, $marker_stage_4], [$stage4_5]],
             [[$stage4_5, $stage4_4], [$marker_stage_0, $marker_stage_4], [$stage4_5]],
             [[$stage4_5, $stage4_4], [$marker_stage_0, $marker_stage_1_4], [$stage4_5]],
+            [[$stage4_5, $stage4_4], [$marker_stage_0, $marker4_stage_0], [$stage4_5, $stage4_4]],
+            [[$stage4_5, $stage4_5], [$marker_stage_0], [$stage4_5, $stage4_5]],
+            [[$stage4_5, $stage4_5no_jewels], [$marker_stage_0], [$stage4_5]],
         ];
     }
 

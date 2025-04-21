@@ -41,8 +41,9 @@ class Pyramid
 
     public function get_candidate_tiles_for_marker($markers): array {
         $tiles_stage_4 =  array_filter($this->tiles, function($tile) {return 4 == $tile['stage'];});
+        $tiles_stage_4_with_jewels =  array_filter($tiles_stage_4, function($tile) {return count($tile['jewels']) > 0;});
         $markers_stage_0 =  array_filter($markers, function($marker) {return 0 == $marker['stage'];});
-        return array_filter($tiles_stage_4, function($tile) use ($markers_stage_0){
+        return array_filter($tiles_stage_4_with_jewels, function($tile) use ($markers_stage_0){
             foreach ($markers_stage_0 as $marker) {
                 if (($marker['colour'] == $tile['colour'])) return true;
             }
