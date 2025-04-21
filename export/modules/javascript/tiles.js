@@ -75,7 +75,13 @@ define(['dojo/_base/declare'], (declare) => {
                 paint() {
                     console.log(this.unique_id, this.element_id, this.x, this.y);
                     //this.game.placeOnObjectPos(this.unique_id, this.element_id, this.x, this.y);
+                    if (this.rotation_class)
+                        this.dojo.removeClass(this.unique_id, this.rotation_class);
+
                     this.game.slideToObjectPos(this.unique_id, this.element_id, this.x, this.y).play();
+
+                    this.rotation_class = 'rotate' + this.rotation;
+                    this.dojo.addClass(this.unique_id, this.rotation_class);
                 }
                 get_bounding_box() {
                     return {horizontal_min: this.horizontal - 2, vertical_min: this.vertical - 1, horizontal_max: this.horizontal + 0, vertical_max: this.vertical + 1};
