@@ -32,7 +32,7 @@ define(['dojo/_base/declare'], (declare) => {
         setup_players(players) {
             Object.values(players).forEach(player => {
                 this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
-                    <div id="player-table-${player.id}">
+                    <div id="player-table-${player.id}" style = "display: inline-block;">
                         <div style = "display: inline-block;"><strong>${player.name}</strong></div>
                         <div id="marker-${player.id}" style = "display: inline-block; width: 130px ; height: 200px"></div>
                         <div id="resurface-${player.id}" style = "display: inline-block; width: 170px ; height: 260px"></div>
