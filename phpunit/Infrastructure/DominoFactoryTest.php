@@ -29,12 +29,14 @@ class DominoFactoryTest extends TestCase{
         $order_index = 7;
         $first_colour = 1;
         $second_colour = 5;
-        $expected_definition = array( 'type' => $order_index, 'type_arg' => $first_colour + 6 * $second_colour, 'nbr' => 1);
+        $first_jewel = 1;
+        $second_jewel = 3;
+        $expected_definition = array( 'type' => $order_index, 'type_arg' => $first_colour + 6 * $second_colour + 6*6 * $first_jewel + 6*6*8 * $second_jewel, 'nbr' => 1);
 
         $this->mock_cards->expects($this->exactly(1))->method('createCards')->with([$expected_definition]);
 
         // Act
-        $this->sut->add($order_index, $first_colour, $second_colour);
+        $this->sut->add($order_index, $first_colour, $second_colour, $first_jewel, $second_jewel);
         $this->sut->flush();
         // Assert
     }

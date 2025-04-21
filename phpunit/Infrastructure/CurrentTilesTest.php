@@ -221,9 +221,6 @@ class CurrentTilesTest extends TestCase{
 
     public function test_first_tile_colour() {
         // Arrange
-        $stage = 1;
-        $this->default_domino['location_arg'] = $stage;
-
         $colour = 5;
         $this->default_domino['type_arg'] = $colour + 6 * 5;
 
@@ -247,6 +244,88 @@ class CurrentTilesTest extends TestCase{
 
         // Assert
         $this->assertEquals($colour, $second_tile['colour']);
+    }
+
+    public function test_first_tile_no_jewels() {
+        // Arrange
+        $this->default_domino['type_arg'] = 5 + 6 * 5 + 6*6 * 4 + 6*6*8 * 7;
+
+        $this->arrange_default_domino();
+
+        // Act
+        $first_tile = $this->act_first_tile();
+
+        // Assert
+        $this->assertEquals([], $first_tile['jewels']);
+    }
+
+    public function test_second_tile_no_jewels() {
+        // Arrange
+        $this->default_domino['type_arg'] = 5 + 6 * 5;
+
+        $this->arrange_default_domino();
+
+        // Act
+        $second_tile = $this->act_second_tile();
+
+        // Assert
+        $this->assertEquals([], $second_tile['jewels']);
+    }
+
+    public function test_first_tile_single_jewel() {
+        // Arrange
+        $jewels = [3];
+        $this->default_domino['type_arg'] = 5 + 6 * 5 + 6*6 * $jewels[0] + 6*6*8 * 7;
+
+        $this->arrange_default_domino();
+
+        // Act
+        $first_tile = $this->act_first_tile();
+
+        // Assert
+        $this->assertEquals($jewels, $first_tile['jewels']);
+    }
+
+    public function test_first_tile_double_jewels() {
+        // Arrange
+        $jewels = [0, 3];
+        $this->default_domino['type_arg'] = 5 + 6 * 5 + 6*6 * $jewels[0] + 6*6*8 * $jewels[1];
+
+        $this->arrange_default_domino();
+
+        // Act
+        $first_tile = $this->act_first_tile();
+
+        // Assert
+        $this->assertEquals($jewels, $first_tile['jewels']);
+    }
+
+    public function test_second_tile_single_jewel() {
+        // Arrange
+        $jewels = [0];
+        $this->default_domino['type_arg'] = 5 + 6 * 5 + 6*6*8 * ($jewels[0] + 4);
+
+        $this->arrange_default_domino();
+
+        // Act
+        $second_tile = $this->act_second_tile();
+
+        // Assert
+        $this->assertEquals($jewels, $second_tile['jewels']);
+    }
+
+    public function test_second_tile_double_jewels() {
+        // Arrange
+        $jewels = [0, 3];
+        $this->default_domino['type_arg'] = 5 + 6 * 5 + 6*6 * ($jewels[0] + 4) + 6*6*8 * ($jewels[1] + 4);
+
+        $this->arrange_default_domino();
+
+        // Act
+        $second_tile = $this->act_second_tile();
+
+        // Assert
+        $this->assertEquals($jewels, $second_tile['jewels']);
     }
 
     protected function arrange_default_domino() {

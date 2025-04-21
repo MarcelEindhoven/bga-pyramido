@@ -28,8 +28,15 @@ class DominoFactory
         $this->deck = $deck;
     }
 
-    public function add($order_index, $first_colour, $second_colour) {
-        $this->definitions[] = array( 'type' => $order_index, 'type_arg' => $first_colour + 6 * $second_colour, 'nbr' => 1);
+    public function add($order_index, $first_colour, $second_colour, $first_jewel, $second_jewel) {
+        $this->definitions[] = array(
+            'type' => $order_index,
+            'type_arg' => 
+            $first_colour + 
+            CurrentTiles::NUMBER_COLOURS * $second_colour +
+            CurrentTiles::NUMBER_COLOURS * CurrentTiles::NUMBER_COLOURS * $first_jewel +
+            CurrentTiles::NUMBER_COLOURS * CurrentTiles::NUMBER_COLOURS * CurrentTiles::NUMBER_SPOTS_WITHIN_DOMINO * $second_jewel,
+            'nbr' => 1);
     }
     public function flush() {
         $this->deck->createCards($this->definitions);
@@ -98,6 +105,9 @@ class CurrentTiles
     const FACTOR_HORIZONTAL = 20;
     const FACTOR_VERTICAL = 20;
     const FACTOR_ROTATION = 4;
+    const NUMBER_COLOURS = 6;
+    const NUMBER_SPOTS_WITHIN_TILE = 4;
+    const NUMBER_SPOTS_WITHIN_DOMINO = 8;
 
     static public function create($deck_domino): CurrentTiles {
         $object = new CurrentTiles();
@@ -164,14 +174,31 @@ class CurrentTiles
         $tile = $this->get_tile_common($domino);
 
         $tile['tile_id'] = $domino['type'] * 2;
-        $tile['colour'] = $domino['type_arg'] % 6;
+        $tile['colour'] = $domino['type_arg'] % CurrentTiles::NUMBER_COLOURS;
+
+        $first_jewel = (int)($domino['type_arg'] / (CurrentTiles::NUMBER_COLOURS * CurrentTiles::NUMBER_COLOURS)) % CurrentTiles::NUMBER_SPOTS_WITHIN_DOMINO;
+        if ($first_jewel < CurrentTiles::NUMBER_SPOTS_WITHIN_TILE) {
+            $tile['jewels'][] = $first_jewel;
+            $second_jewel = (int)($domino['type_arg'] / (CurrentTiles::NUMBER_COLOURS * CurrentTiles::NUMBER_COLOURS * CurrentTiles::NUMBER_SPOTS_WITHIN_DOMINO));
+            if ($second_jewel < CurrentTiles::NUMBER_SPOTS_WITHIN_TILE)
+                $tile['jewels'][] = $second_jewel;
+        }
 
         return $tile;
     }
+
     public function get_second_tile_for($domino) {
         $tile = $this->get_tile_common($domino);
         $tile['tile_id'] = $domino['type'] * 2 + 1;
-        $tile['colour'] = (int) (($domino['type_arg'] % (6 * 6)) / 6);
+        $tile['colour'] = (int) (($domino['type_arg'] % (CurrentTiles::NUMBER_COLOURS * CurrentTiles::NUMBER_COLOURS)) / CurrentTiles::NUMBER_COLOURS);
+
+        $second_jewel = (int)($domino['type_arg'] / (CurrentTiles::NUMBER_COLOURS * CurrentTiles::NUMBER_COLOURS * CurrentTiles::NUMBER_SPOTS_WITHIN_DOMINO)) - CurrentTiles::NUMBER_SPOTS_WITHIN_TILE;
+        if ($second_jewel >= 0) {
+            $first_jewel = (int)($domino['type_arg'] / (CurrentTiles::NUMBER_COLOURS * CurrentTiles::NUMBER_COLOURS)) % CurrentTiles::NUMBER_SPOTS_WITHIN_DOMINO - CurrentTiles::NUMBER_SPOTS_WITHIN_TILE;
+            if ($first_jewel >= 0)
+                $tile['jewels'][] = $first_jewel;
+            $tile['jewels'][] = $second_jewel;
+        }
 
         if ($tile['rotation'] == 0)
             $tile['horizontal'] = $tile['horizontal'] + 2;
@@ -187,8 +214,9 @@ class CurrentTiles
 
         return $tile;
     }
+
     protected function get_tile_common($domino) {
-        $tile = ['id' => '1', 'colour' => 0, 'stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0];
+        $tile = ['id' => '1', 'colour' => 0, 'stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0, 'jewels' => []];
 
         $this->convert_location_argument($tile, 0 + $domino['location_arg']);
 
