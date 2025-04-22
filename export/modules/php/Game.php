@@ -210,6 +210,12 @@ class Game extends \Table
         $this->actions->stAfterTurnFinished();
     }
 
+    public function stAfterStageFinished(): void {
+        $this->initialise();
+
+        $this->actions->stAfterStageFinished();
+    }
+
     public function stAfterMarkerPlaced(): void {
         $this->initialise();
 

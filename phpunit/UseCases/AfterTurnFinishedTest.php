@@ -80,6 +80,39 @@ class AfterTurnFinishedTest extends TestCase{
     protected function act_default() {
         $this->sut->execute();
     }
+
+    public function test_default_transition_name() {
+        // Arrange
+        $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn(['tiles'=> []]);
+
+        // Act
+        $transition_name = $this->sut->get_transition_name();
+        // Assert
+        $this->assertEquals('stage_not_finished', $transition_name);
+    }
+
+    public function test_single_player_stage_1_partially_filled() {
+        // Arrange
+        $tiles = [['stage' => 1]];
+        $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn(['tiles'=> [77 =>$tiles]]);
+
+        // Act
+        $transition_name = $this->sut->get_transition_name();
+        // Assert
+        $this->assertEquals('stage_not_finished', $transition_name);
+    }
+
+    public function test_single_player_stage_1_filled() {
+        // Arrange
+        $tiles = [['stage' => 1]];
+        $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn(['tiles'=> [77 =>$tiles]]);
+
+        // Act
+        $transition_name = $this->sut->get_transition_name();
+        // Assert
+        $this->assertEquals('stage_not_finished', $transition_name);
+    }
+    protected function create_tiles($number_tiles_per_stage): array {return [];}
 }
 
 ?>

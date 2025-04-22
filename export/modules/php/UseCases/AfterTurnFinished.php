@@ -15,6 +15,9 @@ namespace Bga\Games\PyramidoCannonFodder\UseCases;
 
 include_once(__DIR__.'/../BGA/Action.php');
 
+include_once(__DIR__.'/../Domain/Pyramid.php');
+use Bga\Games\PyramidoCannonFodder\Domain;
+
 #[\AllowDynamicProperties]
 class AfterTurnFinished extends \NieuwenhovenGames\BGA\Action {
     static public function create($gamestate): AfterTurnFinished {
@@ -50,5 +53,10 @@ class AfterTurnFinished extends \NieuwenhovenGames\BGA\Action {
         ]);
 
         return $this;
+    }
+
+    public function get_transition_name() : string {
+        $tiles = $this->get_current_data->get()['tiles'];
+        return 'stage_not_finished';
     }
 }
