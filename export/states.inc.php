@@ -132,7 +132,7 @@ $machinestates = [
         "description" => '',
         "type" => "game",
         "action" => "stAfterStageFinished",
-        "transitions" => ["" => 35,]
+        "transitions" => ["not_finished_playing" => 35, "finished_playing" => 99]
     ],
     35 => [
         "name" => "nextPlayer",

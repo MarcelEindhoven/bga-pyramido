@@ -13,7 +13,7 @@ include_once(__DIR__.'/../../export/modules/php/UseCases/AfterStageFinished.php'
 
 include_once(__DIR__.'/../../export/modules/php/UseCases/GetAllDatas.php');
 
-include_once(__DIR__.'/../../export/modules/php/Infrastructure/Domino.php');
+include_once(__DIR__.'/../../export/modules/php/Infrastructure/Marker.php');
 use Bga\Games\PyramidoCannonFodder\Infrastructure;
 
 include_once(__DIR__.'/../_ide_helper.php');
@@ -26,12 +26,12 @@ class AfterStageFinishedTest extends TestCase{
     protected ?FrameworkInterfaces\Deck $mock_cards = null;
     protected ?FrameworkInterfaces\Table $mock_notifications = null;
     protected ?GetAllDatas $mock_get_current_data = null;
-    protected ?Infrastructure\UpdateDomino $mock_update_domino = null;
+    protected ?Infrastructure\UpdateMarker $mock_update_marker = null;
 
     protected int $player_id = 77;
 
     protected array $current_data = ['current_stage' => 2, 'candidate_positions' => [2 => ['id' => 9, 'tiles'=> ['a', 'b']]]];
-    protected array $domino_specification = ['stage' => 4, 'horizontal' => 12, 'vertical' => 14, 'rotation' => 3, ];
+    protected array $marker_specification = ['stage' => 4, 'horizontal' => 12, 'vertical' => 14, 'rotation' => 3, ];
 
     protected function setUp(): void {
         $this->mock_gamestate = $this->createMock(FrameworkInterfaces\GameState::class);
@@ -43,10 +43,43 @@ class AfterStageFinishedTest extends TestCase{
         $this->mock_get_current_data = $this->createMock(GetAllDatas::class);
         $this->sut->set_get_current_data($this->mock_get_current_data);
 
-        $this->mock_update_domino = $this->createMock(Infrastructure\UpdateDomino::class);
-        $this->sut->set_update_domino($this->mock_update_domino);
+        $this->mock_update_marker = $this->createMock(Infrastructure\UpdateMarker::class);
+        $this->sut->set_update_marker($this->mock_update_marker);
 
         $this->sut->set_player_id($this->player_id);
+    }
+
+    public function test_stage_1_filled() {
+        // Arrange
+        $tiles = $this->create_tiles([20]);
+        $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn(['tiles'=> [77 =>$tiles]]);
+
+        // Act
+        $transition_name = $this->sut->get_transition_name();
+        // Assert
+        $this->assertEquals('not_finished_playing', $transition_name);
+    }
+
+    public function test_stage_4_filled() {
+        // Arrange
+        $tiles = $this->create_tiles([20, 6, 3, 1]);
+        $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn(['tiles'=> [77 =>$tiles]]);
+
+        // Act
+        $transition_name = $this->sut->get_transition_name();
+        // Assert
+        $this->assertEquals('finished_playing', $transition_name);
+    }
+
+    protected function create_tiles($number_tiles_per_stage): array {
+        $tiles = [];
+        $stage_number = 0;
+        foreach ($number_tiles_per_stage as $number_tiles) {
+            $stage_number = $stage_number + 1;
+            for ($i=0; $i < $number_tiles; $i++)
+                $tiles[] = ['stage' => $stage_number];
+        }
+        return $tiles;
     }
 }
 

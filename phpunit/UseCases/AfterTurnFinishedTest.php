@@ -81,19 +81,9 @@ class AfterTurnFinishedTest extends TestCase{
         $this->sut->execute();
     }
 
-    public function test_default_transition_name() {
-        // Arrange
-        $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn(['tiles'=> []]);
-
-        // Act
-        $transition_name = $this->sut->get_transition_name();
-        // Assert
-        $this->assertEquals('stage_not_finished', $transition_name);
-    }
-
     public function test_single_player_stage_1_partially_filled() {
         // Arrange
-        $tiles = [['stage' => 1]];
+        $tiles = $this->create_tiles([1]);
         $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn(['tiles'=> [77 =>$tiles]]);
 
         // Act
@@ -104,15 +94,25 @@ class AfterTurnFinishedTest extends TestCase{
 
     public function test_single_player_stage_1_filled() {
         // Arrange
-        $tiles = [['stage' => 1]];
+        $tiles = $this->create_tiles([20]);
         $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn(['tiles'=> [77 =>$tiles]]);
 
         // Act
         $transition_name = $this->sut->get_transition_name();
         // Assert
-        $this->assertEquals('stage_not_finished', $transition_name);
+        $this->assertEquals('stage_finished', $transition_name);
     }
-    protected function create_tiles($number_tiles_per_stage): array {return [];}
+
+    protected function create_tiles($number_tiles_per_stage): array {
+        $tiles = [];
+        $stage_number = 0;
+        foreach ($number_tiles_per_stage as $number_tiles) {
+            $stage_number = $stage_number + 1;
+            for ($i=0; $i < $number_tiles; $i++)
+                $tiles[] = ['stage' => $stage_number];
+        }
+        return $tiles;
+    }
 }
 
 ?>

@@ -57,6 +57,11 @@ class AfterTurnFinished extends \NieuwenhovenGames\BGA\Action {
 
     public function get_transition_name() : string {
         $tiles = $this->get_current_data->get()['tiles'];
-        return 'stage_not_finished';
+        foreach ($tiles as $player_id => $tiles_per_player) {
+            $pyramid = Domain\Pyramid::create($tiles_per_player);
+            if (count($pyramid->get_tiles_for_stage($pyramid->get_stage_next_domino())) > 0)
+                return 'stage_not_finished';
+        }
+        return 'stage_finished';
     }
 }
