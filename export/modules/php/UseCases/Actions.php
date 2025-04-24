@@ -133,9 +133,9 @@ class Actions {
     }
 
     public function stAfterStageFinished(): void {
-        $update_domino = Infrastructure\UpdateDomino::create($this->decks['domino']);
+        $update_marker = Infrastructure\UpdateMarker::create($this->decks['marker']);
         $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
-        AfterStageFinished::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_domino($update_domino)->set_get_current_data($get_current_data)->execute()->nextState();
+        AfterStageFinished::create($this->gamestate)->set_notifications($this->notifications)->set_update_marker($update_marker)->set_get_current_data($get_current_data)->execute()->nextState();
     }
 
     public function stAfterDominoPlaced(): void {

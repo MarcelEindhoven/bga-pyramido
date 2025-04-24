@@ -30,15 +30,14 @@ class AfterStageFinished extends \NieuwenhovenGames\BGA\Action {
         return $this;
     }
 
-    public function set_player_id($player_id) : AfterStageFinished {
-        $this->player_id = $player_id;
-        return $this;
-    }
-
     public function execute(): AfterStageFinished {
+        // Calculate score
+        // Determine next player
+        // Return markers
 
         return $this;
     }
+
     public function get_transition_name() : string {
         $tiles = $this->get_current_data->get()['tiles'];
         foreach ($tiles as $player_id => $tiles_per_player) {

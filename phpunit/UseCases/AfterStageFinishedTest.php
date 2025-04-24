@@ -45,8 +45,6 @@ class AfterStageFinishedTest extends TestCase{
 
         $this->mock_update_marker = $this->createMock(Infrastructure\UpdateMarker::class);
         $this->sut->set_update_marker($this->mock_update_marker);
-
-        $this->sut->set_player_id($this->player_id);
     }
 
     public function test_stage_1_filled() {
