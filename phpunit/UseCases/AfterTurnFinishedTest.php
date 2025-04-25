@@ -103,6 +103,17 @@ class AfterTurnFinishedTest extends TestCase{
         $this->assertEquals('stage_finished', $transition_name);
     }
 
+    public function test_single_player_stage_4_filled() {
+        // Arrange
+        $tiles = $this->create_tiles([20, 12, 6, 2]);
+        $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn(['tiles'=> [77 =>$tiles]]);
+
+        // Act
+        $transition_name = $this->sut->get_transition_name();
+        // Assert
+        $this->assertEquals('stage_finished', $transition_name);
+    }
+
     protected function create_tiles($number_tiles_per_stage): array {
         $tiles = [];
         $stage_number = 0;

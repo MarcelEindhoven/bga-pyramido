@@ -33,6 +33,7 @@ class PyramidTest extends TestCase{
         $this->assertEquals($expected_stage, $stage);
     }
     static public function get_stage_next_domino_provider(): array {
+        $stage4_0 = ['stage' => 4,];
         $stage3_0 = ['stage' => 3,];
         $stage2_0 = ['stage' => 2,];
         $stage1_0 = ['stage' => 1,];
@@ -44,6 +45,7 @@ class PyramidTest extends TestCase{
             [[$stage2_0, $stage2_0, $stage2_0, $stage2_0, $stage2_0, $stage2_0, 
             $stage2_0, $stage2_0, $stage2_0, $stage2_0, $stage2_0, $stage2_0, $stage3_0, $stage3_0], 3],
             [[$stage3_0, $stage3_0, $stage3_0, $stage3_0, $stage3_0, $stage3_0], 4],
+            [[$stage4_0, $stage4_0], 5],
         ];
     }
 
