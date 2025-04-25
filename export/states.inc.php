@@ -132,6 +132,13 @@ $machinestates = [
         "description" => '',
         "type" => "game",
         "action" => "stAfterStageFinished",
+        "transitions" => ["" => 33,]
+    ],
+    33 => [
+        "name" => "ReturnAllMarkers",
+        "description" => '',
+        "type" => "game",
+        "action" => "stReturnAllMarkers",
         "transitions" => ["not_finished_playing" => 35, "finished_playing" => 99]
     ],
     35 => [

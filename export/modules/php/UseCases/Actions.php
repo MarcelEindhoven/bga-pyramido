@@ -25,6 +25,7 @@ include_once(__DIR__.'/MarkerChosenAndPlaced.php');
 include_once(__DIR__.'/NextDominoChosen.php');
 include_once(__DIR__.'/AfterTurnFinished.php');
 include_once(__DIR__.'/AfterStageFinished.php');
+include_once(__DIR__.'/ReturnAllMarkers.php');
 include_once(__DIR__.'/AfterDominoPlaced.php');
 
 include_once(__DIR__.'/../Infrastructure/Domino.php');
@@ -130,6 +131,12 @@ class Actions {
         $update_domino = Infrastructure\UpdateDomino::create($this->decks['domino']);
         $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
         AfterTurnFinished::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_domino($update_domino)->set_get_current_data($get_current_data)->execute()->nextState();
+    }
+
+    public function stReturnAllMarkers(): void {
+        $update_marker = Infrastructure\UpdateMarker::create($this->decks['marker']);
+        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
+        ReturnAllMarkers::create($this->gamestate)->set_notifications($this->notifications)->set_update_marker($update_marker)->set_get_current_data($get_current_data)->execute()->nextState();
     }
 
     public function stAfterStageFinished(): void {

@@ -216,6 +216,12 @@ class Game extends \Table
         $this->actions->stAfterStageFinished();
     }
 
+    public function stReturnAllMarkers(): void {
+        $this->initialise();
+
+        $this->actions->stReturnAllMarkers();
+    }
+
     public function stAfterMarkerPlaced(): void {
         $this->initialise();
 

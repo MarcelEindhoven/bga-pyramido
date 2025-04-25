@@ -33,18 +33,7 @@ class AfterStageFinished extends \NieuwenhovenGames\BGA\Action {
     public function execute(): AfterStageFinished {
         // Calculate score
         // Determine next player
-        // Return markers
 
         return $this;
-    }
-
-    public function get_transition_name() : string {
-        $tiles = $this->get_current_data->get()['tiles'];
-        foreach ($tiles as $player_id => $tiles_per_player) {
-            $pyramid = Domain\Pyramid::create($tiles_per_player);
-            if (count($pyramid->get_tiles_for_stage(4)) > 0)
-                return 'finished_playing';
-        }
-        return 'not_finished_playing';
     }
 }
