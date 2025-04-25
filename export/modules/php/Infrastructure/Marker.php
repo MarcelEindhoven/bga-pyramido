@@ -56,6 +56,14 @@ class UpdateMarker extends CurrentMarkers
 
         return $this;
     }
+
+    public function return_all_markers($player_id): UpdateMarker {
+        $cards = $this->deck->getCardsInLocation(strval($player_id));
+        foreach ($cards as $card) {
+            $this->deck->moveCard($card['id'], strval($player_id), 0);
+        }
+        return $this;
+    }
 }
 
 #[\AllowDynamicProperties]

@@ -66,5 +66,15 @@ class UpdateMarkerTest extends TestCase{
         $this->sut->move($this->player_id, $this->marker_specification);
         // Assert
     }
+    public function test_return_all_markers() {
+        // Arrange
+        $this->mock_cards->expects($this->exactly(1))->method('getCardsInLocation')
+        ->with('77')->willReturn([$this->card2]);
+
+        $this->mock_cards->expects($this->exactly(1))->method('moveCard')->with(1, '77', 0);
+        // Act
+        $this->sut->return_all_markers($this->player_id);
+        // Assert
+    }
 }
 ?>
