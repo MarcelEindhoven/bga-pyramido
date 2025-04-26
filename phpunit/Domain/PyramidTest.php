@@ -95,8 +95,8 @@ class PyramidTest extends TestCase{
         ];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('adjacent_positions_provider')]
-    public function test_get_adjacent_positions($tiles, $expected_positions) {
+    #[\PHPUnit\Framework\Attributes\DataProvider('adjacent_positions_provider_first_stage')]
+    public function test_get_adjacent_positions_first_stage($tiles, $expected_positions) {
         // Arrange
         $this->sut = Pyramid::create($tiles);
 
@@ -105,7 +105,7 @@ class PyramidTest extends TestCase{
         // Assert
         $this->assertEqualsCanonicalizing($expected_positions, $positions);
     }
-    static public function adjacent_positions_provider(): array {
+    static public function adjacent_positions_provider_first_stage(): array {
 
         $initial0 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0];
         $initial1 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 1];
@@ -164,6 +164,11 @@ class PyramidTest extends TestCase{
 
         $faraway = ['stage' => 1, 'horizontal' => 18, 'vertical' => 16, 'rotation' => 3];
 
+        $stage4_0 = ['stage' => 4, 'horizontal' => 13, 'vertical' => 13, 'rotation' => 0];
+        $stage4_1 = ['stage' => 4, 'horizontal' => 13, 'vertical' => 13, 'rotation' => 1];
+        $stage4_2 = ['stage' => 4, 'horizontal' => 15, 'vertical' => 13, 'rotation' => 2];
+        $stage4_3 = ['stage' => 4, 'horizontal' => 13, 'vertical' => 15, 'rotation' => 3];
+
         return [
             [[], [$initial0, $initial1, $initial2, $initial3]],
             [[$initial0, $initial01], [
@@ -181,6 +186,35 @@ class PyramidTest extends TestCase{
                 $t18_12_1, $t16_14_1,
                 $t18_14_2, $t16_16_2,
                 $t18_14_3, $t16_16_3,
+            ]],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('adjacent_positions_provider_stage')]
+    public function test_get_candidate_positions_stage($stage, $tiles, $expected_positions) {
+        // Arrange
+        $this->sut = Pyramid::create($tiles);
+
+        // Act
+        $positions = $this->sut->get_candidate_positions_stage($stage);
+        // Assert
+        $this->assertEqualsCanonicalizing($expected_positions, $positions);
+    }
+    static public function adjacent_positions_provider_stage(): array {
+
+        $stage1_top_left = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0];
+
+        $stage1_far_right = ['stage' => 1, 'horizontal' => 18, 'vertical' => 16, 'rotation' => 3];
+        $stage1_far_bottom = ['stage' => 1, 'horizontal' => 16, 'vertical' => 18, 'rotation' => 3];
+
+        $stage4_0 = ['stage' => 4, 'horizontal' => 13, 'vertical' => 13, 'rotation' => 0];
+        $stage4_1 = ['stage' => 4, 'horizontal' => 13, 'vertical' => 13, 'rotation' => 1];
+        $stage4_2 = ['stage' => 4, 'horizontal' => 15, 'vertical' => 13, 'rotation' => 2];
+        $stage4_3 = ['stage' => 4, 'horizontal' => 13, 'vertical' => 15, 'rotation' => 3];
+
+        return [
+            [4, [$stage1_top_left, $stage1_far_right], [
+                $stage4_0, $stage4_2,
             ]],
         ];
     }

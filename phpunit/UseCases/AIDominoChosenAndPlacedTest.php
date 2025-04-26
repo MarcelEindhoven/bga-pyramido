@@ -66,7 +66,7 @@ class AIDominoChosenAndPlacedTest extends TestCase{
 
     public function test_execute_choose_next_domino() {
         // Arrange
-        $initial_right = ['horizontal' => 12, 'vertical' => 10, 'rotation' => 0];
+        $initial_right = ['stage' => 1, 'horizontal' => 12, 'vertical' => 10, 'rotation' => 0];
         $pyramid = Domain\Pyramid::create([$initial_right]);
         $this->current_data['candidate_positions'] = $pyramid->get_adjacent_positions_first_stage();
         $this->expected_domino_specification = ['stage' => 4, 'horizontal' => 14, 'vertical' => 10, 'rotation' => 0, ];
