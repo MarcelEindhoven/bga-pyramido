@@ -313,6 +313,9 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers,
             dojo.subscribe( 'marker_placed', this, "notify_marker_placed" );
             this.notifqueue.setSynchronous( 'marker_placed', 300 );
 
+            dojo.subscribe( 'return_all_markers', this, "notify_return_all_markers" );
+            this.notifqueue.setSynchronous( 'return_all_markers', 300 );
+
             dojo.subscribe( 'domino_new_stage', this, "notify_domino_new_stage" );
             this.notifqueue.setSynchronous( 'domino_new_stage', 300 );
 
@@ -354,6 +357,40 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers,
             this.market.fill(next_index, notif.args.next_domino);
         },
 
+        notify_return_all_markers: function( notif )
+        {
+            console.log( 'notify_return_all_markers' );
+            console.log( notif.args );
+
+            specifications = notif.args.markers;
+            for (var player_id in specifications) {
+                console.log(player_id);
+                marker_container = this.token_containers['marker-' + notif.args.player_id];
+                pyramid_container = this.token_containers['pyramid-' + notif.args.player_id];
+                markers_per_player = specifications[player_id];
+                for (var i in markers_per_player) {
+                    specification = markers_per_player[i];
+                    id = this.marker_factory.get_unique_id(specification);
+                    if (pyramid_container.is_present(id)) {
+                        console.log(id);
+                        marker = pyramid_container.get(id);
+                        pyramid_container.remove(marker);
+                        marker.place(specification);
+                        marker_container.add(marker);
+                    }
+                }
+            }
+    
+            marker = this.token_containers['marker-' + notif.args.player_id].get(id);
+
+            this.token_containers['marker-' + notif.args.player_id].remove(marker);
+            
+
+            this.token_containers['pyramid-' + notif.args.player_id].add(marker);
+
+            this.paint();
+        },
+
         notify_marker_placed: function( notif )
         {
             console.log( 'notify_marker_placed' );
@@ -364,14 +401,9 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers,
             marker = this.token_containers['marker-' + notif.args.player_id].get(id);
 
             this.token_containers['marker-' + notif.args.player_id].remove(marker);
+            marker.place(specification);
 
-            marker.stage = specification.stage;
-            marker.horizontal = specification.horizontal;
-            marker.vertical = specification.vertical;
-            dojo.destroy(marker.unique_id);
-            new_marker = this.marker_factory.create_from(marker);
-
-            this.token_containers['pyramid-' + notif.args.player_id].add(new_marker);
+            this.token_containers['pyramid-' + notif.args.player_id].add(marker);
 
             this.paint();
         },

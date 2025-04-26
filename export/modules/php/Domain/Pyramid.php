@@ -30,7 +30,7 @@ class Pyramid
     }
 
     public function get_stage_next_domino(): int {
-        if (count($this->get_tiles_for_stage(4)) > 0)
+        if ((count($this->get_tiles_for_stage(4)) > 0) && (count($this->get_tiles_for_stage(3)) > 4))
             return 5;
         if (count($this->get_tiles_for_stage(3)) > 4)
             return 4;

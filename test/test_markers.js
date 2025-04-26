@@ -85,16 +85,25 @@ describe('Markers', function () {
             assert.equal(game.slideToObjectPos.getCall(0).args[3], y);
         });
     });
-    describe('Destroy', function () {
+    describe('Place', function () {
         beforeEach(function() {
             marker = sut.create_from(marker_specification);
         });
         it('removes from HTML', function () {
             // Arrange
+            specification = {marker_id: 7, colour: 99, stage: 1, horizontal: 10,vertical: 12,};
             // Act
-            marker.destroy();
+            marker.place(specification);
             // Assert
             assert.equal(dojo.destroy.getCall(0).args[0], marker.unique_id);
+        });
+        it('creates into HTML', function () {
+            // Arrange
+            specification = {marker_id: 7, colour: 99, stage: 1, horizontal: 10,vertical: 12,};
+            // Act
+            marker.place(specification);
+            // Assert
+            assert.equal(dojo.addClass.getCall(0).args[0], marker.unique_id);
         });
     });
 });

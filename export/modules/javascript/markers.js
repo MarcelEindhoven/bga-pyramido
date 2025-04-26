@@ -36,25 +36,30 @@ define(['dojo/_base/declare'], (declare) => {
                 }
                 create_token(specification) {
                     this.clone(specification);
+                    this.unique_id = this.get_unique_id(specification);
 
-                    this.horizontal = this.horizontal + this.PIXELS_PER_MARKER/this.PIXELS_PER_TILE;
-                    this.vertical = this.vertical + this.PIXELS_PER_MARKER/this.PIXELS_PER_TILE;
 
                     if (this.stage == 0)
                         this.set_position_for_marker_window();
+                    else
+                        this.adjust_position_within_pyramid();
 
-                    this.unique_id = this.get_unique_id(specification);
-                    this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
-                        <div id="${this.unique_id}">
-                    `);
-                    this.dojo.addClass(this.unique_id,'marker40');
-                    const id_horizontal = +this.colour;
-                    this.dojo.style(this.unique_id, 'backgroundPosition', '-' + (this.PIXELS_PER_MARKER * id_horizontal) + 'px -0px');
+                    this.create_dojo();
                 }
                 clone(properties){
                     for (var property in properties) {
                         this[property] = properties[property];
                     }
+                }
+                place(specification) {
+                    this.dojo.destroy(this.unique_id);
+                    this.clone(specification);
+                    this.adjust_position_within_pyramid();
+                    this.create_dojo();
+                }
+                return(specification) {
+                    this.clone(specification);
+                    this.set_position_for_marker_window();
                 }
                 set_position_for_marker_window() {
                     this.horizontal = 2 * (this.colour % 2);
@@ -77,8 +82,17 @@ define(['dojo/_base/declare'], (declare) => {
                 get_bounding_box() {
                     return {horizontal_min: this.horizontal - 2, vertical_min: this.vertical - 1, horizontal_max: this.horizontal + 0 - 1, vertical_max: this.vertical + 1 - 1};
                 }
-                destroy() {
-                    this.dojo.destroy(this.unique_id);
+                create_dojo() {
+                    this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
+                        <div id="${this.unique_id}">
+                    `);
+                    this.dojo.addClass(this.unique_id,'marker40');
+                    const id_horizontal = +this.colour;
+                    this.dojo.style(this.unique_id, 'backgroundPosition', '-' + (this.PIXELS_PER_MARKER * id_horizontal) + 'px -0px');
+                }
+                adjust_position_within_pyramid() {
+                    this.horizontal = this.horizontal + this.PIXELS_PER_MARKER/this.PIXELS_PER_TILE;
+                    this.vertical = this.vertical + this.PIXELS_PER_MARKER/this.PIXELS_PER_TILE;
                 }
             }
             result = new Marker({document: this.document, dojo: this.dojo, game: this.game, get_unique_id: this.get_unique_id,});
