@@ -87,8 +87,9 @@ define(['dojo/_base/declare'], (declare) => {
                         <div id="${this.unique_id}">
                     `);
                     this.dojo.addClass(this.unique_id,'marker40');
-                    const id_horizontal = +this.colour;
-                    this.dojo.style(this.unique_id, 'backgroundPosition', '-' + (this.PIXELS_PER_MARKER * id_horizontal) + 'px -0px');
+                    const id_horizontal = +this.colour % 2;
+                    const id_vertical = (+this.colour - id_horizontal) / 2;
+                    this.dojo.style(this.unique_id, 'backgroundPosition', '-' + this.PIXELS_PER_MARKER * id_horizontal + 'px -' + this.PIXELS_PER_MARKER * id_vertical + 'px');
                 }
                 adjust_position_within_pyramid() {
                     this.horizontal = this.horizontal + this.PIXELS_PER_MARKER/this.PIXELS_PER_TILE;
