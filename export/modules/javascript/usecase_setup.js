@@ -34,8 +34,8 @@ define(['dojo/_base/declare'], (declare) => {
                 this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
                     <div id="player-table-${player.id}" style = "display: inline-block;">
                         <div style = "display: inline-block;"><strong>${player.name}</strong></div>
-                        <div id="marker-${player.id}" style = "display: inline-block; width: 130px ; height: 200px"></div>
-                        <div id="resurface-${player.id}" style = "display: inline-block; width: 170px ; height: 260px"></div>
+                        <div id="marker-${player.id}" style = "display: inline-block; width: 90px ; height: 140px"></div>
+                        <div id="resurface-${player.id}" style = "display: inline-block; width: 160px ; height: 240px"></div>
                         <div id="pyramid-${player.id}" style = "display: inline-block; position: relative; width: 80px ; height: 80px"></div>
                     </div>
                 `);
@@ -45,7 +45,7 @@ define(['dojo/_base/declare'], (declare) => {
 
                 element_id = 'marker' + '-' + player.id;
                 this.create_canvas(element_id);
-                this.token_containers[element_id].set_pixels_per_tile(60);
+                this.token_containers[element_id].set_pixels_per_tile(40);
                 this.token_containers[element_id].set_margin_between_tiles(10);
             });
         },
