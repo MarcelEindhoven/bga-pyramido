@@ -22,6 +22,7 @@ define([
     g_gamethemeurl + 'modules/javascript/dominoes.js',
     g_gamethemeurl + 'modules/javascript/tiles.js',
     g_gamethemeurl + 'modules/javascript/markers.js',
+    g_gamethemeurl + 'modules/javascript/resurfacings.js',
     g_gamethemeurl + 'modules/javascript/usecase_setup.js',
     g_gamethemeurl + 'modules/javascript/usecase_choose_domino.js',
     g_gamethemeurl + 'modules/javascript/usecase_place_domino.js',
@@ -31,7 +32,7 @@ define([
     "ebg/counter",
     "ebg/stock",
 ],
-function (dojo, declare, market, canvas, dominoes, tiles, markers, 
+function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings, 
     usecase_setup, usecase_choose_domino, usecase_place_domino, usecase_choose_next_domino, usecase_place_marker) {
     return declare("bgagame.pyramidocannonfodder", ebg.core.gamegui, {
         constructor: function(){
@@ -71,6 +72,11 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers,
                 document: document,
                 dojo: dojo,
             });
+            this.resurfacing_factory = new resurfacings({
+                game: this,
+                document: document,
+                dojo: dojo,
+            });
             this.domino_factory = new dominoes({
                 game: this,
                 document: document,
@@ -83,6 +89,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers,
                 market: this.market,
                 dojo: dojo,
                 marker_factory: this.marker_factory,
+                resurfacing_factory: this.resurfacing_factory,
                 tile_factory: this.tile_factory,
                 canvas_class: canvas,
                 stock_class: ebg.stock, gamethemeurl: g_gamethemeurl, domino_factory: this.domino_factory,

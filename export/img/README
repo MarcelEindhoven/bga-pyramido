@@ -17,11 +17,6 @@ magick  -fuzz 0% markers.png -transparent white markersx80.png
 magick montage dominoes\*.png -rotate 90 -geometry 160x80 -tile 10x dominoesx80.png
 magick montage resurfaces\*.png -geometry 80x80 -tile 2x resurfacesx80.png
 
-magick montage markers\*.png -geometry 60x60 -tile x1 markers.png
-magick  -fuzz 40% markers.png -transparent white markersx.png
-magick  markersx.png -morphology EdgeOut Square:1 markerse.png
-magick convert -evaluate-sequence add markerse.png  markersx.png markersx60.png
-
 magick montage dominoes\*.png -rotate 90 -geometry 120x60 -tile 10x dominoesx60.png
 magick montage resurfaces\*.png -geometry 60x60 -tile 2x resurfacesx60.png
 
@@ -29,5 +24,16 @@ magick montage markers\*.png -geometry 40x40 -tile 2x markers.png
 magick  -fuzz 40% markers.png -transparent white markersx.png
 magick  markersx.png -morphology EdgeOut Square:1 markerse.png
 magick convert -evaluate-sequence add markerse.png  markersx.png markersx40.png
+del markerse.png
+del markersx.png
+del markers.png
+
+magick montage markers\*.png -geometry 50x50 -tile 2x markers.png
+magick  -fuzz 40% markers.png -transparent white markersx.png
+magick  markersx.png -morphology EdgeOut Square:1 markerse.png
+magick convert -evaluate-sequence add markerse.png  markersx.png markersx50.png
+del markerse.png
+del markersx.png
+del markers.png
 
 cp *.png ..\Pyramido\export\img\

@@ -28,6 +28,7 @@ define(['dojo/_base/declare'], (declare) => {
             this.setup_players(gamedatas.players);
             this.setup_pyramid_tiles(gamedatas.tiles);
             this.setup_markers(gamedatas.markers);
+            this.setup_resurfacings(gamedatas.resurfacings);
         },
         setup_players(players) {
             Object.values(players).forEach(player => {
@@ -35,12 +36,12 @@ define(['dojo/_base/declare'], (declare) => {
                     <div id="player-table-${player.id}" style = "display: inline-block;">
                         <div style = "display: inline-block;"><strong>${player.name}</strong></div>
                         <div id="marker-${player.id}" style = "display: inline-block; width: 90px ; height: 140px"></div>
-                        <div id="resurface-${player.id}" style = "display: inline-block; width: 160px ; height: 240px"></div>
+                        <div id="resurfacing-${player.id}" style = "display: inline-block; width: 160px ; height: 240px"></div>
                         <div id="pyramid-${player.id}" style = "display: inline-block; position: relative; width: 80px ; height: 80px"></div>
                     </div>
                 `);
 
-                this.create_canvas('resurface' + '-' + player.id);
+                this.create_canvas('resurfacing' + '-' + player.id);
                 this.create_canvas('pyramid' + '-' + player.id);
 
                 element_id = 'marker' + '-' + player.id;
@@ -55,6 +56,15 @@ define(['dojo/_base/declare'], (declare) => {
                     marker = this.marker_factory.create_from(marker_specification);
                     this.paintables[marker.stage][marker.unique_id] = marker;
                     this.token_containers[(marker.stage > 0 ? 'pyramid-' : 'marker-') + player_id].add(marker);
+                });
+            });
+        },
+        setup_resurfacings(resurfacings_per_player) {
+            Object.keys(resurfacings_per_player).forEach(player_id => {
+                Object.values(resurfacings_per_player[player_id]).forEach(resurfacing_specification => {
+                    resurfacing = this.resurfacing_factory.create_from(resurfacing_specification);
+                    this.paintables[resurfacing.stage][resurfacing.unique_id] = resurfacing;
+                    this.token_containers[(resurfacing.stage > 0 ? 'pyramid-' : 'resurfacing-') + player_id].add(resurfacing);
                 });
             });
         },

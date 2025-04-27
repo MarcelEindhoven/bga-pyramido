@@ -1,5 +1,5 @@
 define(['dojo/_base/declare'], (declare) => {
-    return declare('pyramido.markers', null, {
+    return declare('pyramido.resurfacings', null, {
         /**
          * Dependencies:
          * dojo
@@ -17,7 +17,7 @@ define(['dojo/_base/declare'], (declare) => {
                 this[property] = properties[property];
             }
         },
-        get_unique_id(tile_specification){return "marker-" + tile_specification.id;},
+        get_unique_id(specification){return "resurfacing-" + specification.id;},
         /**
          * specification:
          * id
@@ -26,10 +26,9 @@ define(['dojo/_base/declare'], (declare) => {
          * vertical
          */
         create_from(specification) {
-            class Marker {
+            class Resurfacing {
                 TILES_PER_ROW = 2;
                 PIXELS_PER_TILE = 80;
-                PIXELS_PER_MARKER = 40;
                 MARGIN_BETWEEN_TOKENS = 10;
                 constructor(dependencies) {
                     this.clone(dependencies);
@@ -38,9 +37,8 @@ define(['dojo/_base/declare'], (declare) => {
                     this.clone(specification);
                     this.unique_id = this.get_unique_id(specification);
 
-
                     if (this.stage == 0)
-                        this.set_position_for_marker_window();
+                        this.set_position_for_resurfacing_window();
                     else
                         this.adjust_position_within_pyramid();
 
@@ -59,9 +57,9 @@ define(['dojo/_base/declare'], (declare) => {
                 }
                 return(specification) {
                     this.clone(specification);
-                    this.set_position_for_marker_window();
+                    this.set_position_for_resurfacing_window();
                 }
-                set_position_for_marker_window() {
+                set_position_for_resurfacing_window() {
                     this.horizontal = 2 * (this.colour % this.TILES_PER_ROW);
                     this.vertical = 2 * ((this.colour - (this.colour % this.TILES_PER_ROW)) / this.TILES_PER_ROW);
                 }
@@ -86,17 +84,17 @@ define(['dojo/_base/declare'], (declare) => {
                     this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
                         <div id="${this.unique_id}">
                     `);
-                    this.dojo.addClass(this.unique_id,'marker40');
+                    this.dojo.addClass(this.unique_id,'resurfacing');
                     const id_horizontal = +this.colour % 2;
                     const id_vertical = (+this.colour - id_horizontal) / 2;
-                    this.dojo.style(this.unique_id, 'backgroundPosition', '-' + this.PIXELS_PER_MARKER * id_horizontal + 'px -' + this.PIXELS_PER_MARKER * id_vertical + 'px');
+                    this.dojo.style(this.unique_id, 'backgroundPosition', '-' + this.PIXELS_PER_TILE * id_horizontal + 'px -' + this.PIXELS_PER_TILE * id_vertical + 'px');
                 }
                 adjust_position_within_pyramid() {
-                    this.horizontal = this.horizontal + this.PIXELS_PER_MARKER/this.PIXELS_PER_TILE;
-                    this.vertical = this.vertical + this.PIXELS_PER_MARKER/this.PIXELS_PER_TILE;
+                    this.horizontal = this.horizontal + this.PIXELS_PER_TILE/this.PIXELS_PER_TILE;
+                    this.vertical = this.vertical + this.PIXELS_PER_TILE/this.PIXELS_PER_TILE;
                 }
             }
-            result = new Marker({document: this.document, dojo: this.dojo, game: this.game, get_unique_id: this.get_unique_id,});
+            result = new Resurfacing({document: this.document, dojo: this.dojo, game: this.game, get_unique_id: this.get_unique_id,});
             result.create_token(specification);
             return result;
         },
