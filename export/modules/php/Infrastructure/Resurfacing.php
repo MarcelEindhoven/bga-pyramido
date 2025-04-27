@@ -57,7 +57,7 @@ class UpdateResurfacing extends CurrentResurfacings
         return $this;
     }
 
-    public function return_all_markers($player_id): UpdateResurfacing {
+    public function return_all_resurfacings($player_id): UpdateResurfacing {
         $cards = $this->deck->getCardsInLocation(strval($player_id));
         foreach ($cards as $card) {
             $this->deck->moveCard($card['id'], strval($player_id), 0);
@@ -73,6 +73,7 @@ class CurrentResurfacings
     const FACTOR_HORIZONTAL = 20;
     const FACTOR_VERTICAL = 20;
     const FACTOR_ROTATION = 4;
+    const FACTOR_SIDE = 2;
 
     static public function create($deck): CurrentResurfacings {
         $object = new CurrentResurfacings();
@@ -92,43 +93,52 @@ class CurrentResurfacings
         return $this;
     }
 
-    public function get_marker($player_id, $marker_specification) {
-        $marker_array =  $this->deck->getCardsInLocation(strval($player_id), $this->calculate_location_argument($marker_specification));
-        return $this->get_marker_for(end($marker_array));
+    public function get_resurfacing($player_id, $resurfacing_specification) {
+        $resurfacing_array =  $this->deck->getCardsInLocation(strval($player_id), $this->calculate_location_argument($resurfacing_specification));
+        return $this->get_resurfacing_for(end($resurfacing_array));
     }
 
-    public function calculate_location_argument($marker_or_tile_specification) {
-        return  $marker_or_tile_specification['stage']
-        + CurrentResurfacings::FACTOR_STAGE * $marker_or_tile_specification['horizontal']
-        + CurrentResurfacings::FACTOR_STAGE * CurrentResurfacings::FACTOR_HORIZONTAL * $marker_or_tile_specification['vertical']
-        + CurrentResurfacings::FACTOR_STAGE * CurrentResurfacings::FACTOR_HORIZONTAL * CurrentResurfacings::FACTOR_VERTICAL * $marker_or_tile_specification['rotation'];
+    public function calculate_location_argument($resurfacing_or_tile_specification) {
+        return  $resurfacing_or_tile_specification['stage']
+        + CurrentResurfacings::FACTOR_STAGE * $resurfacing_or_tile_specification['horizontal']
+        + CurrentResurfacings::FACTOR_STAGE * CurrentResurfacings::FACTOR_HORIZONTAL * $resurfacing_or_tile_specification['vertical']
+        + CurrentResurfacings::FACTOR_STAGE * CurrentResurfacings::FACTOR_HORIZONTAL * CurrentResurfacings::FACTOR_VERTICAL * $resurfacing_or_tile_specification['rotation'];
     }
 
     public function get(): array {
-        $markers_per_player = [];
+        $resurfacings_per_player = [];
         foreach ($this->players as $player_id => $player)
-            $markers_per_player[strval($player_id)] = $this->get_markers_for($player_id);
+            $resurfacings_per_player[strval($player_id)] = $this->get_resurfacings_for($player_id);
 
-        return $markers_per_player;
+        return $resurfacings_per_player;
     }
 
-    public function get_markers_for($player_id) {
-        $markers_per_player = [];
-        $markers = $this->deck->getCardsInLocation(strval($player_id));
-        foreach ($markers as $marker_specification) {
-            $markers_per_player[$marker_specification['type']] = $this->get_marker_for($marker_specification);
+    public function get_resurfacings_for($player_id) {
+        $resurfacings_per_player = [];
+        $resurfacings = $this->deck->getCardsInLocation(strval($player_id));
+        foreach ($resurfacings as $resurfacing_specification) {
+            $resurfacings_per_player[$resurfacing_specification['type']] = $this->get_resurfacing_first($resurfacing_specification);
+            $resurfacings_per_player[$resurfacing_specification['type_arg']] = $this->get_resurfacing_second($resurfacing_specification);
         }
-        return $markers_per_player;
+        return $resurfacings_per_player;
     }
 
-    public function get_marker_for($marker_specification) {
-        $marker = ['id' => '1', 'colour' => 0, 'stage' => 0, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0];
+    public function get_resurfacing_first($resurfacing_specification) {
+        $resurfacing = ['id' => '1', 'colour' => 0, 'stage' => 0];
 
-        $marker['colour'] = $marker_specification['type'];
-        $marker['id'] = $marker_specification['id'];
+        $resurfacing['colour'] = $resurfacing_specification['type'];
+        $resurfacing['id'] = $resurfacing_specification['id'];
 
-        CurrentTiles::convert_location_argument($marker, 0 + $marker_specification['location_arg']);
-        return $marker;
+        return $resurfacing;
+    }
+
+    public function get_resurfacing_second($resurfacing_specification) {
+        $resurfacing = ['id' => '1', 'colour' => 0, 'stage' => 0];
+
+        $resurfacing['colour'] = $resurfacing_specification['type_arg'];
+        $resurfacing['id'] = $resurfacing_specification['id'] + 100;
+
+        return $resurfacing;
     }
 }
 

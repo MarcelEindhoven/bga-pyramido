@@ -25,11 +25,8 @@ class ResurfacingNewGameTest extends TestCase{
         $this->sut->set_resurfacing_factory($this->mock_resurfacing_factory);
 
         $this->sut->set_players($this->players);
-
     }
 
-    /**
-     */
     public function test_resurfacing_factory_add() {
         // Arrange
         $this->mock_resurfacing_factory->expects($this->exactly(ResurfacingNewGame::SIZE * count($this->players)))->method('add');
