@@ -15,9 +15,11 @@ namespace Bga\Games\PyramidoCannonFodder\NewGame;
 
 require_once("DominoNewGame.php");
 require_once("MarkerNewGame.php");
+require_once("ResurfacingNewGame.php");
 
-include_once(__DIR__.'/../Infrastructure/Marker.php');
 include_once(__DIR__.'/../Infrastructure/Domino.php');
+include_once(__DIR__.'/../Infrastructure/Marker.php');
+include_once(__DIR__.'/../Infrastructure/Resurfacing.php');
 use Bga\Games\PyramidoCannonFodder\Infrastructure;
 
 #[\AllowDynamicProperties]
@@ -36,6 +38,7 @@ class NewGame
         $this->decks = $decks;
         $this->set_domino_factory(Infrastructure\DominoFactory::create($this->decks['domino']));
         $this->set_marker_factory(Infrastructure\MarkerFactory::create($this->decks['marker']));
+        $this->set_resurfacing_factory(Infrastructure\ResurfacingFactory::create($this->decks['resurfacing']));
         return $this;
     }
 
@@ -46,6 +49,11 @@ class NewGame
 
     public function set_marker_factory($marker_factory) : NewGame {
         $this->marker_factory = $marker_factory;
+        return $this;
+    }
+
+    public function set_resurfacing_factory($resurfacing_factory) : NewGame {
+        $this->resurfacing_factory = $resurfacing_factory;
         return $this;
     }
 
@@ -67,6 +75,7 @@ class NewGame
         $this->setup_domino();
         $this->setup_market();
         $this->setup_marker($players);
+        $this->setup_resurfacing($players);
 
         return $this;
     }
@@ -92,6 +101,11 @@ class NewGame
 
     public function setup_marker($players) : NewGame{
         MarkerNewGame::create()->set_players($players)->set_marker_factory($this->marker_factory)->setup();
+        return $this;
+    }
+
+    public function setup_resurfacing($players) : NewGame{
+        ResurfacingNewGame::create()->set_players($players)->set_resurfacing_factory($this->resurfacing_factory)->setup();
         return $this;
     }
 }

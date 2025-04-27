@@ -49,12 +49,10 @@ CREATE TABLE IF NOT EXISTS `domino` (
   PRIMARY KEY (`card_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- The ID specifies the position of the tiles in the image
--- The type specifies the first tile, the type argument specifies the second tile
--- A type number is composed of primary colour (6 possibilities) and the presence/absence of a jewel icon in each of the 4 corners
--- and secondary colour (6 possibilities)
+-- The type specifies the colour of the first tile, the type argument specifies the colour of the second tile
 -- Location is player ID
--- Location argument for player ID is the stage (0-4), horizontal and vertical of the first tile (0-19) and rotation (0-3) and side (0-1)
+-- Location argument for player ID is the stage (0-4),
+-- horizontal and vertical of the tile (0-19) and rotation (0-3) and side (0-1)
 CREATE TABLE IF NOT EXISTS `resurfacing` (
   `card_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `card_type` varchar(16) NOT NULL,

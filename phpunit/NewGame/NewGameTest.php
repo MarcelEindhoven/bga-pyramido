@@ -18,11 +18,16 @@ class NewGameTest extends TestCase{
     protected ?NewGame $sut = null;
     protected ?FrameworkInterfaces\Deck $mock_cards = null;
     protected ?FrameworkInterfaces\Deck $mock_marker_cards = null;
+    protected ?FrameworkInterfaces\Deck $mock_resurfacing_cards = null;
 
     public function setup(): void {
         $this->mock_cards = $this->createMock(FrameworkInterfaces\Deck::class);
         $this->mock_marker_cards = $this->createMock(FrameworkInterfaces\Deck::class);
-        $this->sut = NewGame::create(['domino' => $this->mock_cards, 'marker' => $this->mock_marker_cards]);
+        $this->mock_resurfacing_cards = $this->createMock(FrameworkInterfaces\Deck::class);
+        $this->sut = NewGame::create([
+            'domino' => $this->mock_cards, 
+            'resurfacing' => $this->mock_resurfacing_cards,
+            'marker' => $this->mock_marker_cards]);
     }
 
     /**
