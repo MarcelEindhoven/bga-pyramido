@@ -82,7 +82,7 @@ class AIDominoChosenAndPlacedTest extends TestCase{
         $this->mock_update_domino->expects($this->exactly(1))->method('get_domino')->with($this->player_id, $this->expected_domino_specification)->willReturn('x');
         $this->mock_update_domino->expects($this->exactly(1))->method('get_first_tile_for')->with('x')->willReturn('a');
         $this->mock_update_domino->expects($this->exactly(1))->method('get_second_tile_for')->with('x')->willReturn('b');
-        $this->mock_get_current_data->expects($this->exactly(3))->method('get')->willReturn($this->current_data);
+        $this->mock_get_current_data->expects($this->exactly(2))->method('get')->willReturn($this->current_data);
     }
 
     protected function act_default() {

@@ -86,7 +86,7 @@ class DominoChosenAndPlacedTest extends TestCase{
         // Arrange
         $this->arrange();
 
-        $this->mock_notifications->expects($this->exactly(2))->method('notifyPlayer');
+        $this->mock_notifications->expects($this->exactly(1))->method('notifyPlayer');
         // Act
         $this->act_default();
         // Assert
@@ -95,7 +95,7 @@ class DominoChosenAndPlacedTest extends TestCase{
         $this->mock_update_domino->expects($this->exactly(1))->method('get_domino')->with($this->player_id, $this->modified_domino_specification)->willReturn('x');
         $this->mock_update_domino->expects($this->exactly(1))->method('get_first_tile_for')->with('x')->willReturn('a');
         $this->mock_update_domino->expects($this->exactly(1))->method('get_second_tile_for')->with('x')->willReturn('b');
-        $this->mock_get_current_data->expects($this->exactly(2))->method('get')->willReturn($this->current_data);
+        $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn($this->current_data);
     }
 
     protected function act_default() {

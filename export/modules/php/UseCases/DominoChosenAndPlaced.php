@@ -55,9 +55,6 @@ class DominoChosenAndPlaced extends \NieuwenhovenGames\BGA\Action {
         'tiles' => [$this->update_domino->get_first_tile_for($domino), $this->update_domino->get_second_tile_for($domino), ],
         ]);
 
-        $this->notifications->notifyPlayer($this->player_id, 'candidate_positions', '',
-        ['candidate_positions' => $this->get_current_data->get()['candidate_positions']]);
-
         $this->notifications->notifyPlayer($this->player_id, 'candidate_tiles_for_marker', '',
         ['candidate_tiles_for_marker' => $this->get_current_data->get()['candidate_tiles_for_marker']]);
 

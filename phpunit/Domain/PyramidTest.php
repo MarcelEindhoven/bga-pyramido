@@ -212,9 +212,23 @@ class PyramidTest extends TestCase{
         $stage4_2 = ['stage' => 4, 'horizontal' => 15, 'vertical' => 13, 'rotation' => 2];
         $stage4_3 = ['stage' => 4, 'horizontal' => 13, 'vertical' => 15, 'rotation' => 3];
 
+        $stage3_0_00 = ['stage' => 3, 'horizontal' => 12, 'vertical' => 12, 'rotation' => 0];
+        $stage3_0_10 = ['stage' => 3, 'horizontal' => 14, 'vertical' => 12, 'rotation' => 0];
+        $stage3_0_01 = ['stage' => 3, 'horizontal' => 12, 'vertical' => 14, 'rotation' => 0];
+        $stage3_0_11 = ['stage' => 3, 'horizontal' => 14, 'vertical' => 14, 'rotation' => 0];
+        $stage3_0_02 = ['stage' => 3, 'horizontal' => 12, 'vertical' => 16, 'rotation' => 0];
+        $stage3_2_12 = ['stage' => 3, 'horizontal' => 14, 'vertical' => 16, 'rotation' => 2];
+
         return [
             [4, [$stage1_top_left, $stage1_far_right], [
                 $stage4_0, $stage4_2,
+            ]],
+            [4, [$stage1_top_left, $stage1_far_bottom], [
+                $stage4_1, $stage4_3,
+            ]],
+            [3, [$stage1_top_left, $stage1_far_bottom
+            , $stage3_0_00, $stage3_0_10, $stage3_0_01, $stage3_0_11], [
+                $stage3_0_02, $stage3_2_12,
             ]],
         ];
     }

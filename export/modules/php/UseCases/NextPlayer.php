@@ -34,6 +34,9 @@ class NextPlayer extends \NieuwenhovenGames\BGA\Action {
     }
 
     public function execute() : NextPlayer {
+        $this->notifications->notifyPlayer($this->player_id, 'candidate_positions', '',
+        ['candidate_positions' => $this->get_current_data->get()['candidate_positions']]);
+
         return $this;
     }
 

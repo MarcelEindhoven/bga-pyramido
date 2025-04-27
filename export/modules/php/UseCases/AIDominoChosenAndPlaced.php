@@ -31,15 +31,23 @@ class AIDominoChosenAndPlaced extends DominoChosenAndPlaced {
 
         return $this;
     }
- 
+
     protected function get_domino_specification(): array {
         $candidate_positions = array_filter($this->get_current_data->get()['candidate_positions'],
         function (array $candidate_position) {
-            return 
-            ($candidate_position['horizontal'] >= 10) && 
-            ($candidate_position['horizontal'] % 4 == 2) && 
-            ($candidate_position['vertical'] >= 10) && 
-            ($candidate_position['rotation'] == 0);
+            $stage = $candidate_position['stage'];
+            if ($stage % 2 == 1)
+                return 
+                ($candidate_position['horizontal'] >= 10) && 
+                ($candidate_position['horizontal'] % 4 == 3 - $stage) && 
+                ($candidate_position['vertical'] >= 10) && 
+                ($candidate_position['rotation'] == 0);
+            else
+                return 
+                ($candidate_position['horizontal'] >= 10) && 
+                ($candidate_position['vertical'] % 4 == 5 - $stage) && 
+                ($candidate_position['vertical'] >= 10) && 
+                ($candidate_position['rotation'] == 1);
         });
 
         return array_shift($candidate_positions);

@@ -76,7 +76,7 @@ define(['dojo/_base/declare'], (declare) => {
                  * During setup, must be called twice!
                  */
                 paint() {
-                    console.log(this.unique_id, this.element_id, this.x, this.y);
+                    //console.log(this.unique_id, this.element_id, this.x, this.y);
                     this.game.slideToObjectPos(this.unique_id, this.element_id, this.x, this.y, 0, 0).play();
                 }
                 get_bounding_box() {
