@@ -17,8 +17,23 @@ use Bga\Games\FrameworkInterfaces;
 class PyramidTest extends TestCase{
     protected ?Pyramid $sut = null;
     protected ?FrameworkInterfaces\Deck $mock_cards = null;
+    protected array $initial41010 = ['stage' => 4, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 3, 'jewels' => []];
+    protected array $resurfacing = ['stage' => 4, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 2, 'jewels' => [1]];
 
     protected function setUp(): void {
+    }
+
+    public function test_resurfacing_replaces_tile() {
+        // Arrange
+        $tiles = [$this->initial41010];
+        $this->sut = Pyramid::create($tiles);
+
+        // Act
+        $tiles = [$this->resurfacing];
+        $this->sut->set_resurfacing($tiles);
+
+        // Assert
+        $this->assertEquals([$this->resurfacing], $this->sut->tiles);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('get_stage_next_domino_provider')]
@@ -59,6 +74,33 @@ class PyramidTest extends TestCase{
             $stage2_0, $stage2_0, $stage2_0, $stage2_0, $stage2_0, $stage2_0,
             $stage3_0, $stage3_0, $stage3_0, $stage3_0, $stage3_0, $stage3_0, $stage3_0, $stage3_0,
             $stage4_0, $stage4_0], 5],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('get_candidate_tiles_for_resurfacing')]
+    public function test_get_candidate_tiles_for_resurfacing($tiles, $markers, $expected_tiles) {
+        // Arrange
+        $this->sut = Pyramid::create($tiles);
+
+        // Act
+        $candidate_tiles_for_resurfacing = $this->sut->get_candidate_tiles_for_resurfacing($markers);
+
+        // Assert
+        $this->assertEquals($expected_tiles, $candidate_tiles_for_resurfacing);
+    }
+    static public function get_candidate_tiles_for_resurfacing(): array {
+        $initial1 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 1];
+        $initial4 = ['stage' => 4, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 2];
+        $initial4b = ['stage' => 4, 'horizontal' => 12, 'vertical' => 10, 'rotation' => 3];
+        $marker4 = ['stage' => 4, 'horizontal' => 12, 'vertical' => 10, 'rotation' => 0];
+        $marker4b = ['stage' => 4, 'horizontal' => 12, 'vertical' => 8, 'rotation' => 0];
+        return [
+            [[], [], []], // No tiles, no candidate
+            [[$initial1], [], []], // Only stage 4 is a candidate
+            [[$initial4], [], [$initial4]], // Only stage 4 is a candidate
+            [[$initial4, $initial4b, $initial1], [], [$initial4, $initial4b]], // Only stage 4 is a candidate
+            [[$initial4, $initial4b, $initial1], [$marker4], [$initial4]], // Tile with marker is not a candidate
+            [[$initial4, $initial4b, $initial1], [$marker4b], [$initial4, $initial4b]], // Tile with marker is not a candidate
         ];
     }
 

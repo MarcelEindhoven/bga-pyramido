@@ -16,7 +16,7 @@ namespace Bga\Games\PyramidoCannonFodder\Domain;
 #[\AllowDynamicProperties]
 class Pyramid
 {
-    protected array $tiles = [];
+    public array $tiles = [];
 
     static public function create($tiles): Pyramid {
         $object = new Pyramid();
@@ -25,6 +25,11 @@ class Pyramid
     }
 
     public function set_tiles($tiles): Pyramid {
+        $this->tiles = $tiles;
+        return $this;
+    }
+
+    public function set_resurfacing($tiles): Pyramid {
         $this->tiles = $tiles;
         return $this;
     }
@@ -54,6 +59,16 @@ class Pyramid
                 if (($marker['colour'] == $tile['colour'])) return true;
             }
             return false;
+        });
+    }
+
+    public function get_candidate_tiles_for_resurfacing($markers): array {
+        $tiles_stage_4 = array_filter($this->tiles, function($tile) {return 4 == $tile['stage'];});
+        return array_filter($tiles_stage_4, function($tile) use ($markers){
+            foreach ($markers as $marker) {
+                if (($marker['horizontal'] == $tile['horizontal']) && ($marker['vertical'] == $tile['vertical'])) return false;
+            }
+            return true;
         });
     }
 
