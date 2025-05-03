@@ -26,6 +26,15 @@ class CurrentResurfacingsTest extends TestCase{
         $this->sut = CurrentResurfacings::create($this->mock_cards);
     }
 
+    public function test_get_placed_resurfacings_for_2players() {
+        // Arrange
+        $this->sut->set_players($this->players);
+
+        // Act
+        $placed_resurfacings = $this->sut->get_placed_resurfacings();
+        // Assert
+    }
+
     public function test_get_resurfacings_for_player() {
         // Arrange
         $this->sut->set_players(['77' => [],]);

@@ -95,7 +95,7 @@ class CurrentResurfacings
 
     public function get_resurfacing($player_id, $resurfacing_specification) {
         $resurfacing_array =  $this->deck->getCardsInLocation(strval($player_id), $this->calculate_location_argument($resurfacing_specification));
-        return $this->get_resurfacing_for(end($resurfacing_array));
+        return $this->get_resurfacings_for(end($resurfacing_array));
     }
 
     public function calculate_location_argument($resurfacing_or_tile_specification) {
@@ -103,6 +103,14 @@ class CurrentResurfacings
         + CurrentResurfacings::FACTOR_STAGE * $resurfacing_or_tile_specification['horizontal']
         + CurrentResurfacings::FACTOR_STAGE * CurrentResurfacings::FACTOR_HORIZONTAL * $resurfacing_or_tile_specification['vertical']
         + CurrentResurfacings::FACTOR_STAGE * CurrentResurfacings::FACTOR_HORIZONTAL * CurrentResurfacings::FACTOR_VERTICAL * $resurfacing_or_tile_specification['rotation'];
+    }
+
+    public function get_placed_resurfacings(): array {
+        $resurfacings_per_player = [];
+        foreach ($this->players as $player_id => $player)
+            $resurfacings_per_player[strval($player_id)] = $this->get_resurfacings_for($player_id);
+
+        return $resurfacings_per_player;
     }
 
     public function get(): array {

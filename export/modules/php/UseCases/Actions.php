@@ -27,6 +27,7 @@ include_once(__DIR__.'/AfterTurnFinished.php');
 include_once(__DIR__.'/AfterStageFinished.php');
 include_once(__DIR__.'/ReturnAllMarkers.php');
 include_once(__DIR__.'/AfterDominoPlaced.php');
+include_once(__DIR__.'/CheckResurfacing.php');
 
 include_once(__DIR__.'/../Infrastructure/Domino.php');
 include_once(__DIR__.'/../Infrastructure/Marker.php');
@@ -143,6 +144,11 @@ class Actions {
         $update_marker = Infrastructure\UpdateMarker::create($this->decks['marker']);
         $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
         AfterStageFinished::create($this->gamestate)->set_notifications($this->notifications)->set_update_marker($update_marker)->set_get_current_data($get_current_data)->execute()->nextState();
+    }
+
+    public function stCheckResurfacing(): void {
+        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
+        CheckResurfacing::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_get_current_data($get_current_data)->execute()->nextState();
     }
 
     public function stAfterDominoPlaced(): void {

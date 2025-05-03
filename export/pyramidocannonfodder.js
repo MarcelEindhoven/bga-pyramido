@@ -334,6 +334,17 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
 
             dojo.subscribe( 'candidate_tiles_for_marker', this, "notify_candidate_tiles_for_marker" );
             this.notifqueue.setSynchronous( 'candidate_tiles_for_marker', 3 );
+
+            dojo.subscribe( 'candidate_tiles_for_resurfacing', this, "notify_candidate_tiles_for_resurfacing" );
+            this.notifqueue.setSynchronous( 'candidate_tiles_for_resurfacing', 3 );
+        },
+
+        notify_candidate_tiles_for_resurfacing: function( notif )
+        {
+            console.log( 'notify_candidate_tiles_for_resurfacing' );
+            console.log( notif );
+
+            this.gamedatas.candidate_tiles_for_resurfacing = notif.args.candidate_tiles_for_resurfacing;
         },
 
         notify_candidate_tiles_for_marker: function( notif )

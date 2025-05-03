@@ -88,7 +88,7 @@ $machinestates = [
         "description" => '',
         "type" => "game",
         "action" => "stAutomaticallyPlaceMarker",
-        "transitions" => ["" => 30,]
+        "transitions" => ["" => 21,]
     ],
     20 => [
         "name" => "selectMarkerTile",
@@ -102,10 +102,36 @@ $machinestates = [
         "transitions" => ["" => 21,]
     ],
     21 => [
-        "name" => "afterMarkerPlaced",
+        "name" => "CheckResurfacing",
         "description" => '',
         "type" => "game",
-        "action" => "stAfterMarkerPlaced",
+        "action" => "stCheckResurfacing",
+        "transitions" => ["candidate_tiles_for_resurfacing" => 25,"no_candidate_tiles_for_resurfacing" => 30,]
+    ],
+    25 => [
+        "name" => "selectResurfacingTile",
+        "description" => clienttranslate('${actplayer} may select tile to place resurfacing'),
+        "descriptionmyturn" => clienttranslate('${you} may select tile to place resurfacing'),
+        "type" => "activeplayer",
+        "args" => "argPlayerTurn",
+        "possibleactions" => [
+            "action_tile_to_place_resurfacing_chosen",
+            "no_action_tile_to_place_resurfacing_chosen",
+        ],
+        "transitions" => ["action_tile_to_place_resurfacing_chosen" => 26, "no_action_tile_to_place_resurfacing_chosen" => 27,]
+    ],
+    26 => [
+        "name" => "AfterResurfacing",
+        "description" => '',
+        "type" => "game",
+        "action" => "stAfterResurfacing",
+        "transitions" => ["" => 30,]
+    ],
+    27 => [
+        "name" => "AfterNoResurfacing",
+        "description" => '',
+        "type" => "game",
+        "action" => "stAfterNoResurfacing",
         "transitions" => ["" => 30,]
     ],
     30 => [

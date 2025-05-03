@@ -222,11 +222,22 @@ class Game extends \Table
         $this->actions->stReturnAllMarkers();
     }
 
-    public function stAfterMarkerPlaced(): void {
+    public function stCheckResurfacing(): void {
+        $this->initialise();
+
+        $this->actions->stCheckResurfacing();
+    }
+
+    public function stAfterResurfacing(): void {
         $this->initialise();
 
         $this->gamestate->nextState("");
-//        $this->actions->stAfterMarkerPlaced();
+    }
+
+    public function stAfterNoResurfacing(): void {
+        $this->initialise();
+
+        $this->gamestate->nextState("");
     }
 
     public function stAISelectAndPlaceDomino(): void {
