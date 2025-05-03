@@ -89,6 +89,17 @@ class Game extends \Table
         $this->actions->action_next_domino_chosen($next_index, $quarry_index);
     }
 
+    public function action_no_tile_to_place_resurfacing_chosen(): void {
+        $this->gamestate->nextState("no_tile_to_place_resurfacing_chosen");
+    }
+
+    public function action_tile_to_place_resurfacing_chosen(int $horizontal, int $vertical, int $rotation): void {
+        $this->initialise();
+        $tile_specification = ['horizontal' => $horizontal, 'vertical' => $vertical, 'rotation' => $rotation];
+
+        $this->actions->action_tile_to_place_resurfacing_chosen($tile_specification);
+    }
+
     protected function initialise() {
         $this->actions = new UseCases\Actions();
 

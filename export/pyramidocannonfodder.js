@@ -197,6 +197,10 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
             this.call('next_domino_chosen', {next_index: domino.element_id, quarry_index: this.usecase_choose_next_domino.quarry_missing_element});
             this.usecase_choose_next_domino.unsubscribe();
         },
+        no_tile_to_place_resurfacing_chosen() {
+            console.log( "no_tile_to_place_resurfacing_chosen" );
+            this.call('no_tile_to_place_resurfacing_chosen', {});
+        },
         call: function(action, args, handler) {
             console.log(action);
             console.log(args);
@@ -243,6 +247,9 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
                     case 'selectAndPlaceQuarry':
                             this.addActionButton('Rotate', _('Rotate'), () => this.usecase_place_domino.rotate(), null, null, 'gray');
                             this.addActionButton('Toggle', _('Toggle'), () => this.usecase_place_domino.toggle_positions(), null, null, 'gray');
+                        break;
+                    case 'selectResurfacingTile':
+                        this.addActionButton('Skip', _('Skip'), () => this.no_tile_to_place_resurfacing_chosen(), null, null, 'gray');
                         break;
                     case 'playerTurn':
                     const playableCardsIds = args.playableCardsIds; // returned by the argPlayerTurn

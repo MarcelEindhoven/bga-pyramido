@@ -116,9 +116,9 @@ $machinestates = [
         "args" => "argPlayerTurn",
         "possibleactions" => [
             "action_tile_to_place_resurfacing_chosen",
-            "no_action_tile_to_place_resurfacing_chosen",
+            "action_no_tile_to_place_resurfacing_chosen",
         ],
-        "transitions" => ["action_tile_to_place_resurfacing_chosen" => 26, "no_action_tile_to_place_resurfacing_chosen" => 27,]
+        "transitions" => ["tile_to_place_resurfacing_chosen" => 26, "no_tile_to_place_resurfacing_chosen" => 27,]
     ],
     26 => [
         "name" => "AfterResurfacing",
