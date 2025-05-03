@@ -78,6 +78,7 @@ class GetAllDatas {
         $results['candidate_positions'] = $pyramid->get_candidate_positions();
         $results['current_stage'] = $pyramid->get_stage_next_domino();
         $results['candidate_tiles_for_marker'] = $pyramid->get_candidate_tiles_for_marker($results['markers'][$this->current_player_id]);
+        $results['candidate_tiles_for_resurfacing'] = $pyramid->get_candidate_tiles_for_resurfacing($results['markers'][$this->current_player_id]);
 
         return $results;
     }
