@@ -88,10 +88,26 @@ define(['dojo/_base/declare'], (declare) => {
                     const id_horizontal = +this.colour % 2;
                     const id_vertical = (+this.colour - id_horizontal) / 2;
                     this.dojo.style(this.unique_id, 'backgroundPosition', '-' + this.PIXELS_PER_TILE * id_horizontal + 'px -' + this.PIXELS_PER_TILE * id_vertical + 'px');
+
+                    this.dojo.connect(this.game.get_element(this.unique_id), 'onclick', this, 'tile_selected');
                 }
                 adjust_position_within_pyramid() {
                     this.horizontal = this.horizontal + this.PIXELS_PER_TILE/this.PIXELS_PER_TILE;
                     this.vertical = this.vertical + this.PIXELS_PER_TILE/this.PIXELS_PER_TILE;
+                }
+                subscribe(callback_object, callback_method) {
+                    this.callback_object = callback_object;
+                    this.callback_method = callback_method;
+                    this.dojo.addClass(this.unique_id, 'selectable');
+                }
+                unsubscribe() {
+                    this.dojo.removeClass(this.unique_id, 'selectable');
+                    delete this.callback_object;
+                    delete this.callback_method;
+                }
+                tile_selected(tile) {
+                    if ('callback_object' in this)
+                        this.callback_object[this.callback_method](tile);
                 }
             }
             result = new Resurfacing({document: this.document, dojo: this.dojo, game: this.game, get_unique_id: this.get_unique_id,});

@@ -59,9 +59,12 @@ define(['dojo/_base/declare'], (declare) => {
                 }
                 unsubscribe() {
                     this.dojo.removeClass(this.unique_id, 'selectable');
+                    delete this.callback_object;
+                    delete this.callback_method;
                 }
                 tile_selected(tile) {
-                    this.callback_object[this.callback_method](tile);
+                    if ('callback_object' in this)
+                        this.callback_object[this.callback_method](tile);
                 }
                 move_to(element_id, x, y) {
                     this.element_id = element_id;

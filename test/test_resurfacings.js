@@ -11,9 +11,9 @@ class Animation {
 }
 describe('Resurfacings', function () {
     beforeEach(function() {
-        dojo = {style:sinon.spy(), addClass:sinon.spy(), removeClass:sinon.spy(), destroy:sinon.spy(), };
+        dojo = {style:sinon.spy(), addClass:sinon.spy(), removeClass:sinon.spy(), connect:sinon.spy(), destroy:sinon.spy(), };
         document = new Document();
-        game = {slideToObjectPos:sinon.stub().returns (new Animation ()) ,};
+        game = {get_element:sinon.stub().returns(44), slideToObjectPos:sinon.stub().returns (new Animation ()) ,};
         dependencies = {dojo: dojo, document: document, game:game, };
         sut = new sut_module(dependencies);
         resurfacing_specification = {resurfacing_id: 0, colour: 0, stage: 0, horizontal: 0,vertical: 0,};
