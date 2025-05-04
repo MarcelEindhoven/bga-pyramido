@@ -51,7 +51,7 @@ define(['dojo/_base/declare'], (declare) => {
 
                 this.selected_resurfacing.horizontal = candidate_position.horizontal;
                 this.selected_resurfacing.vertical = candidate_position.vertical;
-                this.selected_resurfacing.rotation = candidate_position.rotation;
+                this.selected_resurfacing.rotation = this.rotation;
 
                 this.selected_resurfacing.stage = 5;
 

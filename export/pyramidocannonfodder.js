@@ -200,11 +200,9 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
             });
             this.usecase_place_marker.unsubscribe();
         },
-        resurfacing_placed(element) {
-            console.log(element.target.id);
-            tile = this.token_containers['resurfacing-' + this.player_id].get(element.target.id);
+        resurfacing_placed(tile) {
             console.log(tile);
-            this.call('resurfacing_placed', {
+            this.call('tile_to_place_resurfacing_chosen', {
                 horizontal: tile.horizontal,
                 vertical: tile.vertical,
                 rotation: tile.rotation,
