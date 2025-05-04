@@ -22,6 +22,7 @@ include_once(__DIR__.'/AINextDominoChosen.php');
 include_once(__DIR__.'/DominoChosenAndPlaced.php');
 include_once(__DIR__.'/FirstDominoChosen.php');
 include_once(__DIR__.'/MarkerChosenAndPlaced.php');
+include_once(__DIR__.'/ResurfacingChosenAndPlaced.php');
 include_once(__DIR__.'/NextDominoChosen.php');
 include_once(__DIR__.'/AfterTurnFinished.php');
 include_once(__DIR__.'/AfterStageFinished.php');
@@ -31,6 +32,7 @@ include_once(__DIR__.'/CheckResurfacing.php');
 
 include_once(__DIR__.'/../Infrastructure/Domino.php');
 include_once(__DIR__.'/../Infrastructure/Marker.php');
+include_once(__DIR__.'/../Infrastructure/Resurfacing.php');
 use Bga\Games\PyramidoCannonFodder\Infrastructure;
 
 class Actions {
@@ -100,6 +102,13 @@ class Actions {
         $update_marker = Infrastructure\UpdateMarker::create($this->decks['marker']);
         $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
         MarkerChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_marker($update_marker)->set_get_current_data($get_current_data)->set_tile_specification($tile_specification)
+        ->execute()->nextState();
+    }
+
+    public function action_tile_to_place_resurfacing_chosen(array $tile_specification): void {
+        $update_resurfacing = Infrastructure\UpdateResurfacing::create($this->decks['resurfacing']);
+        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
+        ResurfacingChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_resurfacing($update_resurfacing)->set_get_current_data($get_current_data)->set_tile_specification($tile_specification)
         ->execute()->nextState();
     }
 
