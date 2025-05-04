@@ -28,12 +28,14 @@ define([
     g_gamethemeurl + 'modules/javascript/usecase_place_domino.js',
     g_gamethemeurl + 'modules/javascript/usecase_choose_next_domino.js',
     g_gamethemeurl + 'modules/javascript/usecase_place_marker.js',
+    g_gamethemeurl + 'modules/javascript/usecase_choose_resurfacing.js',
+    g_gamethemeurl + 'modules/javascript/usecase_place_resurfacing.js',
     "ebg/core/gamegui",
     "ebg/counter",
     "ebg/stock",
 ],
 function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings, 
-    usecase_setup, usecase_choose_domino, usecase_place_domino, usecase_choose_next_domino, usecase_place_marker) {
+    usecase_setup, usecase_choose_domino, usecase_place_domino, usecase_choose_next_domino, usecase_place_marker, usecase_choose_resurfacing, usecase_place_resurfacing) {
     return declare("bgagame.pyramidocannonfodder", ebg.core.gamegui, {
         constructor: function(){
             console.log('pyramidocannonfodder constructor');
@@ -145,6 +147,14 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
                     this.usecase_choose_domino = new usecase_choose_domino({market: this.market});
                     this.usecase_choose_domino.subscribe(this.usecase_place_domino, 'quarry_selected');
                     break;
+                case 'selectResurfacingTile':
+                    this.usecase_place_resurfacing = new usecase_place_resurfacing({ui: this, pyramid: this.token_containers['pyramid-' + this.player_id], resurfacing_factory: this.resurfacing_factory});
+                    this.usecase_place_resurfacing.set_candidate_tiles_for_resurfacing(this.gamedatas.candidate_tiles_for_resurfacing);
+                    this.usecase_place_resurfacing.subscribe(this, 'resurfacing_placed');
+
+                    this.usecase_choose_resurfacing = new usecase_choose_resurfacing({container: this.token_containers['resurfacing-' + this.player_id]});
+                    this.usecase_choose_resurfacing.subscribe(this.usecase_place_resurfacing, 'resurfacing_selected');
+                    break;
                 case 'selectNextDomino':
                     this.usecase_choose_next_domino = new usecase_choose_next_domino({market: this.market});
                     this.usecase_choose_next_domino.subscribe(this, 'next_domino_chosen');
@@ -189,6 +199,18 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
                 rotation: tile.rotation,
             });
             this.usecase_place_marker.unsubscribe();
+        },
+        resurfacing_placed(element) {
+            console.log(element.target.id);
+            tile = this.token_containers['resurfacing-' + this.player_id].get(element.target.id);
+            console.log(tile);
+            this.call('resurfacing_placed', {
+                horizontal: tile.horizontal,
+                vertical: tile.vertical,
+                rotation: tile.rotation,
+                colour: tile.colour,
+            });
+            this.usecase_place_resurfacing.unsubscribe();
         },
         next_domino_chosen(domino) {
             console.log( "next_domino_chosen" );
@@ -249,6 +271,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
                             this.addActionButton('Toggle', _('Toggle'), () => this.usecase_place_domino.toggle_positions(), null, null, 'gray');
                         break;
                     case 'selectResurfacingTile':
+                        this.addActionButton('Rotate', _('Rotate'), () => this.usecase_place_resurfacing.rotate(), null, null, 'gray');
                         this.addActionButton('Skip', _('Skip'), () => this.no_tile_to_place_resurfacing_chosen(), null, null, 'gray');
                         break;
                     case 'playerTurn':

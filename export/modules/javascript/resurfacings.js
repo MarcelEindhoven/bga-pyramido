@@ -39,8 +39,6 @@ define(['dojo/_base/declare'], (declare) => {
 
                     if (this.stage == 0)
                         this.set_position_for_resurfacing_window();
-                    else
-                        this.adjust_position_within_pyramid();
 
                     this.create_dojo();
                 }
@@ -52,7 +50,6 @@ define(['dojo/_base/declare'], (declare) => {
                 place(specification) {
                     this.dojo.destroy(this.unique_id);
                     this.clone(specification);
-                    this.adjust_position_within_pyramid();
                     this.create_dojo();
                 }
                 return(specification) {
@@ -65,7 +62,6 @@ define(['dojo/_base/declare'], (declare) => {
                 }
                 move_to(element_id, x, y) {
                     this.element_id = element_id;
-                    //this.game.attachToNewParent(this.unique_id, this.element_id);
                     this.x = x;
                     this.y = y;
                 }
@@ -75,7 +71,13 @@ define(['dojo/_base/declare'], (declare) => {
                  */
                 paint() {
                     //console.log(this.unique_id, this.element_id, this.x, this.y);
+                    if (this.rotation_class)
+                        this.dojo.removeClass(this.unique_id, this.rotation_class);
+
                     this.game.slideToObjectPos(this.unique_id, this.element_id, this.x, this.y, 0, 0).play();
+
+                    this.rotation_class = 'rotate' + this.rotation;
+                    this.dojo.addClass(this.unique_id, this.rotation_class);
                 }
                 get_bounding_box() {
                     return {horizontal_min: this.horizontal - 2, vertical_min: this.vertical - 1, horizontal_max: this.horizontal + 0, vertical_max: this.vertical + 1};
@@ -91,10 +93,6 @@ define(['dojo/_base/declare'], (declare) => {
 
                     this.dojo.connect(this.game.get_element(this.unique_id), 'onclick', this, 'tile_selected');
                 }
-                adjust_position_within_pyramid() {
-                    this.horizontal = this.horizontal + this.PIXELS_PER_TILE/this.PIXELS_PER_TILE;
-                    this.vertical = this.vertical + this.PIXELS_PER_TILE/this.PIXELS_PER_TILE;
-                }
                 subscribe(callback_object, callback_method) {
                     this.callback_object = callback_object;
                     this.callback_method = callback_method;
@@ -106,8 +104,12 @@ define(['dojo/_base/declare'], (declare) => {
                     delete this.callback_method;
                 }
                 tile_selected(tile) {
+                    console.log(tile);
                     if ('callback_object' in this)
-                        this.callback_object[this.callback_method](tile);
+                        this.callback_object[this.callback_method](this);
+                }
+                destroy_canvas_token() {
+                    this.dojo.destroy(this.unique_id);
                 }
             }
             result = new Resurfacing({document: this.document, dojo: this.dojo, game: this.game, get_unique_id: this.get_unique_id,});
