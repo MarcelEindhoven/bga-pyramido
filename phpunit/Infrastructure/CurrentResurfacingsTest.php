@@ -26,13 +26,52 @@ class CurrentResurfacingsTest extends TestCase{
         $this->sut = CurrentResurfacings::create($this->mock_cards);
     }
 
-    public function test_get_placed_resurfacings_for_2players() {
+    public function test_get_only_placed_resurfacing() {
         // Arrange
-        $this->sut->set_players($this->players);
+        $this->sut->set_players(['77' => [],]);
+        $this->mock_cards->expects($this->exactly(1))->method('getCardsInLocation')->with('77')->willReturn(
+            [$this->default_resurfacing]);
+
+        // Act
+        $placed_resurfacings = $this->sut->get_placed_resurfacings();
+
+        // Assert
+        $this->assertEquals(['77' => []], $placed_resurfacings);
+    }
+
+    public function test_get_placed_resurfacing() {
+        // Arrange
+        $this->sut->set_players(['77' => [],]);
+        $expected_resurfacing = ['id' => 9, 'stage' => 4, 'side' => 1, 'colour' => 1, 'horizontal' => 10, 'vertical' => 8, 'rotation' => 2];
+
+        $this->default_resurfacing['id'] = $expected_resurfacing['id'];
+
+        $this->default_resurfacing['location_arg'] = 
+        $expected_resurfacing['stage']
+        + $expected_resurfacing['horizontal'] * 5
+        + $expected_resurfacing['vertical'] * 5 * 20
+        + $expected_resurfacing['rotation'] * 5 * 20 * 20
+        + $expected_resurfacing['side'] * 5 * 20 * 20 * 4;
+        $this->mock_cards->expects($this->exactly(1))->method('getCardsInLocation')->with('77')->willReturn(
+            [$this->default_resurfacing]);
 
         // Act
         $placed_resurfacings = $this->sut->get_placed_resurfacings();
         // Assert
+        $this->assertEquals(['77' => [$expected_resurfacing]], $placed_resurfacings);
+    }
+
+    public function test_get_only_unplaced_resurfacings() {
+        // Arrange
+        $this->sut->set_players(['77' => [],]);
+        $location_argument_unplaced_resurfacings = 0;
+        $this->mock_cards->expects($this->exactly(1))->method('getCardsInLocation')->with('77', $location_argument_unplaced_resurfacings)->willReturn(
+            [$this->default_resurfacing]);
+
+        // Act
+        $resurfacings = $this->act_default();
+        // Assert
+        $this->assertEquals(count($resurfacings), 2);
     }
 
     public function test_get_resurfacings_for_player() {

@@ -103,9 +103,29 @@ class CurrentResurfacings
     public function get_placed_resurfacings(): array {
         $resurfacings_per_player = [];
         foreach ($this->players as $player_id => $player)
-            $resurfacings_per_player[strval($player_id)] = $this->get_resurfacings_for($player_id);
+            $resurfacings_per_player[strval($player_id)] = $this->get_placed_resurfacings_for($player_id);
 
         return $resurfacings_per_player;
+    }
+
+    public function get_placed_resurfacings_for($player_id) {
+        $resurfacings_per_player = [];
+        $resurfacings = array_filter($this->deck->getCardsInLocation(strval($player_id)),
+            function($card) {return 0 != $card['location_arg'];});
+        foreach ($resurfacings as $resurfacing_specification) {
+            $resurfacings_per_player[] = $this->get_placed_resurfacing($resurfacing_specification);
+        }
+        return $resurfacings_per_player;
+    }
+    protected function get_placed_resurfacing($resurfacing_specification): array {
+        $resurfacing = ['id' => '1', 'colour' => 0, 'stage' => 0];
+
+        $resurfacing['id'] = $resurfacing_specification['id'];
+        $resurfacing['side'] = (int) ($resurfacing_specification['location_arg'] / (CurrentResurfacings::FACTOR_STAGE * CurrentResurfacings::FACTOR_HORIZONTAL * CurrentResurfacings::FACTOR_VERTICAL * CurrentResurfacings::FACTOR_ROTATION));
+        $resurfacing['colour'] = $resurfacing['side'] ? $resurfacing_specification['type_arg'] : $resurfacing_specification['type'];
+        CurrentTiles::convert_location_argument($resurfacing, $resurfacing_specification['location_arg'] % (CurrentResurfacings::FACTOR_STAGE * CurrentResurfacings::FACTOR_HORIZONTAL * CurrentResurfacings::FACTOR_VERTICAL * CurrentResurfacings::FACTOR_ROTATION));
+
+        return $resurfacing;
     }
 
     public function get(): array {
@@ -118,7 +138,7 @@ class CurrentResurfacings
 
     public function get_resurfacings_for($player_id) {
         $resurfacings_per_player = [];
-        $resurfacings = $this->deck->getCardsInLocation(strval($player_id));
+        $resurfacings = $this->deck->getCardsInLocation(strval($player_id), 0);
         foreach ($resurfacings as $resurfacing_specification) {
             $resurfacings_per_player[$resurfacing_specification['type']] = $this->get_resurfacing_first($resurfacing_specification);
             $resurfacings_per_player[$resurfacing_specification['type_arg']] = $this->get_resurfacing_second($resurfacing_specification);
