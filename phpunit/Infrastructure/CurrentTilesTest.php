@@ -342,19 +342,19 @@ class CurrentTilesTest extends TestCase{
           + $rotation * CurrentTiles::FACTOR_STAGE * CurrentTiles::FACTOR_HORIZONTAL * CurrentTiles::FACTOR_VERTICAL;
         $this->mock_dominoes->expects($this->exactly(1))->method('getCardsInLocation')->with('77')->willReturn([$this->default_domino]);
     }
-    protected function calculate_location_argument_second_tile($domino) {
-        return $this->sut->calculate_location_argument($this->sut->get_second_tile_for($domino));
+    protected function calculate_array_index_second_tile($domino) {
+        return $this->sut->calculate_array_index($this->sut->get_second_tile_for($domino));
     }
-    protected function calculate_location_argument_first_tile($domino) {
-        return $this->sut->calculate_location_argument($this->sut->get_first_tile_for($domino));
+    protected function calculate_array_index_first_tile($domino) {
+        return $this->sut->calculate_array_index($this->sut->get_first_tile_for($domino));
     }
 
     protected function act_second_tile() {
-        return $this->sut->get()[$this->player_id][$this->calculate_location_argument_second_tile($this->default_domino)];
+        return $this->sut->get()[$this->player_id][$this->calculate_array_index_second_tile($this->default_domino)];
     }
 
     protected function act_first_tile() {
-        return $this->sut->get()[$this->player_id][$this->calculate_location_argument_first_tile($this->default_domino)];
+        return $this->sut->get()[$this->player_id][$this->calculate_array_index_first_tile($this->default_domino)];
     }
 
     protected function act_default() {

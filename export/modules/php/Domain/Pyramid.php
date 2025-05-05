@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Bga\Games\PyramidoCannonFodder\Domain;
 
+include_once(__DIR__.'/../Infrastructure/Domino.php');
+use Bga\Games\PyramidoCannonFodder\Infrastructure;
+
 #[\AllowDynamicProperties]
 class Pyramid
 {
@@ -28,9 +31,11 @@ class Pyramid
         $this->tiles = $tiles;
         return $this;
     }
+    public function get_tiles(): array {return $this->tiles;}
 
-    public function set_resurfacing($tiles): Pyramid {
-        $this->tiles = $tiles;
+    public function resurface($placed_resurfacings): Pyramid {
+        foreach ($placed_resurfacings as $placed_resurfacing)
+            $this->tiles[Infrastructure\CurrentTiles::calculate_array_index($placed_resurfacing)] = $placed_resurfacing;
         return $this;
     }
 
