@@ -67,12 +67,20 @@ class GetAllDatas {
         $results = $this->get_results_from_database();
         $results['quarry'] = Infrastructure\CurrentMarket::create($this->decks['domino'])->get_market();
         $results['next'] = Infrastructure\CurrentMarket::create($this->decks['domino'])->get_next_market();
-        $results['tiles'] = Infrastructure\CurrentTiles::create($this->decks['domino'])->set_players($this->players)->get();
         $results['markers'] = Infrastructure\CurrentMarkers::create($this->decks['marker'])->set_players($this->players)->get();
         $results['resurfacings'] = Infrastructure\CurrentResurfacings::create($this->decks['resurfacing'])->set_players($this->players)->get();
         $results['placed_resurfacings'] = Infrastructure\CurrentResurfacings::create($this->decks['resurfacing'])->set_players($this->players)->get_placed_resurfacings();
 
-        $pyramid = Domain\Pyramid::create($results['tiles'][$this->current_player_id]);
+        $tiles = Infrastructure\CurrentTiles::create($this->decks['domino'])->set_players($this->players)->get();
+        $placed_resurfacings = Infrastructure\CurrentResurfacings::create($this->decks['resurfacing'])->set_players($this->players)->get_placed_resurfacings();
+        $results['tiles'] = [];
+        foreach ($tiles as $player_id => $tiles_per_player) {
+            $pyramid = new Domain\Pyramid();
+            $pyramid->set_tiles($tiles_per_player);
+            $pyramid->resurface($placed_resurfacings[$player_id]);
+            $results['tiles'][$player_id] = $pyramid->get_tiles();
+        }
+
         $pyramid = new Domain\Pyramid();
         $pyramid->set_tiles($results['tiles'][$this->current_player_id]);
         $pyramid->get_adjacent_positions_first_stage();
