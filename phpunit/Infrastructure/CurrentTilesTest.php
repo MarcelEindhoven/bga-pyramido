@@ -71,6 +71,16 @@ class CurrentTilesTest extends TestCase{
         $this->assertEquals(2, sizeof($tiles));
     }
 
+    public function test_category() {
+        // Arrange
+        $this->arrange_default_domino();
+
+        // Act
+        $first_tile = $this->act_first_tile();
+        // Assert
+        $this->assertEquals('tile', $first_tile['class']);
+    }
+
     public function test_horizontal_first_tile() {
         // Arrange
         $stage = 3;

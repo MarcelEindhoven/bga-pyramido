@@ -42,7 +42,7 @@ class CurrentResurfacingsTest extends TestCase{
     public function test_get_placed_resurfacing() {
         // Arrange
         $this->sut->set_players(['77' => [],]);
-        $expected_resurfacing = ['id' => 9, 'stage' => 4, 'side' => 1, 'colour' => 1, 'horizontal' => 10, 'vertical' => 8, 'rotation' => 2];
+        $expected_resurfacing = ['id' => 9, 'class' => 'resurfacing', 'stage' => 4, 'side' => 1, 'colour' => 1, 'horizontal' => 10, 'vertical' => 8, 'rotation' => 2];
 
         $this->default_resurfacing['id'] = $expected_resurfacing['id'];
 

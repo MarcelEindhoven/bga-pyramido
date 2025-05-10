@@ -220,7 +220,7 @@ class CurrentTiles
     }
 
     protected function get_tile_common($domino) {
-        $tile = ['id' => '1', 'colour' => 0, 'stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0, 'jewels' => []];
+        $tile = ['id' => '1', 'class' => 'tile', 'colour' => 0, 'stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0, 'jewels' => []];
 
         $this->convert_location_argument($tile, 0 + $domino['location_arg']);
 

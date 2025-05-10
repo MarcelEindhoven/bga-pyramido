@@ -118,7 +118,7 @@ class CurrentResurfacings
         return $resurfacings_per_player;
     }
     protected function get_placed_resurfacing($resurfacing_specification): array {
-        $resurfacing = ['id' => '1', 'colour' => 0, 'stage' => 0];
+        $resurfacing = ['id' => '1', 'class' => 'resurfacing', 'colour' => 0, 'stage' => 0];
 
         $resurfacing['id'] = $resurfacing_specification['id'];
         $resurfacing['side'] = (int) ($resurfacing_specification['location_arg'] / (CurrentResurfacings::FACTOR_STAGE * CurrentResurfacings::FACTOR_HORIZONTAL * CurrentResurfacings::FACTOR_VERTICAL * CurrentResurfacings::FACTOR_ROTATION));
