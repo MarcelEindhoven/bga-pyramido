@@ -99,6 +99,7 @@ define(['dojo/_base/declare'], (declare) => {
                     this.dojo.addClass(this.unique_id, 'selectable');
                 }
                 unsubscribe() {
+                    console.log(this.unique_id);
                     this.dojo.removeClass(this.unique_id, 'selectable');
                     delete this.callback_object;
                     delete this.callback_method;

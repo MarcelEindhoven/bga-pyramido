@@ -208,6 +208,13 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
                 rotation: tile.rotation,
                 colour: tile.colour,
             });
+            this.usecase_choose_resurfacing.unsubscribe();
+            this.usecase_place_resurfacing.unsubscribe();
+        },
+        no_tile_to_place_resurfacing_chosen() {
+            console.log( "no_tile_to_place_resurfacing_chosen" );
+            this.call('no_tile_to_place_resurfacing_chosen', {});
+            this.usecase_choose_resurfacing.unsubscribe();
             this.usecase_place_resurfacing.unsubscribe();
         },
         next_domino_chosen(domino) {
@@ -216,10 +223,6 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
             console.log(this.usecase_choose_next_domino.quarry_missing_element);
             this.call('next_domino_chosen', {next_index: domino.element_id, quarry_index: this.usecase_choose_next_domino.quarry_missing_element});
             this.usecase_choose_next_domino.unsubscribe();
-        },
-        no_tile_to_place_resurfacing_chosen() {
-            console.log( "no_tile_to_place_resurfacing_chosen" );
-            this.call('no_tile_to_place_resurfacing_chosen', {});
         },
         call: function(action, args, handler) {
             console.log(action);
