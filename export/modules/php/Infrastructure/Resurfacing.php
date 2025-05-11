@@ -50,7 +50,7 @@ class UpdateResurfacing extends CurrentResurfacings
 
     public function move($player_id, $tile): UpdateResurfacing {
         $cards = $this->deck->getCardsInLocation(strval($player_id), 0);
-        $colour = $tile['colour'];
+        $colour = 0 + $tile['colour'];
         $tile['side'] = ($colour % 2);
         $type = $colour - $tile['side'];
         $this->deck->moveCard(current(array_filter($cards, function($card) use($type){return $type == $card['type'];}))['id']
@@ -96,8 +96,8 @@ class CurrentResurfacings
         return  $resurfacing_or_tile_specification['stage']
         + CurrentResurfacings::FACTOR_STAGE * $resurfacing_or_tile_specification['horizontal']
         + CurrentResurfacings::FACTOR_STAGE * CurrentResurfacings::FACTOR_HORIZONTAL * $resurfacing_or_tile_specification['vertical']
-        + CurrentResurfacings::FACTOR_STAGE * CurrentResurfacings::FACTOR_HORIZONTAL * CurrentResurfacings::FACTOR_VERTICAL * $resurfacing_or_tile_specification['rotation'];
-        + CurrentResurfacings::FACTOR_STAGE * CurrentResurfacings::FACTOR_HORIZONTAL * CurrentResurfacings::FACTOR_VERTICAL * CurrentResurfacings::FACTOR_ROTATION * ($resurfacing_or_tile_specification['colour'] % 2);
+        + CurrentResurfacings::FACTOR_STAGE * CurrentResurfacings::FACTOR_HORIZONTAL * CurrentResurfacings::FACTOR_VERTICAL * $resurfacing_or_tile_specification['rotation']
+        + CurrentResurfacings::FACTOR_STAGE * CurrentResurfacings::FACTOR_HORIZONTAL * CurrentResurfacings::FACTOR_VERTICAL * CurrentResurfacings::FACTOR_ROTATION * $resurfacing_or_tile_specification['side'];
     }
 
     public function get_placed_resurfacings(): array {

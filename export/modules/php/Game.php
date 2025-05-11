@@ -239,16 +239,10 @@ class Game extends \Table
         $this->actions->stCheckResurfacing();
     }
 
-    public function stAfterResurfacing(): void {
+    public function stAfterOptionalResurfacing(): void {
         $this->initialise();
 
-        $this->gamestate->nextState("");
-    }
-
-    public function stAfterNoResurfacing(): void {
-        $this->initialise();
-
-        $this->gamestate->nextState("");
+        $this->actions->stAfterOptionalResurfacing();
     }
 
     public function stAISelectAndPlaceDomino(): void {

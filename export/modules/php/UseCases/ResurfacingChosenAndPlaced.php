@@ -15,6 +15,9 @@ namespace Bga\Games\PyramidoCannonFodder\UseCases;
 
 include_once(__DIR__.'/../BGA/Action.php');
 
+include_once(__DIR__.'/../Infrastructure/Domino.php');
+use Bga\Games\PyramidoCannonFodder\Infrastructure;
+
 #[\AllowDynamicProperties]
 class ResurfacingChosenAndPlaced extends \NieuwenhovenGames\BGA\Action {
     static public function create($gamestate): ResurfacingChosenAndPlaced {
@@ -38,9 +41,20 @@ class ResurfacingChosenAndPlaced extends \NieuwenhovenGames\BGA\Action {
     }
 
     public function execute(): ResurfacingChosenAndPlaced {
+        $this->tile_specification['stage'] = 4;
+        $removed_tile = $this->get_current_data->get()['tiles'][$this->player_id][Infrastructure\CurrentTiles::calculate_array_index($this->tile_specification)];
+
         $this->tile_specification['stage'] = $this->get_current_data->get()['current_stage'];
 
         $this->update_resurfacing->move($this->player_id, $this->tile_specification);
+
+        // notify
+        $this->notifications->notifyAllPlayers('resurface', '',
+        [
+        'player_id' => $this->player_id, 
+        'removed_tile' => $removed_tile,
+        'added_tile' => $this->get_current_data->get()['tiles'][$this->player_id][Infrastructure\CurrentTiles::calculate_array_index($this->tile_specification)],
+        ]);
 
         return $this;
     }

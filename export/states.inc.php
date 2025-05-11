@@ -81,7 +81,7 @@ $machinestates = [
         "description" => '',
         "type" => "game",
         "action" => "stAfterDominoPlaced",
-        "transitions" => ["no_candidate_tile" => 30, "single_candidate_tile" => 12, "double_candidate_tile" => 20,]
+        "transitions" => ["no_candidate_tile" => 27, "single_candidate_tile" => 12, "double_candidate_tile" => 20,]
     ],
     12 => [
         "name" => "automaticallyPlaceMarker",
@@ -118,20 +118,13 @@ $machinestates = [
             "action_tile_to_place_resurfacing_chosen",
             "action_no_tile_to_place_resurfacing_chosen",
         ],
-        "transitions" => ["tile_to_place_resurfacing_chosen" => 26, "no_tile_to_place_resurfacing_chosen" => 27,]
-    ],
-    26 => [
-        "name" => "AfterResurfacing",
-        "description" => '',
-        "type" => "game",
-        "action" => "stAfterResurfacing",
-        "transitions" => ["" => 30,]
+        "transitions" => ["tile_to_place_resurfacing_chosen" => 27, "no_tile_to_place_resurfacing_chosen" => 27,]
     ],
     27 => [
-        "name" => "AfterNoResurfacing",
+        "name" => "AfterOptionalResurfacing",
         "description" => '',
         "type" => "game",
-        "action" => "stAfterNoResurfacing",
+        "action" => "stAfterOptionalResurfacing",
         "transitions" => ["" => 30,]
     ],
     30 => [

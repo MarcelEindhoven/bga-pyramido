@@ -40,6 +40,7 @@
 -- Location is 'deck', 'quarry', 'next', player ID
 -- Location argument for quarry and next is the index, starting from 1
 -- Location argument for player ID is the stage (0-4), horizontal and vertical of the first tile (0-19) and rotation (0-3)
+-- Stage 4 has the special meaning that it is the last placed domino
 CREATE TABLE IF NOT EXISTS `domino` (
   `card_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `card_type` varchar(16) NOT NULL,

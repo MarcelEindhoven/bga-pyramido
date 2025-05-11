@@ -343,7 +343,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
             console.log( 'notifications subscriptions setup' );
 
             dojo.subscribe( 'domino_placed', this, "notify_domino_placed" );
-            this.notifqueue.setSynchronous( 'domino_placed', 3000 );
+            this.notifqueue.setSynchronous( 'domino_placed', 1000 );
 
             dojo.subscribe( 'marker_placed', this, "notify_marker_placed" );
             this.notifqueue.setSynchronous( 'marker_placed', 300 );
@@ -351,8 +351,11 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
             dojo.subscribe( 'return_all_markers', this, "notify_return_all_markers" );
             this.notifqueue.setSynchronous( 'return_all_markers', 300 );
 
-            dojo.subscribe( 'domino_new_stage', this, "notify_domino_new_stage" );
-            this.notifqueue.setSynchronous( 'domino_new_stage', 300 );
+            dojo.subscribe( 'tiles_new_stage', this, "notify_tiles_new_stage" );
+            this.notifqueue.setSynchronous( 'tiles_new_stage', 300 );
+
+            dojo.subscribe( 'resurface', this, "notify_resurface" );
+            this.notifqueue.setSynchronous( 'resurface', 300 );
 
             dojo.subscribe( 'next_domino_chosen', this, "notify_next_domino_chosen" );
             this.notifqueue.setSynchronous( 'next_domino_chosen', 300 );
@@ -462,22 +465,35 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
 
             // TODO: play the card in the user interface.
         },
-        notify_domino_new_stage: function( notif )
+        notify_resurface: function( notif )
         {
-            console.log( 'notify_domino_new_stage' );
+            console.log('notify_resurface');
+            console.log(notif);
+
+            let id = this.tile_factory.get_unique_id(notif.args.removed_tile);
+            let removed_tile = this.token_containers['pyramid-' + notif.args.player_id].get(id);
+            this.token_containers['pyramid-' + notif.args.player_id].remove(removed_tile);
+
+            let tile = this.resurfacing_factory.create_from(notif.args.added_tile);
+            this.token_containers['pyramid-' + notif.args.player_id].add(tile);
+            this.paint();
+        },
+        notify_tiles_new_stage: function( notif )
+        {
+            console.log( 'notify_tiles_new_stage' );
             console.log( notif );
 
             Object.values(notif.args.tiles).forEach(tile_specification => {
-                let tile = this.tile_factory.create_from(tile_specification);
-                this.token_containers['pyramid-' + notif.args.player_id].remove(tile);
+                let factory = ('resurfacing' == tile_specification.class ? this.resurfacing_factory : this.tile_factory);
+                let id = factory.get_unique_id(tile_specification);
+                let removed_tile = this.token_containers['pyramid-' + notif.args.player_id].get(id);
+                this.token_containers['pyramid-' + notif.args.player_id].remove(removed_tile);
+
+                let tile = factory.create_from(tile_specification);
                 this.token_containers['pyramid-' + notif.args.player_id].add(tile);
             });
             this.paint();
-            // Note: notif.args contains the arguments specified during you "notifyAllPlayers" / "notifyPlayer" PHP call
-
-            // TODO: play the card in the user interface.
         },
-        // TODO: from this point and below, you can write your game notifications handling methods
 
         /*
         Example:
