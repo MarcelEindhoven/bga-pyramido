@@ -95,6 +95,9 @@ define(['dojo/_base/declare'], (declare) => {
                     this.horizontal = this.horizontal + this.PIXELS_PER_MARKER/this.PIXELS_PER_TILE;
                     this.vertical = this.vertical + this.PIXELS_PER_MARKER/this.PIXELS_PER_TILE;
                 }
+                destroy_canvas_token() {
+                    this.dojo.destroy(this.unique_id);
+                }
             }
             result = new Marker({document: this.document, dojo: this.dojo, game: this.game, get_unique_id: this.get_unique_id,});
             result.create_token(specification);

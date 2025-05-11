@@ -89,6 +89,9 @@ define(['dojo/_base/declare'], (declare) => {
                 get_bounding_box() {
                     return {horizontal_min: this.horizontal - 2, vertical_min: this.vertical - 1, horizontal_max: this.horizontal + 0, vertical_max: this.vertical + 1};
                 }
+                destroy_canvas_token() {
+                    this.dojo.destroy(this.unique_id);
+                }
             }
             result = new Tile({document: this.document, dojo: this.dojo, game: this.game, get_unique_id: this.get_unique_id,});
             result.create_token(specification);
