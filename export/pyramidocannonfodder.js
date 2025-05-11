@@ -454,7 +454,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
             this.market.delete(notif.args.quarry_index);
 
             Object.values(notif.args.tiles).forEach(tile_specification => {
-                let tile = this.tile_factory.create_tile_from(tile_specification);
+                let tile = this.tile_factory.create_from(tile_specification);
                 this.token_containers['pyramid-' + notif.args.player_id].add(tile);
             });
             this.paint();
@@ -468,7 +468,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
             console.log( notif );
 
             Object.values(notif.args.tiles).forEach(tile_specification => {
-                let tile = this.tile_factory.create_tile_from(tile_specification);
+                let tile = this.tile_factory.create_from(tile_specification);
                 this.token_containers['pyramid-' + notif.args.player_id].remove(tile);
                 this.token_containers['pyramid-' + notif.args.player_id].add(tile);
             });

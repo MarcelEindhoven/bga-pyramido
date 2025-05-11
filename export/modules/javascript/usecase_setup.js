@@ -71,7 +71,7 @@ define(['dojo/_base/declare'], (declare) => {
         setup_pyramid_tiles(tiles_per_player) {
             Object.keys(tiles_per_player).forEach(player_id => {
                 Object.values(tiles_per_player[player_id]).forEach(tile_specification => {
-                    tile = this.tile_factory.create_tile_from(tile_specification);
+                    tile = ('resurfacing' == tile_specification.class ? this.resurfacing_factory : this.tile_factory).create_from(tile_specification);
                     this.paintables[tile.stage][tile.unique_id] = tile;
                     this.token_containers['pyramid-' + player_id].add(tile);
                 });

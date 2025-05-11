@@ -25,7 +25,7 @@ define(['dojo/_base/declare'], (declare) => {
          * horizontal
          * vertical
          */
-        create_tile_from(specification) {
+        create_from(specification) {
             class Tile {
                 TILES_PER_ROW = 20;
                 PIXELS_PER_TILE = 80;

@@ -27,7 +27,7 @@ describe('Tiles', function () {
             // Arrange
             tile_specification.test_parameter = dojo;
             // Act
-            tile = sut.create_tile_from(tile_specification);
+            tile = sut.create_from(tile_specification);
             // Assert
             assert.equal(tile.test_parameter, tile_specification.test_parameter);
         });
@@ -35,7 +35,7 @@ describe('Tiles', function () {
             // Arrange
             tile_specification.tile_id = 179;
             // Act
-            tile = sut.create_tile_from(tile_specification);
+            tile = sut.create_from(tile_specification);
             // Assert
             assert.equal(tile.unique_id, "tile-179");
         });
@@ -43,7 +43,7 @@ describe('Tiles', function () {
             // Arrange
             tile_specification.tile_id = 179;
             // Act
-            tile = sut.create_tile_from(tile_specification);
+            tile = sut.create_from(tile_specification);
             // Assert
             sinon.assert.callCount(dojo.connect, 1);
             assert.equal(dojo.connect.getCall(0).args[0], 44);
@@ -72,7 +72,7 @@ describe('Tiles', function () {
         it('makes selectable', function () {
             // Arrange
             tile_specification.tile_id = 179;            
-            tile = sut.create_tile_from(tile_specification);
+            tile = sut.create_from(tile_specification);
             // Act
             act();
             // Assert
@@ -84,7 +84,7 @@ describe('Tiles', function () {
     describe('Stop subscription', function () {
         beforeEach(function() {
             tile_specification.tile_id = 179;            
-            tile = sut.create_tile_from(tile_specification);
+            tile = sut.create_from(tile_specification);
         });
         function act() {
             tile.unsubscribe();
@@ -101,7 +101,7 @@ describe('Tiles', function () {
     });
     describe('Paint', function () {
         beforeEach(function() {
-            tile = sut.create_tile_from(tile_specification);
+            tile = sut.create_from(tile_specification);
         });
         it('calls slideToObjectPos with unique_id', function () {
             // Arrange
