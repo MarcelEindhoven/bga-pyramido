@@ -81,7 +81,7 @@ $machinestates = [
         "description" => '',
         "type" => "game",
         "action" => "stAfterDominoPlaced",
-        "transitions" => ["no_candidate_tile" => 27, "single_candidate_tile" => 12, "double_candidate_tile" => 20,]
+        "transitions" => ["no_candidate_tile" => 21, "single_candidate_tile" => 12, "double_candidate_tile" => 20,]
     ],
     12 => [
         "name" => "automaticallyPlaceMarker",
