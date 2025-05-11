@@ -47,15 +47,16 @@ define(['dojo/_base/declare'], (declare) => {
         create_candidate_resurfacinges() {
             Object.values(this.candidate_tiles_for_resurfacing)
             .forEach(candidate_position => {
-                this.selected_resurfacing.id = 100 + candidate_position.horizontal + candidate_position.vertical * 20;
+                let specification = Object.assign({}, this.selected_resurfacing)
+                specification.id = 100 + candidate_position.horizontal + candidate_position.vertical * 20;
 
-                this.selected_resurfacing.horizontal = candidate_position.horizontal;
-                this.selected_resurfacing.vertical = candidate_position.vertical;
-                this.selected_resurfacing.rotation = this.rotation;
+                specification.horizontal = candidate_position.horizontal;
+                specification.vertical = candidate_position.vertical;
+                specification.rotation = this.rotation;
 
-                this.selected_resurfacing.stage = 5;
+                specification.stage = 5;
 
-                let candidate_resurfacing = this.resurfacing_factory.create_from(this.selected_resurfacing);
+                let candidate_resurfacing = this.resurfacing_factory.create_from(specification);
                 candidate_resurfacing.subscribe(this, 'placement_selected');
 
                 this.pyramid.add(candidate_resurfacing);

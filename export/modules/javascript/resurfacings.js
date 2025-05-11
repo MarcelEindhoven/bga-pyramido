@@ -70,7 +70,7 @@ define(['dojo/_base/declare'], (declare) => {
                  * During setup, must be called twice!
                  */
                 paint() {
-                    // console.log(this.unique_id, this.element_id, this.x, this.y, this.rotation);
+                    console.log(this.unique_id, this.element_id, this.x, this.y, this.rotation);
                     if (this.rotation_class)
                         this.dojo.removeClass(this.unique_id, this.rotation_class);
 
