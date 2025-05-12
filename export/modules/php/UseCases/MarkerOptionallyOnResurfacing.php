@@ -44,8 +44,7 @@ class MarkerOptionallyOnResurfacing extends \NieuwenhovenGames\BGA\Action {
     }
 
     public function execute(): MarkerOptionallyOnResurfacing {
-        foreach(array_filter($this->get_current_data->get()['placed_resurfacings'][$this->player_id]
-                    , function(array $resurfacing) {return 4 == $resurfacing['stage'];})
+        foreach($this->get_current_data->get()['candidate_tiles_for_marker']
                 as $tile) {
             $this->update_marker->move($this->player_id, $tile);
             $marker = $this->update_marker->get_marker($this->player_id, $tile);
