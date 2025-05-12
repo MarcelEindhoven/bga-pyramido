@@ -245,6 +245,12 @@ class Game extends \Table
         $this->actions->stAfterOptionalResurfacing();
     }
 
+    public function stMarkerOptionallyOnResurfacing(): void {
+        $this->initialise();
+
+        $this->actions->stMarkerOptionallyOnResurfacing();
+    }
+
     public function stAISelectAndPlaceDomino(): void {
         $this->initialise();
 

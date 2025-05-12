@@ -118,7 +118,14 @@ $machinestates = [
             "action_tile_to_place_resurfacing_chosen",
             "action_no_tile_to_place_resurfacing_chosen",
         ],
-        "transitions" => ["tile_to_place_resurfacing_chosen" => 27, "no_tile_to_place_resurfacing_chosen" => 27,]
+        "transitions" => ["tile_to_place_resurfacing_chosen" => 26, "no_tile_to_place_resurfacing_chosen" => 27,]
+    ],
+    26 => [
+        "name" => "MarkerOptionallyOnResurfacing",
+        "description" => '',
+        "type" => "game",
+        "action" => "stMarkerOptionallyOnResurfacing",
+        "transitions" => ["" => 27,]
     ],
     27 => [
         "name" => "AfterOptionalResurfacing",
