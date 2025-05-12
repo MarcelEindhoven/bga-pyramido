@@ -503,11 +503,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
                 let factory = ('resurfacing' == tile_specification.class ? this.resurfacing_factory : this.tile_factory);
                 let id = factory.get_unique_id(tile_specification);
                 let removed_tile = this.token_containers['pyramid-' + notif.args.player_id].get(id);
-                this.token_containers['pyramid-' + notif.args.player_id].remove(removed_tile);
-                removed_tile.destroy_canvas_token();
-
-                let tile = factory.create_from(tile_specification);
-                this.token_containers['pyramid-' + notif.args.player_id].add(tile);
+                removed_tile.stage = tile_specification.stage;
             });
             this.paint();
         },

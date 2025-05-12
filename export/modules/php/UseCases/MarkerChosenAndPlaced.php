@@ -15,6 +15,9 @@ namespace Bga\Games\PyramidoCannonFodder\UseCases;
 
 include_once(__DIR__.'/../BGA/Action.php');
 
+include_once(__DIR__.'/../Infrastructure/Domino.php');
+use Bga\Games\PyramidoCannonFodder\Infrastructure;
+
 #[\AllowDynamicProperties]
 class MarkerChosenAndPlaced extends \NieuwenhovenGames\BGA\Action {
     static public function create($gamestate): MarkerChosenAndPlaced {
@@ -40,7 +43,7 @@ class MarkerChosenAndPlaced extends \NieuwenhovenGames\BGA\Action {
     public function execute(): MarkerChosenAndPlaced {
         $this->tile_specification['stage'] = 4;
 
-        $tile = $this->get_current_data->get()['tiles'][$this->player_id][$this->update_marker->calculate_location_argument($this->tile_specification)];
+        $tile = $this->get_current_data->get()['tiles'][$this->player_id][Infrastructure\CurrentTiles::calculate_array_index($this->tile_specification)];
         $this->update_marker->move($this->player_id, $tile);
 
         $marker = $this->update_marker->get_marker($this->player_id, $tile);

@@ -56,6 +56,7 @@ define(['dojo/_base/declare'], (declare) => {
         is_present(unique_id) {return unique_id in this.paintables;},
         paint: function() {
             Object.values(this.paintables).forEach(paintable => {
+                // console.log(paintable.unique_id);
                 paintable.paint();
             });
         },
