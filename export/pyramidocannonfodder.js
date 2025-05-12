@@ -480,16 +480,17 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
             this.token_containers['pyramid-' + notif.args.player_id].remove(removed_tile);
             removed_tile.destroy_canvas_token();
 
-            let tile = this.resurfacing_factory.create_from(notif.args.added_tile);
-            this.token_containers['pyramid-' + notif.args.player_id].add(tile);
-
             Object.values(notif.args.removed_resurfacings).forEach(tile_specification => {
                 let id = this.resurfacing_factory.get_unique_id(tile_specification);
                 console.log(id);
                 let removed_tile = this.token_containers['resurfacing-' + notif.args.player_id].get(id);
                 console.log(removed_tile);
                 this.token_containers['resurfacing-' + notif.args.player_id].remove(removed_tile);
+                removed_tile.destroy_canvas_token();
             });
+
+            let tile = this.resurfacing_factory.create_from(notif.args.added_tile);
+            this.token_containers['pyramid-' + notif.args.player_id].add(tile);
 
             this.paint();
         },
