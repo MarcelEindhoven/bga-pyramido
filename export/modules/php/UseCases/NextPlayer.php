@@ -41,8 +41,6 @@ class NextPlayer extends \NieuwenhovenGames\BGA\Action {
     }
 
     public function get_transition_name() : string {
-        if (0 == $this->deck->countCardInLocation('deck'))
-            return 'finished_playing';
         if (substr($this->get_current_data->get()['players'][$this->player_id]['name'], 0, 3) === 'AI_')
             return 'ai_playing';
         return 'player_playing';

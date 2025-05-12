@@ -173,8 +173,8 @@ $machinestates = [
         "type" => "game",
         "action" => "stNextPlayer",
         "updateGameProgression" => true,
-        "possibleactions" => array("player_playing", "ai_playing", "finished_playing"),
-        "transitions" => ["player_playing" => 10, "ai_playing" => 50, "finished_playing" => 99]
+        "possibleactions" => array("player_playing", "ai_playing"),
+        "transitions" => ["player_playing" => 10, "ai_playing" => 50]
     ],
     50 => [
         "name" => "selectAndPlaceDominoAI",
@@ -188,7 +188,14 @@ $machinestates = [
         "description" => 'AI selects and places marker',
         "type" => "game",
         "action" => "stAISelectAndPlaceMarker",
-        "transitions" => ["" => 70, ]
+        "transitions" => ["" => 67, ]
+    ],
+    67 => [
+        "name" => "AfterOptionalResurfacing",
+        "description" => '',
+        "type" => "game",
+        "action" => "stAfterOptionalResurfacing",
+        "transitions" => ["" => 70,]
     ],
     70 => [
         "name" => "chooseNextDominoAI",
