@@ -47,8 +47,17 @@ class UpdateResurfacing extends CurrentResurfacings
         $object->set_deck($deck);
         return $object;
     }
+    public function get_both_unplaced($player_id, $tile): array {
+        $unplaced_tiles = $this->get_resurfacings_for($player_id);
+        $colour = 0 + $tile['colour'];
+        $tile['side'] = ($colour % 2);
+        $type = $colour - $tile['side'];
+        $colours = [$type, $type + 1];
 
-    public function move($player_id, $tile): UpdateResurfacing {
+        return array_filter($unplaced_tiles, function($tile) use($colours){return in_array($tile['colour'], $colours);});
+    }
+
+    public function move_to_pyramid($player_id, $tile): UpdateResurfacing {
         $cards = $this->deck->getCardsInLocation(strval($player_id), 0);
         $colour = 0 + $tile['colour'];
         $tile['side'] = ($colour % 2);
@@ -56,6 +65,15 @@ class UpdateResurfacing extends CurrentResurfacings
         $this->deck->moveCard(current(array_filter($cards, function($card) use($type){return $type == $card['type'];}))['id']
         , strval($player_id), $this->calculate_location_argument($tile));
 
+        return $this;
+    }
+
+    public function move_stage($player_id, $specification, $stage): UpdateResurfacing {
+        $old_location_argument = $this->calculate_location_argument($specification);
+        $specification['stage'] = $stage;
+        $this->deck->moveAllCardsInLocation(strval($player_id), strval($player_id)
+        , $old_location_argument
+        , $this->calculate_location_argument($specification));
         return $this;
     }
 }
@@ -118,7 +136,7 @@ class CurrentResurfacings
         return $resurfacings_per_player;
     }
     protected function get_placed_resurfacing($resurfacing_specification): array {
-        $resurfacing = ['id' => '1', 'class' => 'resurfacing', 'colour' => 0, 'stage' => 0];
+        $resurfacing = ['id' => '1', 'class' => 'resurfacing', 'colour' => 0, 'stage' => 0, 'jewels' => [0]];
 
         $resurfacing['id'] = $resurfacing_specification['id'];
         $resurfacing['side'] = (int) ($resurfacing_specification['location_arg'] / (CurrentResurfacings::FACTOR_STAGE * CurrentResurfacings::FACTOR_HORIZONTAL * CurrentResurfacings::FACTOR_VERTICAL * CurrentResurfacings::FACTOR_ROTATION));

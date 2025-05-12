@@ -33,6 +33,11 @@ class AfterOptionalResurfacing extends \NieuwenhovenGames\BGA\Action {
         return $this;
     }
 
+    public function set_update_resurfacing($update_resurfacing) : AfterOptionalResurfacing {
+        $this->update_resurfacing = $update_resurfacing;
+        return $this;
+    }
+
     public function set_player_id($player_id) : AfterOptionalResurfacing {
         $this->player_id = $player_id;
         return $this;
@@ -45,12 +50,18 @@ class AfterOptionalResurfacing extends \NieuwenhovenGames\BGA\Action {
             , function(array $domino) {return 4 == $domino['stage'];});
         $domino_last_placed = end($dominoes_last_placed);
 
-        // Retrieve stage 4 tiles from Pyramid
-
         $this->update_domino->move_stage($this->player_id, $domino_last_placed, $current_stage);
         $domino_last_placed['stage'] = $current_stage;
 
+
+        foreach(array_filter($this->get_current_data->get()['placed_resurfacings'][$this->player_id]
+                    , function(array $resurfacing) {return 4 == $resurfacing['stage'];})
+                as $just_placed_resurfacing)
+            $this->update_resurfacing->move_stage($this->player_id, $just_placed_resurfacing, $current_stage);
+
+
         $domino = $this->update_domino->get_domino($this->player_id, $domino_last_placed);
+
         $updated_tiles = $this->get_current_data->get()['tiles'][$this->player_id];
         $this->notifications->notifyAllPlayers('tiles_new_stage', '',
         [

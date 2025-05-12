@@ -44,9 +44,10 @@ class ResurfacingChosenAndPlaced extends \NieuwenhovenGames\BGA\Action {
         $this->tile_specification['stage'] = 4;
         $removed_tile = $this->get_current_data->get()['tiles'][$this->player_id][Infrastructure\CurrentTiles::calculate_array_index($this->tile_specification)];
 
-        $this->tile_specification['stage'] = $this->get_current_data->get()['current_stage'];
+        // $this->tile_specification['stage'] = $this->get_current_data->get()['current_stage'];
+        $unplaced = $this->update_resurfacing->get_both_unplaced($this->player_id, $this->tile_specification);
 
-        $this->update_resurfacing->move($this->player_id, $this->tile_specification);
+        $this->update_resurfacing->move_to_pyramid($this->player_id, $this->tile_specification);
 
         // notify
         $this->notifications->notifyAllPlayers('resurface', '',
@@ -54,6 +55,7 @@ class ResurfacingChosenAndPlaced extends \NieuwenhovenGames\BGA\Action {
         'player_id' => $this->player_id, 
         'removed_tile' => $removed_tile,
         'added_tile' => $this->get_current_data->get()['tiles'][$this->player_id][Infrastructure\CurrentTiles::calculate_array_index($this->tile_specification)],
+        'removed_resurfacings' => $unplaced,
         ]);
 
         return $this;

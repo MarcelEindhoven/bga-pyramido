@@ -106,7 +106,7 @@ $machinestates = [
         "description" => '',
         "type" => "game",
         "action" => "stCheckResurfacing",
-        "transitions" => ["candidate_tiles_for_resurfacing" => 25,"no_candidate_tiles_for_resurfacing" => 30,]
+        "transitions" => ["candidate_tiles_for_resurfacing" => 25, "no_candidate_tiles_for_resurfacing" => 27,]
     ],
     25 => [
         "name" => "selectResurfacingTile",

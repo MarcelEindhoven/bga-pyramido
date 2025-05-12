@@ -60,5 +60,29 @@ class UpdateResurfacingTest extends TestCase{
         $this->sut->move($this->player_id, $this->resurfacing_specification);
         // Assert
     }
+
+    public function test_get_both_unplaced() {
+        // Arrange
+        $this->resurfacing_specification['colour'] = $this->resurfacing_card['type_arg'];
+        $this->mock_cards->expects($this->exactly(1))->method('getCardsInLocation')
+        ->with(strval($this->player_id), 0)->willReturn([$this->resurfacing_card]);
+
+        // Act
+        $unplaced_tiles = $this->sut->get_both_unplaced($this->player_id, $this->resurfacing_specification);
+        // Assert
+        $this->assertEquals(2, count($unplaced_tiles));
+    }
+
+    public function test_get_no_unplaced() {
+        // Arrange
+        $this->resurfacing_specification['colour'] = 7;
+        $this->mock_cards->expects($this->exactly(1))->method('getCardsInLocation')
+        ->with(strval($this->player_id), 0)->willReturn([$this->resurfacing_card]);
+
+        // Act
+        $unplaced_tiles = $this->sut->get_both_unplaced($this->player_id, $this->resurfacing_specification);
+        // Assert
+        $this->assertEqualsCanonicalizing([], $unplaced_tiles);
+    }
 }
 ?>
