@@ -269,7 +269,6 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
                 {
                     case 'selectAndPlaceQuarry':
                             this.addActionButton('Rotate', _('Rotate'), () => this.usecase_place_domino.rotate(), null, null, 'gray');
-                            this.addActionButton('Toggle', _('Toggle'), () => this.usecase_place_domino.toggle_positions(), null, null, 'gray');
                         break;
                     case 'selectResurfacingTile':
                         this.addActionButton('Rotate', _('Rotate'), () => this.usecase_place_resurfacing.rotate(), null, null, 'gray');
