@@ -111,14 +111,14 @@ $machinestates = [
     25 => [
         "name" => "selectResurfacingTile",
         "description" => clienttranslate('${actplayer} may select tile to place resurfacing'),
-        "descriptionmyturn" => clienttranslate('${you} may select tile to place resurfacing'),
+        "descriptionmyturn" => clienttranslate('${you} may optionally resurface and must select next domino to finish turn'),
         "type" => "activeplayer",
         "args" => "argPlayerTurn",
         "possibleactions" => [
             "action_tile_to_place_resurfacing_chosen",
-            "action_no_tile_to_place_resurfacing_chosen",
+            "action_next_domino_chosen",
         ],
-        "transitions" => ["tile_to_place_resurfacing_chosen" => 26, "no_tile_to_place_resurfacing_chosen" => 27,]
+        "transitions" => ["tile_to_place_resurfacing_chosen" => 26, "next_domino_chosen" => 28,]
     ],
     26 => [
         "name" => "MarkerOptionallyOnResurfacing",
@@ -134,17 +134,24 @@ $machinestates = [
         "action" => "stAfterOptionalResurfacing",
         "transitions" => ["" => 30,]
     ],
+    28 => [
+        "name" => "AfterNextDomino",
+        "description" => '',
+        "type" => "game",
+        "action" => "stAfterOptionalResurfacing",
+        "transitions" => ["" => 31,]
+    ],
     30 => [
         "name" => "selectNextDomino",
-        "description" => clienttranslate('${actplayer} must select next domino'),
-        "descriptionmyturn" => clienttranslate('${you} must select next domino'),
+        "description" => clienttranslate('${actplayer} must select next domino to finish turn'),
+        "descriptionmyturn" => clienttranslate('${you} must select next domino to finish turn'),
         "type" => "activeplayer",
         "args" => "argPlayerTurn",
         "possibleactions" => [
             // these actions are called from the front with bgaPerformAction, and matched to the function on the game.php file
-            "action_next_domino_chosen", 
+            "action_next_domino_chosen",
         ],
-        "transitions" => ["" => 31,]
+        "transitions" => ["next_domino_chosen" => 31,]
     ],
     31 => [
         "name" => "afterTurnFinished",
@@ -202,7 +209,7 @@ $machinestates = [
         "description" => 'AI chooses next domino',
         "type" => "game",
         "action" => "stAIChooseNextDomino",
-        "transitions" => ["" => 31, ]
+        "transitions" => ["next_domino_chosen" => 31, ]
     ],
     // Final state.
     // Please do not modify (and do not overload action/args methods).

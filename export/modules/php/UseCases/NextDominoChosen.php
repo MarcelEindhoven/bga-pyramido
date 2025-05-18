@@ -51,4 +51,8 @@ class NextDominoChosen extends \NieuwenhovenGames\BGA\Action {
         ]);
     return $this;
     }
+
+    public function get_transition_name() : string {
+        return 'next_domino_chosen';
+    }
 }

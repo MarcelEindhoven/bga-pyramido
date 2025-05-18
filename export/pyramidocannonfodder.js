@@ -154,6 +154,9 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
 
                     this.usecase_choose_resurfacing = new usecase_choose_resurfacing({container: this.token_containers['resurfacing-' + this.player_id]});
                     this.usecase_choose_resurfacing.subscribe(this.usecase_place_resurfacing, 'resurfacing_selected');
+
+                    this.usecase_choose_next_domino = new usecase_choose_next_domino({market: this.market});
+                    this.usecase_choose_next_domino.subscribe(this, 'next_domino_chosen');
                     break;
                 case 'selectNextDomino':
                     this.usecase_choose_next_domino = new usecase_choose_next_domino({market: this.market});
@@ -188,6 +191,8 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
             });
             this.usecase_choose_domino.unsubscribe();
             this.usecase_place_domino.unsubscribe();
+            delete this.usecase_choose_domino;
+            delete this.usecase_place_domino;
         },
         tile_to_place_marker_chosen(element) {
             console.log(element.target.id);
@@ -199,6 +204,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
                 rotation: tile.rotation,
             });
             this.usecase_place_marker.unsubscribe();
+            delete this.usecase_place_marker;
         },
         resurfacing_placed(tile) {
             console.log(tile);
@@ -208,21 +214,30 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
                 rotation: tile.rotation,
                 colour: tile.colour,
             });
-            this.usecase_choose_resurfacing.unsubscribe();
-            this.usecase_place_resurfacing.unsubscribe();
+            this.cleanup_usecase_resurfacing();
+            this.cleanup_usecase_next_domino();
         },
-        no_tile_to_place_resurfacing_chosen() {
-            console.log( "no_tile_to_place_resurfacing_chosen" );
-            this.call('no_tile_to_place_resurfacing_chosen', {});
-            this.usecase_choose_resurfacing.unsubscribe();
-            this.usecase_place_resurfacing.unsubscribe();
+        cleanup_usecase_resurfacing() {
+            console.log( "cleanup_usecase_resurfacing" );
+            if (this.usecase_place_resurfacing) {
+                this.usecase_choose_resurfacing.unsubscribe();
+                this.usecase_place_resurfacing.unsubscribe();
+                delete this.usecase_choose_resurfacing;
+                delete this.usecase_place_resurfacing;
+            }
         },
         next_domino_chosen(domino) {
             console.log( "next_domino_chosen" );
             console.log( domino);
             console.log(this.usecase_choose_next_domino.quarry_missing_element);
             this.call('next_domino_chosen', {next_index: domino.element_id, quarry_index: this.usecase_choose_next_domino.quarry_missing_element});
+
+            this.cleanup_usecase_next_domino();
+            this.cleanup_usecase_resurfacing();
+        },
+        cleanup_usecase_next_domino() {
             this.usecase_choose_next_domino.unsubscribe();
+            delete this.usecase_choose_next_domino;
         },
         call: function(action, args, handler) {
             console.log(action);
@@ -272,7 +287,6 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
                         break;
                     case 'selectResurfacingTile':
                         this.addActionButton('Rotate', _('Rotate'), () => this.usecase_place_resurfacing.rotate(), null, null, 'gray');
-                        this.addActionButton('Skip', _('Skip'), () => this.no_tile_to_place_resurfacing_chosen(), null, null, 'gray');
                         break;
                     case 'playerTurn':
                     const playableCardsIds = args.playableCardsIds; // returned by the argPlayerTurn
