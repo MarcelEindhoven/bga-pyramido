@@ -45,9 +45,9 @@ class ReturnAllMarkers extends \NieuwenhovenGames\BGA\Action {
         $tiles = $this->get_current_data->get()['tiles'];
         foreach ($tiles as $player_id => $tiles_per_player) {
             $pyramid = Domain\Pyramid::create($tiles_per_player);
-            if (count($pyramid->get_tiles_for_stage(4)) > 0)
-                return 'finished_playing';
+            if (count($pyramid->get_tiles_for_stage(4)) < 2)
+                return 'not_finished_playing';
         }
-        return 'not_finished_playing';
+        return 'finished_playing';
     }
 }
