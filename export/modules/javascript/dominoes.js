@@ -28,9 +28,10 @@ define(['dojo/_base/declare'], (declare) => {
         create_domino_from(specification) {
             class Domino {
                 DOMINOES_PER_ROW = 10;
-                PIXELS_PER_TILE = 80;
+                DEFAULT_PIXELS_PER_TILE = 80;
                 constructor(dependencies) {
                     this.clone(dependencies);
+                    this.pixels_per_tile = this.DEFAULT_PIXELS_PER_TILE;
                 }
                 create_token(specification) {
                     this.clone(specification);
@@ -47,10 +48,10 @@ define(['dojo/_base/declare'], (declare) => {
                     this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
                         <div id="${this.unique_id}">
                     `);
-                    this.dojo.addClass(this.unique_id, 'domino');
+                    this.dojo.addClass(this.unique_id, 'domino' + this.pixels_per_tile);
                     const id_horizontal = this.id % this.DOMINOES_PER_ROW;
                     const id_vertical = (this.id-id_horizontal) / this.DOMINOES_PER_ROW;
-                    this.dojo.style(this.unique_id, 'backgroundPosition', '-' + this.PIXELS_PER_TILE * id_horizontal * 2 + 'px -' + this.PIXELS_PER_TILE * id_vertical + 'px');
+                    this.dojo.style(this.unique_id, 'backgroundPosition', '-' + this.pixels_per_tile * id_horizontal * 2 + 'px -' + this.pixels_per_tile * id_vertical + 'px');
                 }
                 destroy_canvas_token() {
                     this.dojo.destroy(this.unique_id);
@@ -72,10 +73,15 @@ define(['dojo/_base/declare'], (declare) => {
                         return {horizontal_min: this.horizontal - 2, vertical_min: this.vertical - 3, horizontal_max: this.horizontal + 0, vertical_max: this.vertical + 1};
                     }
                 }
-                move_to(element_id, x, y) {
+                move_to(element_id, x, y, canvas_pixels_per_tile) {
                     this.element_id = element_id;
-                    this.x = x;
-                    this.y = y;
+                    this.x = x + ((this.rotation % 2 == 0) ?
+                        canvas_pixels_per_tile - this.pixels_per_tile:
+                        (canvas_pixels_per_tile - this.pixels_per_tile)/2);
+                    this.y = y + ((this.rotation % 2 == 1) ?
+                    canvas_pixels_per_tile - this.pixels_per_tile:
+                    (canvas_pixels_per_tile - this.pixels_per_tile)/2);
+                    this.canvas_pixels_per_tile = canvas_pixels_per_tile;
                 }
                 paint() {
                     //console.log(this.unique_id, this.element_id, this.x, this.y);

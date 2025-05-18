@@ -96,7 +96,7 @@ define(['dojo/_base/declare'], (declare) => {
         relocate(paintable) {
             const bounding_box = paintable.get_bounding_box();
             const [x, y] = this.getAbsoluteCoordinates(bounding_box.horizontal_min, bounding_box.vertical_min);
-            paintable.move_to(this.element_id, x - this.x_minimum, y - this.y_minimum);
+            paintable.move_to(this.element_id, x - this.x_minimum, y - this.y_minimum, this.pixels_per_tile);
         },
         getAbsoluteCoordinates(horizontal, vertical) {
             const x = horizontal * (this.pixels_per_tile + this.margin_between_tiles)/ 2;

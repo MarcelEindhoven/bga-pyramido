@@ -45,6 +45,7 @@ class AfterOptionalResurfacing extends \NieuwenhovenGames\BGA\Action {
 
     public function execute(): AfterOptionalResurfacing {
         $current_stage = $this->get_current_data->get()['current_stage'];
+        if ($current_stage >4) $current_stage = 4;
 
         $dominoes_last_placed = array_filter($this->update_domino->get_dominoes($this->player_id)
             , function(array $domino) {return 4 == $domino['stage'];});

@@ -63,17 +63,21 @@ define(['dojo/_base/declare'], (declare) => {
         create_candidate_dominoes() {
             Object.values(this.candidate_positions)
             .filter(candidate_position => { if (candidate_position.rotation == this.rotation) return candidate_position;})
-                .filter(candidate_position => { if (this.is_toggle_for_position(candidate_position)) return candidate_position;})
+//                .filter(candidate_position => { if (this.is_toggle_for_position(candidate_position)) return candidate_position;})
                     .forEach(candidate_position => {
-                let candidate_domino = this.domino_factory.create_domino_from(this.selected_domino);
+                let candidate_specification = Object.assign({}, this.selected_domino);
+
+                candidate_specification.pixels_per_tile = 40;
+
+                candidate_specification.horizontal = candidate_position.horizontal;
+                candidate_specification.vertical = candidate_position.vertical;
+                candidate_specification.rotation = candidate_position.rotation;
+
+                candidate_specification.stage = 5;
+
+                let candidate_domino = this.domino_factory.create_domino_from(candidate_specification);
 
                 candidate_domino.unique_id = candidate_domino.unique_id + candidate_position.horizontal + candidate_position.vertical;
-
-                candidate_domino.horizontal = candidate_position.horizontal;
-                candidate_domino.vertical = candidate_position.vertical;
-                candidate_domino.rotation = candidate_position.rotation;
-
-                candidate_domino.stage = 5;
 
                 candidate_domino.subscribe(this, 'placement_selected');
 

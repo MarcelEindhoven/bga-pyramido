@@ -20,6 +20,8 @@ magick montage resurfaces\*.png -geometry 80x80 -tile 2x resurfacesx80.png
 magick montage dominoes\*.png -rotate 90 -geometry 120x60 -tile 10x dominoesx60.png
 magick montage resurfaces\*.png -geometry 60x60 -tile 2x resurfacesx60.png
 
+magick montage dominoes\*.png -rotate 90 -geometry 80x40 -tile 10x dominoesx40.png
+
 magick montage markers\*.png -geometry 40x40 -tile 2x markers.png
 magick  -fuzz 40% markers.png -transparent white markersx.png
 magick  markersx.png -morphology EdgeOut Square:1 markerse.png

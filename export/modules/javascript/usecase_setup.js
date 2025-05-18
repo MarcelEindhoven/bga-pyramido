@@ -41,7 +41,10 @@ define(['dojo/_base/declare'], (declare) => {
                     </div>
                 `);
 
-                this.create_canvas('resurfacing' + '-' + player.id);
+                element_id = 'resurfacing' + '-' + player.id;
+                this.create_canvas(element_id);
+                this.token_containers[element_id].set_pixels_per_tile(60);
+
                 this.create_canvas('pyramid' + '-' + player.id);
 
                 element_id = 'marker' + '-' + player.id;
@@ -62,6 +65,7 @@ define(['dojo/_base/declare'], (declare) => {
         setup_resurfacings(resurfacings_per_player) {
             Object.keys(resurfacings_per_player).forEach(player_id => {
                 Object.values(resurfacings_per_player[player_id]).forEach(resurfacing_specification => {
+                    resurfacing_specification.pixels_per_tile = 60;
                     resurfacing = this.resurfacing_factory.create_from(resurfacing_specification);
                     this.paintables[resurfacing.stage][resurfacing.unique_id] = resurfacing;
                     this.token_containers[(resurfacing.stage > 0 ? 'pyramid-' : 'resurfacing-') + player_id].add(resurfacing);
@@ -84,6 +88,7 @@ define(['dojo/_base/declare'], (declare) => {
         create_canvas(element_id) {
             dependencies = {dojo: this.dojo, game: this.game, element_id: element_id};
             this.token_containers[element_id] = new this.canvas_class(dependencies);
+            this.token_containers[element_id].set_margin_between_tiles(2);
         },
     });
 });

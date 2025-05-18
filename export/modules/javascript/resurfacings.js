@@ -28,10 +28,11 @@ define(['dojo/_base/declare'], (declare) => {
         create_from(specification) {
             class Resurfacing {
                 TILES_PER_ROW = 2;
-                PIXELS_PER_TILE = 80;
+                DEFAULT_PIXELS_PER_TILE = 80;
                 MARGIN_BETWEEN_TOKENS = 10;
                 constructor(dependencies) {
                     this.clone(dependencies);
+                    this.pixels_per_tile = this.DEFAULT_PIXELS_PER_TILE;
                 }
                 create_token(specification) {
                     this.clone(specification);
@@ -65,6 +66,11 @@ define(['dojo/_base/declare'], (declare) => {
                     this.x = x;
                     this.y = y;
                 }
+                move_to(element_id, x, y, canvas_pixels_per_tile) {
+                    this.element_id = element_id;
+                    this.x = x + (canvas_pixels_per_tile - this.pixels_per_tile)/2;
+                    this.y = y + (canvas_pixels_per_tile - this.pixels_per_tile)/2;
+                }
                 /**
                  * Precondition: move_to has been called
                  * During setup, must be called twice!
@@ -86,10 +92,10 @@ define(['dojo/_base/declare'], (declare) => {
                     this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
                         <div id="${this.unique_id}">
                     `);
-                    this.dojo.addClass(this.unique_id,'resurfacing');
+                    this.dojo.addClass(this.unique_id,'resurfacing' + this.pixels_per_tile);
                     const id_horizontal = +this.colour % 2;
                     const id_vertical = (+this.colour - id_horizontal) / 2;
-                    this.dojo.style(this.unique_id, 'backgroundPosition', '-' + this.PIXELS_PER_TILE * id_horizontal + 'px -' + this.PIXELS_PER_TILE * id_vertical + 'px');
+                    this.dojo.style(this.unique_id, 'backgroundPosition', '-' + this.pixels_per_tile * id_horizontal + 'px -' + this.pixels_per_tile * id_vertical + 'px');
 
                     this.dojo.connect(this.game.get_element(this.unique_id), 'onclick', this, 'tile_selected');
                 }
