@@ -32,16 +32,23 @@ define(['dojo/_base/declare'], (declare) => {
         rotate() {
             this.rotation = this.rotation + 1;
             if (this.rotation >3) this.rotation = 0;
+            this.skip_empty_rotation();
             if (this.selected_domino) {
                 this.destroy_candidate_dominoes();
                 this.create_candidate_dominoes();
                 this.ui.paint();
             }
         },
+        skip_empty_rotation() {
+            if (Object.values(this.candidate_positions)
+                .filter(candidate_position => { if (candidate_position.rotation == this.rotation) return candidate_position;})
+                .length == 0) this.rotate();
+        },
         quarry_selected(domino) {
             this.destroy_candidate_dominoes();
             this.selected_domino = domino;
             this.create_candidate_dominoes();
+            this.skip_empty_rotation();
             this.ui.paint();
         },
         create_candidate_dominoes() {

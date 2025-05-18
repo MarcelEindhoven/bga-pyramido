@@ -88,7 +88,7 @@ define(['dojo/_base/declare'], (declare) => {
         create_canvas(element_id) {
             dependencies = {dojo: this.dojo, game: this.game, element_id: element_id};
             this.token_containers[element_id] = new this.canvas_class(dependencies);
-            this.token_containers[element_id].set_margin_between_tiles(2);
+            this.token_containers[element_id].set_margin_between_tiles(4);
         },
     });
 });
