@@ -223,7 +223,8 @@ class PyramidTest extends TestCase{
         $t18_14_3 = ['stage' => 1, 'horizontal' => 18, 'vertical' => 14, 'rotation' => 3];
         $t16_16_3 = ['stage' => 1, 'horizontal' => 16, 'vertical' => 16, 'rotation' => 3];
 
-        $faraway = ['stage' => 1, 'horizontal' => 18, 'vertical' => 16, 'rotation' => 3];
+        $faraway_horizontal = ['stage' => 1, 'horizontal' => 18, 'vertical' => 16, 'rotation' => 3];
+        $faraway_4x4 = ['stage' => 1, 'horizontal' => 18, 'vertical' => 16, 'rotation' => 3];
 
         $stage4_0 = ['stage' => 4, 'horizontal' => 13, 'vertical' => 13, 'rotation' => 0];
         $stage4_1 = ['stage' => 4, 'horizontal' => 13, 'vertical' => 13, 'rotation' => 1];
@@ -238,7 +239,7 @@ class PyramidTest extends TestCase{
                 $t10_8_2, $t12_8_2, $t14_8_2, $t8_10_2, $t16_10_2, $t10_12_2, $t12_12_2, $t14_12_2,
                 $t10_8_3, $t12_8_3, $t8_10_3, $t8_12_3, $t14_10_3, $t14_12_3, $t10_14_3, $t12_14_3,
             ]],
-            [[$initial0, $faraway], [
+            [[$initial0, $faraway_horizontal], [
                 $t12_10_0, $t10_12_0,
                 $t12_10_1, $t10_12_1,
                 $t14_10_2, $t12_12_2,
