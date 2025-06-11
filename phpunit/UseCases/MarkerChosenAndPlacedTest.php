@@ -31,12 +31,11 @@ class MarkerChosenAndPlacedTest extends TestCase{
     protected int $player_id = 77;
 
     protected array $current_data = [
-        'tiles' => [77 => [22 => ['colour'=> 3]]],
+        'tiles' => [77 => [1464 => ['colour'=> 3]]],
     ];
     protected array $marker_specification = ['horizontal' => 12, 'vertical' => 14, ];
     protected array $modified_marker_specification = ['stage' => 4, 'horizontal' => 12, 'vertical' => 14,];
     protected array $tile_specification = ['horizontal' => 12, 'vertical' => 14, 'rotation' => 3, ];
-    protected array $modified_tile_specification = ['stage' => 4, 'horizontal' => 12, 'vertical' => 14, 'rotation' => 3, ];
 
     protected function setUp(): void {
         $this->mock_gamestate = $this->createMock(FrameworkInterfaces\GameState::class);
@@ -82,7 +81,6 @@ class MarkerChosenAndPlacedTest extends TestCase{
 
     protected function arrange() {
         $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn($this->current_data);
-        $this->mock_update_marker->expects($this->exactly(1))->method('calculate_location_argument')->with($this->modified_tile_specification)->willReturn(22);
         $this->mock_update_marker->expects($this->exactly(1))->method('get_marker')->with($this->player_id, ['colour'=> 3])->willReturn('x');
     }
 

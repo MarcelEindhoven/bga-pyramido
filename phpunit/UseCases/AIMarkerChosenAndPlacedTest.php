@@ -34,7 +34,8 @@ class AIMarkerChosenAndPlacedTest extends TestCase{
     protected int $player_id = 77;
     protected string $quarry_index = 'quarry-2';
 
-    protected array $current_data = ['tiles' => [77 => ['location_argument' => ['tile']]], 'candidate_tiles_for_marker' => []];
+    protected array $current_data = ['tiles' => [77 => [1054 => ['tile']]],
+     'candidate_tiles_for_marker' => []];
     protected array $expected_marker_specification = ['stage' => 4, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0, ];
 
     protected function setUp(): void {
@@ -66,12 +67,14 @@ class AIMarkerChosenAndPlacedTest extends TestCase{
 
     public function test_execute_single_candidate_tile() {
         // Arrange
-        $this->current_data['candidate_tiles_for_marker'] = [['test' => 1, ]];
+        $tile_specification = ['stage' => 4, 'horizontal' => 10, 'vertical' => 10]; // index 1054
+        $tile = ['stage' => 4, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 3, 'jewels' => []];
+        $tile_index = Infrastructure\CurrentTiles::calculate_array_index($tile_specification);
+        $this->current_data['tiles'][$this->player_id][$tile_index] = $tile;
+        $this->current_data['candidate_tiles_for_marker'] = [$tile_specification];
         $this->mock_get_current_data->expects($this->exactly(2))->method('get')->willReturn($this->current_data);
 
-        $expected_tile_specification = ['test' => 1, 'stage' => 4];
-        $this->mock_update_marker->expects($this->exactly(1))->method('calculate_location_argument')
-        ->with($expected_tile_specification)->willReturn('location_argument');
+        $expected_tile_specification = $tile_specification;
         $this->arrange();
 
         // Act
@@ -81,12 +84,11 @@ class AIMarkerChosenAndPlacedTest extends TestCase{
 
     public function test_execute_double_candidate_tiles() {
         // Arrange
-        $this->current_data['candidate_tiles_for_marker'] = [['test' => 1, ], ['test' => 1, ], ];
+        $tile = ['stage' => 4, 'horizontal' => 10, 'vertical' => 10];
+        $this->current_data['candidate_tiles_for_marker'] = [$tile, $tile];
         $this->mock_get_current_data->expects($this->exactly(2))->method('get')->willReturn($this->current_data);
 
-        $expected_tile_specification = ['test' => 1, 'stage' => 4];
-        $this->mock_update_marker->expects($this->exactly(1))->method('calculate_location_argument')
-        ->with($expected_tile_specification)->willReturn('location_argument');
+        $expected_tile_specification = $tile;
         $this->arrange();
 
         // Act

@@ -74,8 +74,9 @@ class ReturnAllMarkersTest extends TestCase{
 
     public function test_stage_4_filled() {
         // Arrange
-        $tiles = $this->create_tiles([20, 6, 3, 1]);
-        $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn(['tiles'=> [77 =>$tiles]]);
+        $tiles = $this->create_tiles([20, 6, 3, 2]);
+        $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn(
+            ['tiles'=> [77 =>$tiles]]);
 
         // Act
         $transition_name = $this->sut->get_transition_name();

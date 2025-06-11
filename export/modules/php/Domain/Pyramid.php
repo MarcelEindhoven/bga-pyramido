@@ -19,6 +19,24 @@ use Bga\Games\PyramidoCannonFodder\Infrastructure;
 #[\AllowDynamicProperties]
 class Pyramid
 {
+    /**
+     * Stage 0 means outside the pyramid.
+     * Stage 1-4 are the floors in the pyramid.
+     * Stage 4 has the special meaning that it is the last placed domino
+     */
+    const FACTOR_STAGE = 5;
+    const FACTOR_HORIZONTAL = 20; // Maximum range coordinates is between 2 and 19
+    const FACTOR_VERTICAL = 20;
+
+    /**
+     * location_key => tile
+     * Each domino has 2 tiles.
+     * A resurfacing has 1 tile which always replaces a domino tile.
+     * Each tile has 2x2 locations for jewels.
+     * Each jewel and each tile in the pyramid is located on a floor (stage 1-4).
+     * The horizontal and vertical location of the tile is the location of the first jewel in the tile.
+     * The horizontal and vertical distance between 2 jewels is an integer number.
+     */
     public array $tiles = [];
 
     static public function create($tiles): Pyramid {
@@ -27,16 +45,31 @@ class Pyramid
         return $object;
     }
 
+    /**
+     * Precondition: key of each tile == get_location_key(tile)
+     */
     public function set_tiles($tiles): Pyramid {
         $this->tiles = $tiles;
         return $this;
     }
     public function get_tiles(): array {return $this->tiles;}
 
+    /**
+     * Calculate key that is unique for each possible combination of stage and horizontal and vertical 
+     */
+    static public function get_location_key($pyramid_object_specification) {
+        return  $pyramid_object_specification['stage']
+        + Pyramid::FACTOR_STAGE * $pyramid_object_specification['horizontal']
+        + Pyramid::FACTOR_STAGE * Pyramid::FACTOR_HORIZONTAL * $pyramid_object_specification['vertical'];
+    }
+
     public function resurface($placed_resurfacings): Pyramid {
         foreach ($placed_resurfacings as $placed_resurfacing)
-            $this->tiles[Infrastructure\CurrentTiles::calculate_array_index($placed_resurfacing)] = $placed_resurfacing;
+            $this->replace_tile($placed_resurfacing);
         return $this;
+    }
+    protected function replace_tile($placed_resurfacing) {
+        $this->tiles[$this->get_location_key($placed_resurfacing)] = $placed_resurfacing;
     }
 
     public function get_stage_next_domino(): int {
@@ -56,25 +89,33 @@ class Pyramid
     }
 
     public function get_candidate_tiles_for_marker($markers): array {
-        $tiles_last_placed =  array_filter($this->tiles, function($tile) {return 4 == $tile['stage'];});
-        $tiles_last_placed_with_jewels =  array_filter($tiles_last_placed, function($tile) {return count($tile['jewels']) > 0;});
-        $markers_stage_0 =  array_filter($markers, function($marker) {return 0 == $marker['stage'];});
-        return array_filter($tiles_last_placed_with_jewels, function($tile) use ($markers_stage_0){
-            foreach ($markers_stage_0 as $marker) {
-                if (($marker['colour'] == $tile['colour'])) return true;
-            }
-            return false;
+        $tiles_last_placed_with_jewels =  array_filter($this->get_last_placed_tiles(), function($tile) {
+            return count($tile['jewels']) > 0;
         });
+        $unplaced_markers =  array_filter($markers, function($marker) {return 0 == $marker['stage'];});
+
+        return array_filter($tiles_last_placed_with_jewels, function($tile) use ($unplaced_markers){
+            return $this->is_tile_candidate_for_marker($tile, $unplaced_markers);
+        });
+    }
+    protected function is_tile_candidate_for_marker($tile, $unplaced_markers): bool {
+        foreach ($unplaced_markers as $marker) {
+            if (($marker['colour'] == $tile['colour'])) return true;
+        }
+        return false;
     }
 
     public function get_candidate_tiles_for_resurfacing($markers): array {
-        $tiles_last_placed = array_filter($this->tiles, function($tile) {return 4 == $tile['stage'];});
-        return array_filter($tiles_last_placed, function($tile) use ($markers){
+        return array_filter($this->get_last_placed_tiles(), function($tile) use ($markers){
             foreach ($markers as $marker) {
                 if (($marker['horizontal'] == $tile['horizontal']) && ($marker['vertical'] == $tile['vertical'])) return false;
             }
             return true;
         });
+    }
+
+    public function get_last_placed_tiles(): array {
+        return array_filter($this->tiles, function($tile) {return 4 == $tile['stage'];});
     }
 
     public function get_candidate_positions(): array {

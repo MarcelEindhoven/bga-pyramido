@@ -19,7 +19,8 @@ class CurrentResurfacingsTest extends TestCase{
     protected ?FrameworkInterfaces\Deck $mock_cards = null;
     protected string $player_id = '77';
     protected array $players = ['7' => [], '77' => [],];
-    protected array $default_resurfacing = ['id' => 0, 'type' => 0, 'type_arg' => 1, 'location' => '0', 'location_arg' => 0];
+    protected array $default_resurfacing = ['id' => 0, 'type' => 0, 'type_arg' => 1, 'location' => '0',
+     'location_arg' => 0];
 
     protected function setUp(): void {
         $this->mock_cards = $this->createMock(FrameworkInterfaces\Deck::class);
@@ -42,7 +43,8 @@ class CurrentResurfacingsTest extends TestCase{
     public function test_get_placed_resurfacing() {
         // Arrange
         $this->sut->set_players(['77' => [],]);
-        $expected_resurfacing = ['id' => 9, 'class' => 'resurfacing', 'stage' => 4, 'side' => 1, 'colour' => 1, 'horizontal' => 10, 'vertical' => 8, 'rotation' => 2];
+        $expected_resurfacing = ['id' => 9, 'class' => 'resurfacing', 'stage' => 4, 'side' => 1, 
+        'colour' => 1, 'horizontal' => 10, 'vertical' => 8, 'rotation' => 2, 'jewels' => [0]];
 
         $this->default_resurfacing['id'] = $expected_resurfacing['id'];
 

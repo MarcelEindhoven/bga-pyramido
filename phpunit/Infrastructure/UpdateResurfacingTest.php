@@ -42,7 +42,7 @@ class UpdateResurfacingTest extends TestCase{
         , $this->resurfacing_specification['stage'] + 5 * $this->resurfacing_specification['horizontal'] + 5*20* $this->resurfacing_specification['vertical'] + 5*20*20* $this->resurfacing_specification['rotation'] + 5*20*20*4* ($this->resurfacing_specification['colour'] % 2));
 
         // Act
-        $this->sut->move($this->player_id, $this->resurfacing_specification);
+        $this->sut->move_to_pyramid($this->player_id, $this->resurfacing_specification);
         // Assert
     }
 
@@ -57,7 +57,7 @@ class UpdateResurfacingTest extends TestCase{
         , $this->resurfacing_specification['stage'] + 5 * $this->resurfacing_specification['horizontal'] + 5*20* $this->resurfacing_specification['vertical'] + 5*20*20* $this->resurfacing_specification['rotation'] + 5*20*20*4* ($this->resurfacing_specification['colour'] % 2));
 
         // Act
-        $this->sut->move($this->player_id, $this->resurfacing_specification);
+        $this->sut->move_to_pyramid($this->player_id, $this->resurfacing_specification);
         // Assert
     }
 
