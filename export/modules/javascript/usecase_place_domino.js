@@ -30,26 +30,29 @@ define(['dojo/_base/declare'], (declare) => {
             this.market.subscribe_to_quarry(this, 'quarry_selected');
         },
         rotate() {
-            this.rotation = this.rotation + 1;
-            if (this.rotation >3) this.rotation = 0;
-            this.skip_empty_rotation();
+            this.destroy_candidate_dominoes();
+            this.rotate_until_valid_candidate_positions_found();
             if (this.selected_domino) {
-                this.destroy_candidate_dominoes();
                 this.create_candidate_dominoes();
                 this.ui.paint();
             }
         },
-        skip_empty_rotation() {
-            if (Object.values(this.candidate_positions)
-                .filter(candidate_position => { if (candidate_position.rotation == this.rotation) return candidate_position;})
-                .length == 0) this.rotate();
-        },
         quarry_selected(domino) {
             this.destroy_candidate_dominoes();
             this.selected_domino = domino;
-            this.create_candidate_dominoes();
             this.skip_empty_rotation();
+            this.create_candidate_dominoes();
             this.ui.paint();
+        },
+        skip_empty_rotation() {
+            if (Object.values(this.candidate_positions)
+                .filter(candidate_position => { if (candidate_position.rotation == this.rotation) return candidate_position;})
+                .length == 0) this.rotate_until_valid_candidate_positions_found();
+        },
+        rotate_until_valid_candidate_positions_found() {
+            this.rotation = this.rotation + 1;
+            if (this.rotation >3) this.rotation = 0;
+
         },
         create_candidate_dominoes() {
             Object.values(this.candidate_positions)

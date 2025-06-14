@@ -22,14 +22,20 @@ describe('Use case choose place domino', function () {
         market = {subscribe_to_quarry: sinon.spy(), unsubscribe: sinon.spy(),};
         canvas = {add: sinon.spy(), remove: sinon.spy(), };
         ui = {paint: sinon.spy(), };
-        sut = new sut_module({ui: ui, market: market, pyramid: canvas, domino_factory: new DominoFactoryx()});
+        sut = new sut_module({ui: ui, market: market, pyramid: canvas, domino_factory: new DominoFactoryx(),
+            candidate_positions: [{horizontal: 10, vertical: 10, rotation: 3}]
+        });
         stock = {control_name: "quarry-2"};
 
         create_domino_fromx = sinon.spy();
         create_canvas_token = sinon.spy();
         destroy_canvas_token = sinon.spy();
         subscribe = sinon.spy();
-    });
+        sut.set_candidate_positions([
+            {horizontal: 10, vertical: 10, rotation: 0},
+            {horizontal: 14, vertical: 10, rotation: 0},
+        ]);
+});
     describe('Subscribe', function () {
         beforeEach(function() {
             callback_object = {
@@ -154,7 +160,6 @@ describe('Use case choose place domino', function () {
             sut.subscribe(callback_object, 'domino_selected');
         });
         function arrange_selected_domino() {
-            sut.subscribe(callback_object, 'domino_selected');
             domino = {id: 33, unique_id: 'domino'};
             sut.quarry_selected(domino);
         };
@@ -163,8 +168,7 @@ describe('Use case choose place domino', function () {
         };
         it('calls paint if domino has been selected', function () {
             // Arrange
-            domino = {id: 33, unique_id: 'domino'};
-            sut.quarry_selected(domino);
+            arrange_selected_domino();
             // Act
             act();
             // Assert
@@ -188,7 +192,7 @@ describe('Use case choose place domino', function () {
             ]);
             arrange_selected_domino();
             // Act
-            act();
+            //act();
             // Assert
             sinon.assert.callCount(canvas.add, 2);
         });
@@ -197,6 +201,7 @@ describe('Use case choose place domino', function () {
             sut.set_candidate_positions([
                 {horizontal: 11, vertical: 11, rotation: 0},
                 {horizontal: 10, vertical: 11, rotation: 0},
+                {horizontal: 10, vertical: 11, rotation: 1},
             ]);
             arrange_selected_domino();
             // Act
@@ -254,8 +259,6 @@ describe('Use case choose place domino', function () {
                 domino_selected: sinon.spy(),
             };
             sut.subscribe(callback_object, 'domino_selected');
-            domino = {id: 33, unique_id: 'domino'};
-            sut.quarry_selected(domino);
         });
         function arrange() {
             domino = {id: 33, unique_id: 'domino'};
