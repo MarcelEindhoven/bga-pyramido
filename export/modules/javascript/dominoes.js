@@ -101,6 +101,7 @@ define(['dojo/_base/declare'], (declare) => {
                     this.x = x;
                     this.y = y;
                     this.canvas_pixels_per_tile = canvas_pixels_per_tile;
+                    console.log(this.pixels_per_tile, this.canvas_pixels_per_tile);
                 }
                 paint() {
                     //console.log(this.unique_id, this.element_id, this.x, this.y);
@@ -112,7 +113,7 @@ define(['dojo/_base/declare'], (declare) => {
                         this.canvas_pixels_per_tile - this.pixels_per_tile:
                         (this.canvas_pixels_per_tile - this.pixels_per_tile)/2);
 
-                    this.game.slideToObjectPos(this.unique_id, this.element_id, x, y).play();
+                    this.game.slideToObjectPos(this.unique_id, this.element_id, x, y, 1).play();
                     if (this.rotation_class)
                         this.dojo.removeClass(this.unique_id, this.rotation_class);
                     this.rotation_class = 'domino_rotate' + this.rotation;
