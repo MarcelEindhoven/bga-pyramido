@@ -50,13 +50,13 @@ describe('Dominoes', function () {
         function act() {
             domino.subscribe(callback_object, 'domino_selected');
         };
-        it('connects', function () {
+        it('connects for onclick, onmouseover, onmouseout', function () {
             // Arrange
             
             // Act
             act();
             // Assert
-            sinon.assert.callCount(dojo.connect, 1);
+            sinon.assert.callCount(dojo.connect, 3);
             assert.equal(dojo.connect.getCall(0).args[0], 44);
         });
     });

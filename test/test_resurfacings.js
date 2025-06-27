@@ -74,9 +74,9 @@ describe('Resurfacings', function () {
             // Assert
             assert.equal(game.slideToObjectPos.getCall(0).args[0], resurfacing.unique_id);
         });
-        it('uses the parameters from move', function () {
+        it('uses the parameters from move and center', function () {
             // Arrange
-            resurfacing.move_to(element_id, x, y, 100);
+            resurfacing.move_to(element_id, x, y, resurfacing.pixels_per_tile + 2 * 10);
             // Act
             resurfacing.paint();
             // Assert
