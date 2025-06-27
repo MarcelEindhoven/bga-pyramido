@@ -13,11 +13,11 @@ describe('Dominoes', function () {
     beforeEach(function() {
         dojo = {style:sinon.spy(), connect:sinon.spy(), destroy:sinon.spy(), addClass:sinon.spy(), removeClass:sinon.spy(), };
         document = new Document();
-        game = {get_element:sinon.stub().returns(44), slideToObjectPos:sinon.stub().returns (new Animation ()) ,};
+        element_id = 'HTML element ID ';
+        game = {get_element:sinon.stub().returns(element_id), slideToObjectPos:sinon.stub().returns (new Animation ()) ,};
         dependencies = {dojo: dojo, document: document, game:game, };
         sut = new sut_module(dependencies);
         domino_specification = {id: 0, stage: 0, horizontal: 10,vertical: 12, rotation: 0};
-        element_id = 'HTML element ID ';
         x = 12;
         y = 33;
 
@@ -57,7 +57,7 @@ describe('Dominoes', function () {
             act();
             // Assert
             sinon.assert.callCount(dojo.connect, 3);
-            assert.equal(dojo.connect.getCall(0).args[0], 44);
+            assert.equal(dojo.connect.getCall(0).args[0], element_id);
         });
     });
     describe('Cleanup', function () {
