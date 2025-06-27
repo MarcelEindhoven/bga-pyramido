@@ -76,13 +76,13 @@ describe('Resurfacings', function () {
         });
         it('uses the parameters from move', function () {
             // Arrange
-            resurfacing.move_to(element_id, x, y);
+            resurfacing.move_to(element_id, x, y, 100);
             // Act
             resurfacing.paint();
             // Assert
             assert.equal(game.slideToObjectPos.getCall(0).args[1], element_id);
-            assert.equal(game.slideToObjectPos.getCall(0).args[2], x);
-            assert.equal(game.slideToObjectPos.getCall(0).args[3], y);
+            assert.equal(game.slideToObjectPos.getCall(0).args[2], x + 10);
+            assert.equal(game.slideToObjectPos.getCall(0).args[3], y + 10);
         });
     });
     describe('Place', function () {

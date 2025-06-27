@@ -29,7 +29,7 @@ define(['dojo/_base/declare'], (declare) => {
             class Resurfacing {
                 TILES_PER_ROW = 2;
                 DEFAULT_PIXELS_PER_TILE = 80;
-                MARGIN_BETWEEN_TOKENS = 10;
+                SIZE_TILE_IN_COORDINATES = 2;
                 constructor(dependencies) {
                     this.clone(dependencies);
                     this.pixels_per_tile = this.DEFAULT_PIXELS_PER_TILE;
@@ -58,18 +58,16 @@ define(['dojo/_base/declare'], (declare) => {
                     this.set_position_for_resurfacing_window();
                 }
                 set_position_for_resurfacing_window() {
-                    this.horizontal = 2 * (this.colour % this.TILES_PER_ROW);
-                    this.vertical = 2 * ((this.colour - (this.colour % this.TILES_PER_ROW)) / this.TILES_PER_ROW);
+                    this.horizontal = this.SIZE_TILE_IN_COORDINATES * (this.colour % this.TILES_PER_ROW);
+                    this.vertical = this.SIZE_TILE_IN_COORDINATES * ((this.colour - (this.colour % this.TILES_PER_ROW)) / this.TILES_PER_ROW);
                 }
-                move_to(element_id, x, y) {
+                move_to(element_id, x, y, element_pixels_per_tile) {
                     this.element_id = element_id;
-                    this.x = x;
-                    this.y = y;
+                    this.centre_within_tile(x, y, element_pixels_per_tile);
                 }
-                move_to(element_id, x, y, canvas_pixels_per_tile) {
-                    this.element_id = element_id;
-                    this.x = x + (canvas_pixels_per_tile - this.pixels_per_tile)/2;
-                    this.y = y + (canvas_pixels_per_tile - this.pixels_per_tile)/2;
+                centre_within_tile(x, y, element_pixels_per_tile) {
+                    this.x = x + (element_pixels_per_tile - this.pixels_per_tile)/2;
+                    this.y = y + (element_pixels_per_tile - this.pixels_per_tile)/2;
                 }
                 /**
                  * Precondition: move_to has been called

@@ -96,22 +96,22 @@ define(['dojo/_base/declare'], (declare) => {
                         return {horizontal_min: this.horizontal - 2, vertical_min: this.vertical - 3, horizontal_max: this.horizontal + 0, vertical_max: this.vertical + 1};
                     }
                 }
-                move_to(element_id, x, y, canvas_pixels_per_tile) {
+                move_to(element_id, x, y, element_pixels_per_tile) {
                     this.element_id = element_id;
                     this.x = x;
                     this.y = y;
-                    this.canvas_pixels_per_tile = canvas_pixels_per_tile;
-                    console.log(this.pixels_per_tile, this.canvas_pixels_per_tile);
+                    this.element_pixels_per_tile = element_pixels_per_tile;
+                    console.log(this.pixels_per_tile, this.element_pixels_per_tile);
                 }
                 paint() {
                     //console.log(this.unique_id, this.element_id, this.x, this.y);
                     //this.game.placeOnObjectPos(this.unique_id, this.element_id, this.x, this.y);
                     const x = this.x + ((this.rotation % 2 == 0) ?
-                        this.canvas_pixels_per_tile - this.pixels_per_tile:
-                        (this.canvas_pixels_per_tile - this.pixels_per_tile)/2);
+                        this.element_pixels_per_tile - this.pixels_per_tile:
+                        (this.element_pixels_per_tile - this.pixels_per_tile)/2);
                     const y = this.y + ((this.rotation % 2 == 1) ?
-                        this.canvas_pixels_per_tile - this.pixels_per_tile:
-                        (this.canvas_pixels_per_tile - this.pixels_per_tile)/2);
+                        this.element_pixels_per_tile - this.pixels_per_tile:
+                        (this.element_pixels_per_tile - this.pixels_per_tile)/2);
 
                     this.game.slideToObjectPos(this.unique_id, this.element_id, x, y, 1).play();
                     if (this.rotation_class)
