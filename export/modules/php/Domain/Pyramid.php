@@ -201,7 +201,10 @@ class Pyramid
 
     public function get_adjacent_positions_first_stage_with_tiles(): array {
         $candidates = [];
+        $occupied = $this->get_occupied_array(1);
         [$horizontal_min, $horizontal_max, $vertical_min, $vertical_max] = $this->get_bounding_box_first_stage();
+        $allowed_size_vertical = $horizontal_max - $horizontal_min < 8? 10:8;
+        $allowed_size_horizontal = $vertical_max - $vertical_min < 8? 10:8;
         foreach ($this->tiles as $tile) {
             $horizontal = $tile['horizontal'];
             $vertical = $tile['vertical'];
@@ -210,15 +213,17 @@ class Pyramid
             $candidates[$this->calculate_key_horizontal_vertical([$horizontal + 2, $vertical])] = [$horizontal + 2, $vertical];
             $candidates[$this->calculate_key_horizontal_vertical([$horizontal, $vertical - 2])] = [$horizontal, $vertical - 2];
             $candidates[$this->calculate_key_horizontal_vertical([$horizontal, $vertical + 2])] = [$horizontal, $vertical + 2];
-        }
-        $occupied = $this->get_occupied_array(1);
-        $allowed_size_vertical = $horizontal_max - $horizontal_min < 8? 10:8;
-        $allowed_size_horizontal = $vertical_max - $vertical_min < 8? 10:8;
-        for ($i = 0; $i <= 21; $i++) {
-            $occupied[$this->calculate_key_horizontal_vertical([$i, $vertical_max - $allowed_size_vertical])] = 999;
-            $occupied[$this->calculate_key_horizontal_vertical([$i, $vertical_min + $allowed_size_vertical])] = 999;
-            $occupied[$this->calculate_key_horizontal_vertical([$horizontal_max - $allowed_size_horizontal, $i])] = 999;
-            $occupied[$this->calculate_key_horizontal_vertical([$horizontal_min + $allowed_size_horizontal, $i])] = 999;
+
+            for ($i = -10; $i <= 10; $i = $i + 2) {
+                $occupied[$this->calculate_key_horizontal_vertical([$horizontal + $i, $vertical - $allowed_size_vertical])] = 999;
+                $occupied[$this->calculate_key_horizontal_vertical([$horizontal + $i, $vertical + $allowed_size_vertical])] = 999;
+                $occupied[$this->calculate_key_horizontal_vertical([$horizontal + $allowed_size_horizontal, $vertical + $i])] = 999;
+                $occupied[$this->calculate_key_horizontal_vertical([$horizontal - $allowed_size_horizontal, $vertical + $i])] = 999;
+            }
+            $occupied[$this->calculate_key_horizontal_vertical([$horizontal - 8, $vertical - 8])] = 999;
+            $occupied[$this->calculate_key_horizontal_vertical([$horizontal - 8, $vertical + 8])] = 999;
+            $occupied[$this->calculate_key_horizontal_vertical([$horizontal + 8, $vertical - 8])] = 999;
+            $occupied[$this->calculate_key_horizontal_vertical([$horizontal + 8, $vertical + 8])] = 999;
         }
         return $this->combine ($candidates, $occupied, 1);
     }

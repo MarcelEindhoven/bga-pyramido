@@ -184,11 +184,15 @@ class PyramidTest extends TestCase{
         $t10_12_0 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 12, 'rotation' => 0];
         $t12_12_0 = ['stage' => 1, 'horizontal' => 12, 'vertical' => 12, 'rotation' => 0];
         $t12_10_0 = ['stage' => 1, 'horizontal' => 12, 'vertical' => 10, 'rotation' => 0];
+        $t12_16_0 = ['stage' => 1, 'horizontal' => 12, 'vertical' => 16, 'rotation' => 0];
         $t16_14_0 = ['stage' => 1, 'horizontal' => 16, 'vertical' => 14, 'rotation' => 0];
+        $t14_18_0 = ['stage' => 1, 'horizontal' => 14, 'vertical' => 18, 'rotation' => 0];
         $t14_16_0 = ['stage' => 1, 'horizontal' => 14, 'vertical' => 16, 'rotation' => 0];
+        $t14_14_0 = ['stage' => 1, 'horizontal' => 14, 'vertical' => 14, 'rotation' => 0];
 
         $t10_6_1 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 6, 'rotation' => 1];
         $t12_6_1 = ['stage' => 1, 'horizontal' => 12, 'vertical' => 6, 'rotation' => 1];
+        $t12_8_1 = ['stage' => 1, 'horizontal' => 12, 'vertical' => 8, 'rotation' => 1];
         $t8_8_1 = ['stage' => 1, 'horizontal' => 8, 'vertical' => 8, 'rotation' => 1];
         $t8_10_1 = ['stage' => 1, 'horizontal' => 8, 'vertical' => 10, 'rotation' => 1];
         $t14_8_1 = ['stage' => 1, 'horizontal' => 14, 'vertical' => 8, 'rotation' => 1];
@@ -197,7 +201,11 @@ class PyramidTest extends TestCase{
         $t12_12_1 = ['stage' => 1, 'horizontal' => 12, 'vertical' => 12, 'rotation' => 1];
         $t12_10_1 = ['stage' => 1, 'horizontal' => 12, 'vertical' => 10, 'rotation' => 1];
         $t18_12_1 = ['stage' => 1, 'horizontal' => 18, 'vertical' => 12, 'rotation' => 1];
+        $t14_14_1 = ['stage' => 1, 'horizontal' => 14, 'vertical' => 14, 'rotation' => 1];
         $t16_14_1 = ['stage' => 1, 'horizontal' => 16, 'vertical' => 14, 'rotation' => 1];
+        $t18_14_1 = ['stage' => 1, 'horizontal' => 18, 'vertical' => 14, 'rotation' => 1];
+        $t16_12_1 = ['stage' => 1, 'horizontal' => 16, 'vertical' => 12, 'rotation' => 1];
+        $t14_16_1 = ['stage' => 1, 'horizontal' => 14, 'vertical' => 16, 'rotation' => 1];
 
         $t10_8_2 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 8, 'rotation' => 2];
         $t12_8_2 = ['stage' => 1, 'horizontal' => 12, 'vertical' => 8, 'rotation' => 2];
@@ -210,9 +218,13 @@ class PyramidTest extends TestCase{
         $t14_10_2 = ['stage' => 1, 'horizontal' => 14, 'vertical' => 10, 'rotation' => 2];
         $t18_14_2 = ['stage' => 1, 'horizontal' => 18, 'vertical' => 14, 'rotation' => 2];
         $t16_16_2 = ['stage' => 1, 'horizontal' => 16, 'vertical' => 16, 'rotation' => 2];
+        $t16_14_2 = ['stage' => 1, 'horizontal' => 16, 'vertical' => 14, 'rotation' => 2];
+        $t16_18_2 = ['stage' => 1, 'horizontal' => 16, 'vertical' => 18, 'rotation' => 2];
+        $t14_16_2 = ['stage' => 1, 'horizontal' => 14, 'vertical' => 16, 'rotation' => 2];
 
         $t10_8_3 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 8, 'rotation' => 3];
         $t12_8_3 = ['stage' => 1, 'horizontal' => 12, 'vertical' => 8, 'rotation' => 3];
+        $t12_10_3 = ['stage' => 1, 'horizontal' => 12, 'vertical' => 10, 'rotation' => 3];
         $t8_10_3 = ['stage' => 1, 'horizontal' => 8, 'vertical' => 10, 'rotation' => 3];
         $t8_12_3 = ['stage' => 1, 'horizontal' => 8, 'vertical' => 12, 'rotation' => 3];
         $t14_10_3 = ['stage' => 1, 'horizontal' => 14, 'vertical' => 10, 'rotation' => 3];
@@ -222,9 +234,13 @@ class PyramidTest extends TestCase{
         $t12_12_3 = ['stage' => 1, 'horizontal' => 12, 'vertical' => 12, 'rotation' => 3];
         $t18_14_3 = ['stage' => 1, 'horizontal' => 18, 'vertical' => 14, 'rotation' => 3];
         $t16_16_3 = ['stage' => 1, 'horizontal' => 16, 'vertical' => 16, 'rotation' => 3];
+        $t16_14_3 = ['stage' => 1, 'horizontal' => 16, 'vertical' => 14, 'rotation' => 3];
+        $t18_16_3 = ['stage' => 1, 'horizontal' => 18, 'vertical' => 16, 'rotation' => 3];
+        $t14_16_3 = ['stage' => 1, 'horizontal' => 14, 'vertical' => 16, 'rotation' => 3];
+        $t14_18_3 = ['stage' => 1, 'horizontal' => 14, 'vertical' => 18, 'rotation' => 3];
 
         $faraway_horizontal = ['stage' => 1, 'horizontal' => 18, 'vertical' => 16, 'rotation' => 3];
-        $faraway_4x4 = ['stage' => 1, 'horizontal' => 18, 'vertical' => 16, 'rotation' => 3];
+        $faraway_4x4 = ['stage' => 1, 'horizontal' => 16, 'vertical' => 16, 'rotation' => 3];
 
         $stage4_0 = ['stage' => 4, 'horizontal' => 13, 'vertical' => 13, 'rotation' => 0];
         $stage4_1 = ['stage' => 4, 'horizontal' => 13, 'vertical' => 13, 'rotation' => 1];
@@ -248,6 +264,24 @@ class PyramidTest extends TestCase{
                 $t18_12_1, $t16_14_1,
                 $t18_14_2, $t16_16_2,
                 $t18_14_3, $t16_16_3,
+            ]],
+            [[$initial0, $faraway_4x4], [
+                $t10_8_0, $t8_12_0, 
+                $t12_10_0, $t10_12_0,
+                $t12_8_1, $t8_10_1, 
+                $t12_10_1, $t10_12_1,
+                $t12_8_2,  $t10_12_2,
+                $t14_10_2, $t12_12_2,
+                $t12_10_3, $t8_12_3, 
+                $t12_12_3, $t10_14_3,
+                $t14_14_0, $t12_16_0, 
+                $t16_14_0, $t14_18_0,
+                $t18_14_1, $t14_14_1,
+                $t14_16_1, $t16_12_1,
+                $t16_14_2, $t16_18_2,
+                $t18_14_2, $t14_16_2,
+                $t16_14_3, $t18_16_3,
+                $t14_18_3, $t14_16_3,
             ]],
         ];
     }
