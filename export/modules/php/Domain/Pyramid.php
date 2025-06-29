@@ -213,18 +213,19 @@ class Pyramid
             $candidates[$this->calculate_key_horizontal_vertical([$horizontal + 2, $vertical])] = [$horizontal + 2, $vertical];
             $candidates[$this->calculate_key_horizontal_vertical([$horizontal, $vertical - 2])] = [$horizontal, $vertical - 2];
             $candidates[$this->calculate_key_horizontal_vertical([$horizontal, $vertical + 2])] = [$horizontal, $vertical + 2];
-
-            for ($i = -10; $i <= 10; $i = $i + 2) {
-                $occupied[$this->calculate_key_horizontal_vertical([$horizontal + $i, $vertical - $allowed_size_vertical])] = 999;
-                $occupied[$this->calculate_key_horizontal_vertical([$horizontal + $i, $vertical + $allowed_size_vertical])] = 999;
-                $occupied[$this->calculate_key_horizontal_vertical([$horizontal + $allowed_size_horizontal, $vertical + $i])] = 999;
-                $occupied[$this->calculate_key_horizontal_vertical([$horizontal - $allowed_size_horizontal, $vertical + $i])] = 999;
-            }
-            $occupied[$this->calculate_key_horizontal_vertical([$horizontal - 8, $vertical - 8])] = 999;
-            $occupied[$this->calculate_key_horizontal_vertical([$horizontal - 8, $vertical + 8])] = 999;
-            $occupied[$this->calculate_key_horizontal_vertical([$horizontal + 8, $vertical - 8])] = 999;
-            $occupied[$this->calculate_key_horizontal_vertical([$horizontal + 8, $vertical + 8])] = 999;
         }
+        for ($i = 0; $i <= 21; $i = $i + 2) {
+            $occupied[$this->calculate_key_horizontal_vertical([$i, $vertical_max - $allowed_size_vertical])] = 999;
+            $occupied[$this->calculate_key_horizontal_vertical([$i, $vertical_min + $allowed_size_vertical])] = 999;
+            $occupied[$this->calculate_key_horizontal_vertical([$horizontal_max - $allowed_size_horizontal, $i])] = 999;
+            $occupied[$this->calculate_key_horizontal_vertical([$horizontal_min + $allowed_size_horizontal, $i])] = 999;
+        }
+        // If bounding box within 4x4, disable corners
+        $occupied[$this->calculate_key_horizontal_vertical([$horizontal_max - 8, $vertical_max - 8])] = 999;
+        $occupied[$this->calculate_key_horizontal_vertical([$horizontal_max - 8, $vertical_min + 8])] = 999;
+        $occupied[$this->calculate_key_horizontal_vertical([$horizontal_min + 8, $vertical_max - 8])] = 999;
+        $occupied[$this->calculate_key_horizontal_vertical([$horizontal_min + 8, $vertical_min + 8])] = 999;
+
         return $this->combine ($candidates, $occupied, 1);
     }
     protected function combine($candidates, $occupied, $stage): array {
