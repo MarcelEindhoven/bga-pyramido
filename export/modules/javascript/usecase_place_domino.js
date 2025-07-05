@@ -53,6 +53,7 @@ define(['dojo/_base/declare'], (declare) => {
             this.rotation = this.rotation + 1;
             if (this.rotation >3) this.rotation = 0;
 
+            this.skip_empty_rotation();
         },
         create_candidate_dominoes() {
             Object.values(this.candidate_positions)

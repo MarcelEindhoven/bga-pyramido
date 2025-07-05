@@ -25,13 +25,14 @@ class AfterStageFinished extends \NieuwenhovenGames\BGA\Action {
         return $object;
     }
 
-    public function set_update_marker($update_marker) : AfterStageFinished {
-        $this->update_marker = $update_marker;
+    public function set_database($database) : AfterStageFinished {
+        $this->database = $database;
         return $this;
     }
 
     public function execute(): AfterStageFinished {
         // Calculate score
+        // $this->database->DbQuery( "UPDATE `player` SET `player_score` = `player_score` + 2 WHERE `player_id` = '".$this->getActivePlayerId()."'" );
         // Determine next player
 
         return $this;

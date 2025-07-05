@@ -164,9 +164,8 @@ class Actions {
     }
 
     public function stAfterStageFinished(): void {
-        $update_marker = Infrastructure\UpdateMarker::create($this->decks['marker']);
         $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
-        AfterStageFinished::create($this->gamestate)->set_notifications($this->notifications)->set_update_marker($update_marker)->set_get_current_data($get_current_data)->execute()->nextState();
+        AfterStageFinished::create($this->gamestate)->set_notifications($this->notifications)->set_database($this->database)->set_get_current_data($get_current_data)->execute()->nextState();
     }
 
     public function stCheckResurfacing(): void {
