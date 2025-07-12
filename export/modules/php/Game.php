@@ -66,6 +66,25 @@ class Game extends \Table
         $this->decks['resurfacing'] = self::getNew('module.common.deck');
         $this->decks['resurfacing']->init('resurfacing');
     }
+
+    // NieuwenhovenGames\BGA\Database
+    public function query(string $query) : void  {
+        self::DbQuery($query);
+    }
+	
+    public function getObject(string $query) : array {
+        self::trace("getObject {$query}");
+        return self::getObjectFromDB($query);
+    }
+
+    public function getObjectList(string $query) : array {
+        return self::getObjectListFromDB($query);
+    }
+
+    public function getCollection(string $query) : array {
+        return self::getCollectionFromDb($query);
+    }
+
     /**
      * The framework demands that each action starts with the prefix "act"
      */
