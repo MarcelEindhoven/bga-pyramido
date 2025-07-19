@@ -21,22 +21,8 @@ use Bga\Games\FrameworkInterfaces;
 class TopViewTest extends TestCase {
     protected ?TopView $sut = null;
     protected ?FrameworkInterfaces\Deck $mock_cards = null;
-    protected array $initial41010 = ['stage' => 4, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 3, 'jewels' => []];
-    protected array $resurfacing = ['stage' => 4, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 2, 'jewels' => [1]];
 
     protected function setUp(): void {
-    }
-
-    public function test_resurfacing_replaces_tile() {
-        // Arrange
-        $tiles = [Infrastructure\CurrentTiles::calculate_array_index($this->initial41010) => $this->initial41010];
-        $this->sut = TopView::create($tiles);
-
-        // Act
-        $this->sut->resurface([$this->resurfacing]);
-
-        // Assert
-        $this->assertEquals([TopView::get_location_key($this->initial41010) => $this->resurfacing], $this->sut->get_tiles());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('get_tiles_multiple_stages')]
@@ -51,18 +37,85 @@ class TopViewTest extends TestCase {
         $this->assertEquals($expected_tiles, $top_view);
     }
     static public function get_tiles_multiple_stages(): array {
-        $initial1 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 1];
-        $initial4 = ['stage' => 4, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 2];
-        $initial4b = ['stage' => 4, 'horizontal' => 12, 'vertical' => 10, 'rotation' => 3];
-        $marker4 = ['stage' => 4, 'horizontal' => 12, 'vertical' => 10, 'rotation' => 0];
-        $marker4b = ['stage' => 4, 'horizontal' => 12, 'vertical' => 8, 'rotation' => 0];
+        $initial1 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 1, 'colour' => 5, 'jewels' => []];
+        $initial4 = ['stage' => 4, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 2, 'colour' => 5, 'jewels' => []];
+        $initial4b = ['stage' => 4, 'horizontal' => 12, 'vertical' => 10, 'rotation' => 3, 'colour' => 5, 'jewels' => []];
+        $marker4 = ['stage' => 4, 'horizontal' => 12, 'vertical' => 10, 'rotation' => 0, 'colour' => 5, 'jewels' => []];
+        $marker4b = ['stage' => 4, 'horizontal' => 12, 'vertical' => 8, 'rotation' => 0, 'colour' => 5, 'jewels' => []];
         $location_key1010 = TopView::get_location_key($initial4);
         $pyramid_key10101 = Pyramid::get_location_key($initial1);
         $pyramid_key10104 = Pyramid::get_location_key($initial4);
         return [
             [[], []], // No tiles
-          //  [[$pyramid_key10101 => $initial1], [$location_key1010 => $initial1]], // Single tile
+            [[$pyramid_key10101 => $initial1], [$location_key1010 => $initial1]], // Single tile
             [[$pyramid_key10101 => $initial1, $pyramid_key10104 => $initial4], [$location_key1010 => $initial4]], // Replace tile
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('get_jewels_multiple_stages')]
+    public function test_get_jewels_multiple_stages($tiles, $expected_jewels) {
+        // Arrange
+        $this->sut = TopView::create($tiles);
+
+        // Act
+        $top_view = $this->sut->get_jewels();
+
+        // Assert
+        $this->assertEquals($expected_jewels, $top_view);
+    }
+    static public function get_jewels_multiple_stages(): array {
+        $initial1 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 1, 'colour' => 5, 'jewels' => []];
+        $initial4 = ['stage' => 4, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 2, 'colour' => 5, 'jewels' => []];
+        $initial4b = ['stage' => 4, 'horizontal' => 12, 'vertical' => 10, 'rotation' => 3, 'colour' => 5, 'jewels' => []];
+        $marker4 = ['stage' => 4, 'horizontal' => 12, 'vertical' => 10, 'rotation' => 0, 'colour' => 5, 'jewels' => []];
+        $marker4b = ['stage' => 4, 'horizontal' => 12, 'vertical' => 8, 'rotation' => 0, 'colour' => 5, 'jewels' => []];
+
+        $location_1010 = ['horizontal' => 10, 'vertical' => 10];
+        $location_key1010 = TopView::get_location_key($location_1010);
+
+        $pyramid_key10101 = Pyramid::get_location_key($initial1);
+        $pyramid_key10104 = Pyramid::get_location_key($initial4);
+        return [
+            [[], []], // No tiles
+            [[$initial1], []], // No jewels
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('get_colour_map_multiple_stages')]
+    public function test_get_colour_map_multiple_stages($tiles, $expected_colour_map) {
+        // Arrange
+        $this->sut = TopView::create($tiles);
+
+        // Act
+        $top_view = $this->sut->get_colour_map();
+
+        // Assert
+        $this->assertEquals($expected_colour_map, $top_view);
+    }
+    static public function get_colour_map_multiple_stages(): array {
+        $initial1 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 1, 'colour' => 5, 'jewels' => []];
+        $initial4 = ['stage' => 4, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 2, 'colour' => 5, 'jewels' => []];
+        $initial4b = ['stage' => 4, 'horizontal' => 12, 'vertical' => 10, 'rotation' => 3, 'colour' => 5, 'jewels' => []];
+        $marker4 = ['stage' => 4, 'horizontal' => 12, 'vertical' => 10, 'rotation' => 0, 'colour' => 5, 'jewels' => []];
+        $marker4b = ['stage' => 4, 'horizontal' => 12, 'vertical' => 8, 'rotation' => 0, 'colour' => 5, 'jewels' => []];
+
+        $location_1010 = ['horizontal' => 10, 'vertical' => 10];
+        $location_key1010 = TopView::get_location_key($location_1010);
+
+        $location_1011 = ['horizontal' => 10, 'vertical' => 11];
+        $location_key1011 = TopView::get_location_key($location_1011);
+
+        $location_1110 = ['horizontal' => 11, 'vertical' => 10];
+        $location_key1110 = TopView::get_location_key($location_1110);
+
+        $location_1111 = ['horizontal' => 11, 'vertical' => 11];
+        $location_key1111 = TopView::get_location_key($location_1111);
+
+        $pyramid_key10101 = Pyramid::get_location_key($initial1);
+        $pyramid_key10104 = Pyramid::get_location_key($initial4);
+        return [
+            [[], []], // No tiles
+            [[$initial1], [$location_key1010 => 5, $location_key1011 => 5, $location_key1110 => 5, $location_key1111 => 5, ]], // 4 colour locations
         ];
     }
 }

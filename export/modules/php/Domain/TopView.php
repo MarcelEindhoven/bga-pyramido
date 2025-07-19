@@ -29,15 +29,19 @@ class TopView
     const FACTOR_VERTICAL = 20;
 
     /**
-     * location_key => tile
+     * pyramid location_key => tile
+     * Includes resurfacing tiles, no distinction is made between resurfacing and other tiles
      * Each domino has 2 tiles.
      * A resurfacing has 1 tile which always replaces a domino tile.
      * Each tile has 2x2 locations for jewels.
+     * Each tile has a rotation
      * Each jewel and each tile in the pyramid is located on a floor (stage 1-4).
      * The horizontal and vertical location of the tile is the location of the first jewel in the tile.
      * The horizontal and vertical distance between 2 jewels is an integer number.
      */
     public array $tiles = [];
+    public array $jewels = [];
+    public array $colour_map = [];
 
     static public function create($tiles): TopView {
         $object = new TopView();
@@ -52,39 +56,30 @@ class TopView
         foreach(range(1, 4) as $i) {
             foreach($this->get_tiles_for_stage($tiles, $i) as $tile) {
                 $this->tiles[$this->get_location_key($tile)] = $tile;
+                $horizontal = $tile['horizontal'];
+                $vertical = $tile['vertical'];
+                $colour = $tile['colour'];
+                $this->colour_map[$this->get_key($horizontal, $vertical)] = $colour;
+                $this->colour_map[$this->get_key($horizontal + 1, $vertical)] = $colour;
+                $this->colour_map[$this->get_key($horizontal, $vertical + 1)] = $colour;
+                $this->colour_map[$this->get_key($horizontal + 1, $vertical + 1)] = $colour;
             }
         }
         return $this;
     }
     public function get_tiles(): array {return $this->tiles;}
+    public function get_jewels(): array {return $this->jewels;}
+    public function get_colour_map(): array {return $this->colour_map;}
 
     /**
      * Calculate key that is unique for each possible combination of horizontal and vertical 
      */
-    static public function get_location_key($pyramid_object_specification) {
-        return  $pyramid_object_specification['horizontal']
-        + TopView::FACTOR_HORIZONTAL * $pyramid_object_specification['vertical'];
+    static public function get_location_key($location_specification) {
+        return TopView::get_key($location_specification['horizontal']
+        , $location_specification['vertical']);
     }
-
-    public function resurface($placed_resurfacings): TopView {
-        foreach ($placed_resurfacings as $placed_resurfacing)
-            $this->replace_tile($placed_resurfacing);
-        return $this;
-    }
-    protected function replace_tile($placed_resurfacing) {
-        $this->tiles[$this->get_location_key($placed_resurfacing)] = $placed_resurfacing;
-    }
-
-    public function get_stage_next_domino(): int {
-        if ((count($this->get_tiles_for_stage(4)) > 0) && (count($this->get_tiles_for_stage(3)) > 4))
-            return 5;
-        if (count($this->get_tiles_for_stage(3)) > 4)
-            return 4;
-        if (count($this->get_tiles_for_stage(2)) > 10)
-            return 3;
-        if (count($this->get_tiles_for_stage(1)) > 18)
-            return 2;
-        return 1;
+    static public function get_key($horizontal, $vertical) {
+        return  $horizontal + TopView::FACTOR_HORIZONTAL * $vertical;
     }
 
     public function get_tiles_for_stage($tiles, $stage): array {
