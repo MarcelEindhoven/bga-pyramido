@@ -28,30 +28,30 @@ class PyramidTest extends TestCase{
 
     public function test_resurfacing_replaces_tile() {
         // Arrange
-        $tiles = [Infrastructure\CurrentTiles::calculate_array_index($this->initial41010) => $this->initial41010];
+        $tiles = [Pyramid::get_location_key($this->initial41010) => $this->initial41010];
         $this->sut = Pyramid::create($tiles);
 
         // Act
         $this->sut->resurface([$this->resurfacing]);
 
         // Assert
-        $this->assertEquals([Infrastructure\CurrentTiles::calculate_array_index($this->initial41010) => $this->resurfacing], $this->sut->get_tiles());
+        $this->assertEquals([Pyramid::get_location_key($this->initial41010) => $this->resurfacing], $this->sut->get_tiles());
     }
 
     public function test_resurfacing_replaces_tile_horizontal() {
         // Arrange
         $initial41210 = $this->initial41010;
         $initial41210['horizontal'] = 12;
-        $tiles = [Infrastructure\CurrentTiles::calculate_array_index($initial41210) => $initial41210,
-        Infrastructure\CurrentTiles::calculate_array_index($this->initial41010) => $this->initial41010];
+        $tiles = [Pyramid::get_location_key($initial41210) => $initial41210,
+        Pyramid::get_location_key($this->initial41010) => $this->initial41010];
         $this->sut = Pyramid::create($tiles);
 
         // Act
         $this->sut->resurface([$this->resurfacing]);
 
         // Assert
-        $expected_tiles = [Infrastructure\CurrentTiles::calculate_array_index($initial41210) => $initial41210,
-        Infrastructure\CurrentTiles::calculate_array_index($this->initial41010) => $this->resurfacing];
+        $expected_tiles = [Pyramid::get_location_key($initial41210) => $initial41210,
+        Pyramid::get_location_key($this->initial41010) => $this->resurfacing];
         $this->assertEquals($expected_tiles, $this->sut->get_tiles());
     }
 
