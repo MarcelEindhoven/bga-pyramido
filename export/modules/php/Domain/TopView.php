@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Bga\Games\PyramidoCannonFodder\Domain;
 
-include_once(__DIR__.'/../Infrastructure/Domino.php');
-use Bga\Games\PyramidoCannonFodder\Infrastructure;
-
 #[\AllowDynamicProperties]
 class TopView
 {
@@ -50,7 +47,7 @@ class TopView
     }
 
     /**
-     * Precondition: key of each tile == get_location_key(tile)
+     * Precondition: key of each lower tile has lower value
      */
     public function set_tiles($tiles): TopView {
         foreach(range(1, 4) as $i) {
