@@ -118,6 +118,54 @@ class StageScoreTest extends TestCase {
         $this->assertEquals($score, 4);
     }
 
+    public function test_score_2x1p1_with_double_marker() {
+        // Arrange
+        $location_1010 = ['horizontal' => 10, 'vertical' => 10];
+        $location_1110 = ['horizontal' => 11, 'vertical' => 10];
+
+        $colour_map = [$this->get_key(10, 10) => 4, $this->get_key(11, 10) => 1, $this->get_key(10, 11) => 4];
+        $jewels = [$this->get_key(10, 11), $this->get_key(11, 10)];
+
+        $this->sut->set_stage($jewels, $colour_map);
+
+        // Act
+        $score = $this->sut->get_score([$location_1010, $location_1110]);
+        // Assert
+        $this->assertEquals($score, 3);
+    }
+
+    public function test_score_2x1p2_with_double_marker() {
+        // Arrange
+        $location_1010 = ['horizontal' => 10, 'vertical' => 10];
+        $location_1110 = ['horizontal' => 11, 'vertical' => 10];
+
+        $colour_map = [$this->get_key(10, 10) => 4, $this->get_key(11, 10) => 1, $this->get_key(10, 11) => 4];
+        $jewels = [$this->get_key(10, 10), $this->get_key(10, 11), $this->get_key(11, 10)];
+
+        $this->sut->set_stage($jewels, $colour_map);
+
+        // Act
+        $score = $this->sut->get_score([$location_1010, $location_1110]);
+        // Assert
+        $this->assertEquals($score, 4);
+    }
+
+    public function test_score_2x1p2_with_double_marker_reverse_order() {
+        // Arrange
+        $location_1010 = ['horizontal' => 10, 'vertical' => 10];
+        $location_1110 = ['horizontal' => 11, 'vertical' => 10];
+
+        $colour_map = [$this->get_key(10, 10) => 4, $this->get_key(11, 10) => 1, $this->get_key(10, 11) => 4];
+        $jewels = [$this->get_key(10, 10), $this->get_key(10, 11), $this->get_key(11, 10)];
+
+        $this->sut->set_stage($jewels, $colour_map);
+
+        // Act
+        $score = $this->sut->get_score([$location_1110, $location_1010]);
+        // Assert
+        $this->assertEquals($score, 4);
+    }
+
     protected function get_key($horizontal, $vertical) {
         $location = ['horizontal' => $horizontal, 'vertical' => $vertical];
         return TopView::get_location_key($location);

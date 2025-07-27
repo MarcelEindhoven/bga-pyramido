@@ -27,9 +27,6 @@ class StageScore
         return $object;
     }
 
-    /**
-     * Precondition: key of each tile == get_location_key(tile)
-     */
     public function set_stage($jewel_location_keys, $colour_map): StageScore {
         $this->jewel_location_keys = $jewel_location_keys;
         $this->colour_per_location_key = $colour_map;
@@ -37,10 +34,15 @@ class StageScore
     }
 
     public function get_score($markers): int {
+        $score = 0;
+        $lowest_score = 20;
         foreach($markers as $marker) {
-            return 2 * $this->get_score_for_marker($marker);
+            $score = $score + $this->get_score_for_marker($marker);
+            $lowest_score = min($lowest_score, $this->get_score_for_marker($marker));
         }
-        return 0;
+        if ($score >0)
+            $score = $score + $lowest_score; 
+        return $score;
     }
     protected function get_score_for_marker($marker): int {
         $marker_colour = $this->colour_per_location_key[TopView::get_location_key($marker)];
