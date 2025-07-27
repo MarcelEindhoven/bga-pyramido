@@ -28,15 +28,14 @@ class StageScoreTest extends TestCase {
         $this->assertEquals($score, 0);
     }
 
-    public function test_score_1_with_single_marker_single_location() {
+    public function test_score_2x1_with_single_marker_single_location() {
         // Arrange
-        $stage = new TopView();
         $location_1010 = ['horizontal' => 10, 'vertical' => 10];
 
-        $stage->colour_map = [$this->get_key(10, 10) => 5];
-        $stage->jewels = [$this->get_key(10, 10)];
+        $colour_map = [$this->get_key(10, 10) => 5];
+        $jewels = [$this->get_key(10, 10)];
 
-        $this->sut->set_stage($stage);
+        $this->sut->set_stage($jewels, $colour_map);
 
         // Act
         $score = $this->sut->get_score([$location_1010]);
@@ -44,15 +43,74 @@ class StageScoreTest extends TestCase {
         $this->assertEquals($score, 2);
     }
 
-    public function test_score_2_with_single_marker_double_jewel() {
+    public function test_score_2x2_with_single_marker_double_jewel() {
         // Arrange
-        $stage = new TopView();
         $location_1010 = ['horizontal' => 10, 'vertical' => 10];
 
-        $stage->colour_map = [$this->get_key(10, 10) => 5, $this->get_key(10, 11) => 5];
-        $stage->jewels = [$this->get_key(10, 10), $this->get_key(10, 11)];
+        $colour_map = [$this->get_key(10, 10) => 5, $this->get_key(10, 11) => 5];
+        $jewels = [$this->get_key(10, 10), $this->get_key(10, 11)];
 
-        $this->sut->set_stage($stage);
+        $this->sut->set_stage($jewels, $colour_map);
+
+        // Act
+        $score = $this->sut->get_score([$location_1010]);
+        // Assert
+        $this->assertEquals($score, 4);
+    }
+
+    public function test_score_2x1_with_single_marker_double_jewel_double_colour() {
+        // Arrange
+        $location_1010 = ['horizontal' => 10, 'vertical' => 10];
+
+        $colour_map = [$this->get_key(10, 10) => 5, $this->get_key(10, 11) => 4];
+        $jewels = [$this->get_key(10, 10), $this->get_key(10, 11)];
+
+        $this->sut->set_stage($jewels, $colour_map);
+
+        // Act
+        $score = $this->sut->get_score([$location_1010]);
+        // Assert
+        $this->assertEquals($score, 2);
+    }
+
+    public function test_score_2x1_with_single_marker_separated_locations_down() {
+        // Arrange
+        $location_1010 = ['horizontal' => 10, 'vertical' => 10];
+
+        $colour_map = [$this->get_key(10, 10) => 4, $this->get_key(10, 11) => 5, $this->get_key(10, 12) => 4];
+        $jewels = [$this->get_key(10, 10), $this->get_key(10, 12)];
+
+        $this->sut->set_stage($jewels, $colour_map);
+
+        // Act
+        $score = $this->sut->get_score([$location_1010]);
+        // Assert
+        $this->assertEquals($score, 2);
+    }
+
+    public function test_score_2x2_with_single_marker_horizontal_area() {
+        // Arrange
+        $location_1010 = ['horizontal' => 10, 'vertical' => 10];
+
+        $colour_map = [$this->get_key(10, 10) => 4, $this->get_key(11, 10) => 4, $this->get_key(10, 12) => 4];
+        $jewels = [$this->get_key(10, 10), $this->get_key(11, 10)];
+
+        $this->sut->set_stage($jewels, $colour_map);
+
+        // Act
+        $score = $this->sut->get_score([$location_1010]);
+        // Assert
+        $this->assertEquals($score, 4);
+    }
+
+    public function test_score_2x2_with_single_marker_multiple_initial_neighbours() {
+        // Arrange
+        $location_1010 = ['horizontal' => 10, 'vertical' => 10];
+
+        $colour_map = [$this->get_key(10, 10) => 4, $this->get_key(11, 10) => 4, $this->get_key(10, 11) => 4];
+        $jewels = [$this->get_key(10, 11), $this->get_key(11, 10)];
+
+        $this->sut->set_stage($jewels, $colour_map);
 
         // Act
         $score = $this->sut->get_score([$location_1010]);
