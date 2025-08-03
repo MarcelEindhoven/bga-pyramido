@@ -65,6 +65,7 @@ class TopViewTest extends TestCase {
     }
     static public function get_jewels_multiple_stages(): array {
         $initial1 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 1, 'colour' => 5, 'jewels' => []];
+        $initial100 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0, 'colour' => 5, 'jewels' => [0]];
         $initial4 = ['stage' => 4, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 2, 'colour' => 5, 'jewels' => []];
         $initial4b = ['stage' => 4, 'horizontal' => 12, 'vertical' => 10, 'rotation' => 3, 'colour' => 5, 'jewels' => []];
         $marker4 = ['stage' => 4, 'horizontal' => 12, 'vertical' => 10, 'rotation' => 0, 'colour' => 5, 'jewels' => []];
@@ -78,6 +79,7 @@ class TopViewTest extends TestCase {
         return [
             [[], []], // No tiles
             [[$initial1], []], // No jewels
+            [[$pyramid_key10101 => $initial100], [$location_key1010]], // No rotation, first jewel
         ];
     }
 

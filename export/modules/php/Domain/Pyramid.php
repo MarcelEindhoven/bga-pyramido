@@ -54,15 +54,6 @@ class Pyramid
     }
     public function get_tiles(): array {return $this->tiles;}
 
-    /**
-     * Calculate key that is unique for each possible combination of stage and horizontal and vertical 
-     */
-    static public function get_location_key($pyramid_object_specification) {
-        return  $pyramid_object_specification['stage']
-        + Pyramid::FACTOR_STAGE * $pyramid_object_specification['horizontal']
-        + Pyramid::FACTOR_STAGE * Pyramid::FACTOR_HORIZONTAL * $pyramid_object_specification['vertical'];
-    }
-
     public function resurface($placed_resurfacings): Pyramid {
         foreach ($placed_resurfacings as $placed_resurfacing)
             $this->replace_tile($placed_resurfacing);
@@ -70,6 +61,15 @@ class Pyramid
     }
     protected function replace_tile($placed_resurfacing) {
         $this->tiles[$this->get_location_key($placed_resurfacing)] = $placed_resurfacing;
+    }
+
+    /**
+     * Calculate key that is unique for each possible combination of stage and horizontal and vertical
+     */
+    static public function get_location_key($pyramid_object_specification) {
+        return  $pyramid_object_specification['stage']
+        + Pyramid::FACTOR_STAGE * $pyramid_object_specification['horizontal']
+        + Pyramid::FACTOR_STAGE * Pyramid::FACTOR_HORIZONTAL * $pyramid_object_specification['vertical'];
     }
 
     public function get_stage_next_domino(): int {
@@ -265,10 +265,16 @@ class Pyramid
         return [0, -2];
     }
 
+    /**
+     * Calculate key that is unique for each possible combination of horizontal and vertical and rotation
+     */
     protected function calculate_key_horizontal_vertical_rotation($position) {
         return $this->calculate_key_horizontal_vertical($position) . $position[2];
     }
-
+    /**
+     * Calculate key that is unique for each possible combination of horizontal and vertical
+     * BUG: position 11, 1 results in the same key as 1, 11, fortunately this combination cannot happen
+     */
     protected function calculate_key_horizontal_vertical($position) {
         return '' . $position[0] . $position[1];
     }

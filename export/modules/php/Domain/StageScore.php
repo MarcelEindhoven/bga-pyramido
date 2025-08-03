@@ -17,13 +17,12 @@ include_once(__DIR__.'/TopView.php');
 #[\AllowDynamicProperties]
 class StageScore
 {
-    public TopView $stage;
     protected array $colour_per_location_key = [];
     protected array $jewel_location_keys = [];
 
-    static public function create($stage): StageScore {
+    static public function create($jewel_location_keys, $colour_map): StageScore {
         $object = new StageScore();
-        $object->set_stage($stage);
+        $object->set_stage($jewel_location_keys, $colour_map);
         return $object;
     }
 
@@ -33,14 +32,18 @@ class StageScore
         return $this;
     }
 
+    /**
+     * Each marker must have a horizontal and vertical field
+     */
     public function get_score($markers): int {
         $score = 0;
-        $lowest_score = 20;
+        $lowest_score = 999;
         foreach($markers as $marker) {
-            $score = $score + $this->get_score_for_marker($marker);
-            $lowest_score = min($lowest_score, $this->get_score_for_marker($marker));
+            $marker_score = $this->get_score_for_marker($marker);
+            $score = $score + $marker_score;
+            $lowest_score = min($lowest_score, $marker_score);
         }
-        if ($score >0)
+        if ($score > 0)
             $score = $score + $lowest_score; 
         return $score;
     }
@@ -79,10 +82,5 @@ class StageScore
             ['horizontal' => $horizontal, 'vertical' => $vertical - 1],
             ['horizontal' => $horizontal - 1, 'vertical' => $vertical],
         ];
-    }
-
-    protected function get_key($horizontal, $vertical) {
-        $location = ['horizontal' => $horizontal, 'vertical' => $vertical];
-        return TopView::get_location_key($location);
     }
 }
