@@ -95,6 +95,7 @@ class TopViewTest extends TestCase {
             [[$pyramid_key10101 => $initial110], [$location_key1011]], // No rotation, second jewel
             [[$pyramid_key10101 => $initial121], [$location_key1111]], // Rotation 1, third jewel
             [[$pyramid_key10101 => $initial2133], [$location_key1111, $location_key1110]], // Rotation 3, second and fourth jewel
+            [[$pyramid_key10101 => $initial2133, $pyramid_key10104 => $initial4], []], // Lower stage jewels hidden
         ];
     }
 

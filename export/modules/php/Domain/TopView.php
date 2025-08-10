@@ -72,6 +72,7 @@ class TopView
         return $this;
     }
     protected function fill_jewels_from_tile($tile): void {
+        $this->hide_lower_stage_jewels($tile);
         foreach($tile['jewels'] as $jewel_index) {
             $this->add_jewel($tile, $jewel_index);
         }
@@ -81,6 +82,15 @@ class TopView
             $this->add(
                 $tile, 
                 $this->get_offset($this->get_rotated_jewel_index($jewel_index, $tile['rotation']))));
+    }
+    protected function hide_lower_stage_jewels($tile): void {
+        foreach(range(0, 3) as $jewel_index) {
+            $location_to_be_hidden = $this->add(
+                $tile, 
+                $this->get_offset($jewel_index));
+            if (($key = array_search($this->get_location_key($location_to_be_hidden), $this->jewels)) !== false)
+                unset($this->jewels[$key]);
+        }
     }
     protected function get_offset($jewel_index): array {
         return TopView::OFFSETS[$jewel_index];
