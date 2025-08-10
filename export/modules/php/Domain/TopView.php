@@ -24,6 +24,18 @@ class TopView
     const FACTOR_STAGE = 5;
     const FACTOR_HORIZONTAL = 20; // Maximum range coordinates is between 2 and 19
     const FACTOR_VERTICAL = 20;
+    const OFFSETS = [
+        ['horizontal' => 0, 'vertical' => 0],
+        ['horizontal' => 0, 'vertical' => 1],
+        ['horizontal' => 1, 'vertical' => 0],
+        ['horizontal' => 1, 'vertical' => 1],
+    ];
+    const INDEX_AFTER_ROTATION = [
+        [0, 1, 2, 3],
+        [2, 0, 3, 1],
+        [3, 2, 1, 0],
+        [1, 3, 0, 2]
+    ];
 
     /**
      * pyramid location_key => tile
@@ -65,7 +77,23 @@ class TopView
         }
     }
     protected function add_jewel($tile, $jewel_index): void {
-        $this->jewels[] = $this->get_location_key($tile);
+        $this->jewels[] = $this->get_location_key(
+            $this->add(
+                $tile, 
+                $this->get_offset($this->get_rotated_jewel_index($jewel_index, $tile['rotation']))));
+    }
+    protected function get_offset($jewel_index): array {
+        return TopView::OFFSETS[$jewel_index];
+    }
+    protected function get_rotated_jewel_index($jewel_index, $rotation): int {
+        return TopView::INDEX_AFTER_ROTATION[$rotation][$jewel_index];
+    }
+    protected function add($location1, $location2): array {
+        return [
+            'horizontal' => $location1['horizontal'] + $location2['horizontal'],
+            'vertical' => $location1['vertical'] + $location2['vertical'],
+        ];
+
     }
     protected function fill_colour_map_from_tile($tile): void {
         $horizontal = $tile['horizontal'];

@@ -64,8 +64,11 @@ class TopViewTest extends TestCase {
         $this->assertEquals($expected_jewels, $top_view);
     }
     static public function get_jewels_multiple_stages(): array {
-        $initial1 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 1, 'colour' => 5, 'jewels' => []];
+        $initial11 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 1, 'colour' => 5, 'jewels' => []];
         $initial100 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0, 'colour' => 5, 'jewels' => [0]];
+        $initial110 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0, 'colour' => 5, 'jewels' => [1]];
+        $initial121 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 1, 'colour' => 5, 'jewels' => [2]];
+        $initial2133 = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 3, 'colour' => 5, 'jewels' => [1, 3]];
         $initial4 = ['stage' => 4, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 2, 'colour' => 5, 'jewels' => []];
         $initial4b = ['stage' => 4, 'horizontal' => 12, 'vertical' => 10, 'rotation' => 3, 'colour' => 5, 'jewels' => []];
         $marker4 = ['stage' => 4, 'horizontal' => 12, 'vertical' => 10, 'rotation' => 0, 'colour' => 5, 'jewels' => []];
@@ -74,12 +77,24 @@ class TopViewTest extends TestCase {
         $location_1010 = ['horizontal' => 10, 'vertical' => 10];
         $location_key1010 = TopView::get_location_key($location_1010);
 
-        $pyramid_key10101 = Pyramid::get_location_key($initial1);
+        $location_1110 = ['horizontal' => 11, 'vertical' => 10];
+        $location_key1110 = TopView::get_location_key($location_1110);
+
+        $location_1011 = ['horizontal' => 10, 'vertical' => 11];
+        $location_key1011 = TopView::get_location_key($location_1011);
+
+        $location_1111 = ['horizontal' => 11, 'vertical' => 11];
+        $location_key1111 = TopView::get_location_key($location_1111);
+
+        $pyramid_key10101 = Pyramid::get_location_key($initial11);
         $pyramid_key10104 = Pyramid::get_location_key($initial4);
         return [
             [[], []], // No tiles
-            [[$initial1], []], // No jewels
+            [[$initial11], []], // No jewels
             [[$pyramid_key10101 => $initial100], [$location_key1010]], // No rotation, first jewel
+            [[$pyramid_key10101 => $initial110], [$location_key1011]], // No rotation, second jewel
+            [[$pyramid_key10101 => $initial121], [$location_key1111]], // Rotation 1, third jewel
+            [[$pyramid_key10101 => $initial2133], [$location_key1111, $location_key1110]], // Rotation 3, second and fourth jewel
         ];
     }
 
