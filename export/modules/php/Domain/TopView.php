@@ -71,6 +71,10 @@ class TopView
         }
         return $this;
     }
+    public function get_tiles(): array {return $this->tiles;}
+    public function get_jewels(): array {return $this->jewels;}
+    public function get_colour_map(): array {return $this->colour_map;}
+
     protected function fill_jewels_from_tile($tile): void {
         $this->hide_lower_stage_jewels($tile);
         foreach($tile['jewels'] as $jewel_index) {
@@ -114,9 +118,6 @@ class TopView
         $this->colour_map[$this->get_key($horizontal, $vertical + 1)] = $colour;
         $this->colour_map[$this->get_key($horizontal + 1, $vertical + 1)] = $colour;
     }
-    public function get_tiles(): array {return $this->tiles;}
-    public function get_jewels(): array {return $this->jewels;}
-    public function get_colour_map(): array {return $this->colour_map;}
 
     /**
      * Calculate key that is unique for each possible combination of horizontal and vertical 
@@ -127,6 +128,12 @@ class TopView
     }
     static public function get_key($horizontal, $vertical) {
         return  $horizontal + TopView::FACTOR_HORIZONTAL * $vertical;
+    }
+    static public function get_location($key): array {
+        return [
+            'horizontal' => $key % TopView::FACTOR_HORIZONTAL,
+            'vertical' => intdiv($key, TopView::FACTOR_HORIZONTAL),
+        ];
     }
 
     public function get_tiles_for_stage($tiles, $stage): array {

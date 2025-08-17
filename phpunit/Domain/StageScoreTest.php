@@ -166,6 +166,37 @@ class StageScoreTest extends TestCase {
         $this->assertEquals($score, 4);
     }
 
+    public function test_get_score_details_contains_score() {
+        // Arrange
+        $location_1010 = ['horizontal' => 10, 'vertical' => 10];
+        $location_1110 = ['horizontal' => 11, 'vertical' => 10];
+
+        $colour_map = [$this->get_key(10, 10) => 4, $this->get_key(11, 10) => 1, $this->get_key(10, 11) => 4];
+        $jewels = [$this->get_key(10, 10), $this->get_key(10, 11), $this->get_key(11, 10)];
+
+        $this->sut->set_stage($jewels, $colour_map);
+
+        // Act
+        $score_details = $this->sut->get_score_details([$location_1110, $location_1010]);
+        // Assert
+        $this->assertEquals($score_details['score'], 4);
+    }
+
+    public function test_get_score_details_contains_jewels_first_marker() {
+        // Arrange
+        $location_1110 = ['horizontal' => 11, 'vertical' => 10];
+
+        $colour_map = [$this->get_key(10, 10) => 4, $this->get_key(11, 10) => 1, $this->get_key(10, 11) => 4];
+        $jewels = [$this->get_key(11, 10)];
+
+        $this->sut->set_stage($jewels, $colour_map);
+
+        // Act
+        $score_details = $this->sut->get_score_details([$location_1110]);
+        // Assert
+        $this->assertEquals($score_details['jewels_per_marker_sorted'], [0 => [$location_1110]]);
+    }
+
     protected function get_key($horizontal, $vertical) {
         $location = ['horizontal' => $horizontal, 'vertical' => $vertical];
         return TopView::get_location_key($location);

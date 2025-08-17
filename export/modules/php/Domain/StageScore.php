@@ -35,6 +35,12 @@ class StageScore
     /**
      * Each marker must have a horizontal and vertical field
      */
+    public function get_score_details($markers): array {
+        return [
+            'score' => $this->get_score($markers),
+            'jewels_per_marker_sorted' => [$this->get_locations($this->get_jewels_for_marker($markers[0]))],
+        ];
+    }
     public function get_score($markers): int {
         $score = 0;
         $lowest_score = 999;
@@ -47,7 +53,13 @@ class StageScore
             $score = $score + $lowest_score; 
         return $score;
     }
+    protected function get_locations($keys): array {
+        return array_map(fn($key): array => TopView::get_location($key), $keys);
+    }
     protected function get_score_for_marker($marker): int {
+        return count($this->get_jewels_for_marker($marker));
+    }
+    protected function get_jewels_for_marker($marker): array {
         $marker_colour = $this->colour_per_location_key[TopView::get_location_key($marker)];
         $marker_colour_location_keys = array_keys(array_filter($this->colour_per_location_key,
             function($colour) use($marker_colour) {
@@ -56,7 +68,7 @@ class StageScore
         ));
         $marker_area_location_keys = $this->get_area($marker, $marker_colour_location_keys);
 
-        return count(array_intersect($this->jewel_location_keys, $marker_area_location_keys));
+        return array_intersect($this->jewel_location_keys, $marker_area_location_keys);
     }
     protected function get_area($initial_location, $location_keys): array {
         $area = [];
