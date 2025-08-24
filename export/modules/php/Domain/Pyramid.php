@@ -92,7 +92,7 @@ class Pyramid
         $tiles_last_placed_with_jewels =  array_filter($this->get_last_placed_tiles(), function($tile) {
             return count($tile['jewels']) > 0;
         });
-        $unplaced_markers =  array_filter($markers, function($marker) {return 0 == $marker['stage'];});
+        $unplaced_markers = array_filter($markers, function($marker) {return 0 == $marker['stage'];});
 
         return array_filter($tiles_last_placed_with_jewels, function($tile) use ($unplaced_markers){
             return $this->is_tile_candidate_for_marker($tile, $unplaced_markers);
