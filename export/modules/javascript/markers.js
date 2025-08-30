@@ -38,7 +38,6 @@ define(['dojo/_base/declare'], (declare) => {
                     this.clone(specification);
                     this.unique_id = this.get_unique_id(specification);
 
-
                     if (this.stage == 0)
                         this.set_position_for_marker_window();
                     else
@@ -97,6 +96,9 @@ define(['dojo/_base/declare'], (declare) => {
                 }
                 destroy_canvas_token() {
                     this.dojo.destroy(this.unique_id);
+                }
+                scale_down() {
+                    this.dojo.addClass(this.unique_id,'icon');
                 }
             }
             result = new Marker({document: this.document, dojo: this.dojo, game: this.game, get_unique_id: this.get_unique_id,});

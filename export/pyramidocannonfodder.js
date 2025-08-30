@@ -361,6 +361,9 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
             dojo.subscribe( 'domino_placed', this, "notify_domino_placed" );
             this.notifqueue.setSynchronous( 'domino_placed', 1000 );
 
+            dojo.subscribe( 'score_details', this, "notify_score_details" );
+            this.notifqueue.setSynchronous( 'score_details', 1000 );
+
             dojo.subscribe( 'marker_placed', this, "notify_marker_placed" );
             this.notifqueue.setSynchronous( 'marker_placed', 300 );
 
@@ -384,6 +387,16 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
 
             dojo.subscribe( 'candidate_tiles_for_resurfacing', this, "notify_candidate_tiles_for_resurfacing" );
             this.notifqueue.setSynchronous( 'candidate_tiles_for_resurfacing', 3 );
+        },
+
+        notify_score_details: function( notif )
+        {
+            console.log( 'notify_score_details' );
+            console.log( notif );
+
+            Object.values(notif.args.score_details.score_details.jewels_per_marker_sorted).forEach(jewels => {
+            });
+            this.paint();
         },
 
         notify_candidate_tiles_for_resurfacing: function( notif )

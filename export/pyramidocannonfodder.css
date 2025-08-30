@@ -106,6 +106,9 @@
     width: 60px;
     height: 60px;
 }
+.icon {
+    transform: scale(0.4);
+}
 .rotate0 {
     transform: rotate(0deg);
 }

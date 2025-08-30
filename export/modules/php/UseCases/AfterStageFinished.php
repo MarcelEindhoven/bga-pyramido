@@ -33,6 +33,7 @@ class AfterStageFinished extends \NieuwenhovenGames\BGA\Action {
     }
 
     public function execute(): AfterStageFinished {
+        // Calculate score
         foreach ($this->get_current_data->get()['tiles'] as $player_id => $tiles_per_player) {
             $top_view = Domain\TopView::create($tiles_per_player);
             $markers = $this->get_current_data->get()['markers'][$player_id];
@@ -42,14 +43,17 @@ class AfterStageFinished extends \NieuwenhovenGames\BGA\Action {
                 Domain\StageScore::create($top_view->get_jewels(), $top_view->get_colour_map())->get_score_details($placed_markers)
             );
         }
-        // Calculate score
-        // Determine next player
 
         return $this;
     }
     protected function process_stage_score($player_id, $score_details): void {
         $score = $score_details['score'];
         $this->database->DbQuery( "UPDATE `player` SET `player_score` = `player_score` + ".$score." WHERE `player_id` = '".$player_id."'" );
-
+        $this->notifications->notifyAllPlayers('score_details', '',
+        [
+            'player_id' => $player_id, 
+            'score_details' => $score_details
+        ]);
+    
     }
 }
