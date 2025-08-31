@@ -38,7 +38,7 @@ class StageScore
     public function get_score_details($markers): array {
         return [
             'score' => $this->get_score($markers),
-            'jewels_per_marker_sorted' => [$this->get_locations($this->get_jewels_for_marker($markers[0]))],
+            'jewels_per_marker_sorted' => $this->get_jewels_for_markers($markers),
         ];
     }
     public function get_score($markers): int {
@@ -58,6 +58,13 @@ class StageScore
     }
     protected function get_score_for_marker($marker): int {
         return count($this->get_jewels_for_marker($marker));
+    }
+    protected function get_jewels_for_markers($markers): array {
+        $jewels_per_marker_sorted = [];
+        foreach($markers as $marker) {
+            $jewels_per_marker_sorted[$marker['colour']] = $this->get_locations($this->get_jewels_for_marker($marker));
+        }
+        return $jewels_per_marker_sorted;
     }
     protected function get_jewels_for_marker($marker): array {
         $marker_colour = $this->colour_per_location_key[TopView::get_location_key($marker)];

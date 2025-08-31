@@ -17,10 +17,11 @@ define(['dojo/_base/declare'], (declare) => {
                 this[property] = properties[property];
             }
         },
-        get_unique_id(tile_specification){return "marker-" + tile_specification.id;},
+        get_unique_id(specification){return "marker-" + specification.id;},
         /**
          * specification:
          * id
+         * colour
          * stage
          * horizontal
          * vertical
