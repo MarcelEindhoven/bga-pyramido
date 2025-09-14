@@ -394,7 +394,15 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
             console.log( 'notify_score_details' );
             console.log( notif );
 
-            Object.values(notif.args.score_details.score_details.jewels_per_marker_sorted).forEach(jewels => {
+            score_details = notif.args.score_details;
+            this.scoreCtrl[ notif.args.player_id ].incValue( score_details.score_increase );
+
+            pyramid_container = this.token_containers['pyramid-' + notif.args.player_id];
+
+            jewels_per_marker_sorted = notif.args.jewels_per_marker_sorted;
+            Object.keys(jewels_per_marker_sorted).forEach(
+                colour => { Object.values(jewels_per_marker_sorted[colour]).forEach(
+                    jewel => { });
             });
             this.paint();
         },
