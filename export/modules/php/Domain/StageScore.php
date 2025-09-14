@@ -36,16 +36,17 @@ class StageScore
      * Each marker must have a horizontal and vertical field
      */
     public function get_score_details($markers): array {
+        $jewels_for_markers = $this->get_jewels_for_markers($markers);
         return [
-            'score' => $this->get_score($markers),
-            'jewels_per_marker_sorted' => $this->get_jewels_for_markers($markers),
+            'score_increase' => $this->get_score($jewels_for_markers),
+            'jewels_per_marker_sorted' => $jewels_for_markers,
         ];
     }
-    public function get_score($markers): int {
+    public function get_score($jewels_for_markers): int {
         $score = 0;
         $lowest_score = 999;
-        foreach($markers as $marker) {
-            $marker_score = $this->get_score_for_marker($marker);
+        foreach($jewels_for_markers as $jewels_for_marker) {
+            $marker_score = count($jewels_for_marker);
             $score = $score + $marker_score;
             $lowest_score = min($lowest_score, $marker_score);
         }
@@ -53,18 +54,15 @@ class StageScore
             $score = $score + $lowest_score; 
         return $score;
     }
-    protected function get_locations($keys): array {
-        return array_map(fn($key): array => TopView::get_location($key), $keys);
-    }
-    protected function get_score_for_marker($marker): int {
-        return count($this->get_jewels_for_marker($marker));
-    }
     protected function get_jewels_for_markers($markers): array {
         $jewels_per_marker_sorted = [];
         foreach($markers as $marker) {
             $jewels_per_marker_sorted[$marker['colour']] = $this->get_locations($this->get_jewels_for_marker($marker));
         }
         return $jewels_per_marker_sorted;
+    }
+    protected function get_locations($keys): array {
+        return array_map(fn($key): array => TopView::get_location($key), $keys);
     }
     protected function get_jewels_for_marker($marker): array {
         $marker_colour = $this->colour_per_location_key[TopView::get_location_key($marker)];

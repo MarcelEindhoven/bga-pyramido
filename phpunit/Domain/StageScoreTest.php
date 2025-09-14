@@ -28,7 +28,7 @@ class StageScoreTest extends TestCase {
         // Arrange
 
         // Act
-        $score = $this->sut->get_score([]);
+        $score = $this->get_score([]);
         // Assert
         $this->assertEquals($score, 0);
     }
@@ -41,7 +41,7 @@ class StageScoreTest extends TestCase {
         $this->sut->set_stage($jewels, $colour_map);
 
         // Act
-        $score = $this->sut->get_score([$this->marker_1010]);
+        $score = $this->get_score([$this->marker_1010]);
         // Assert
         $this->assertEquals($score, 2);
     }
@@ -54,7 +54,7 @@ class StageScoreTest extends TestCase {
         $this->sut->set_stage($jewels, $colour_map);
 
         // Act
-        $score = $this->sut->get_score([$this->marker_1010]);
+        $score = $this->get_score([$this->marker_1010]);
         // Assert
         $this->assertEquals($score, 4);
     }
@@ -67,7 +67,7 @@ class StageScoreTest extends TestCase {
         $this->sut->set_stage($jewels, $colour_map);
 
         // Act
-        $score = $this->sut->get_score([$this->marker_1010]);
+        $score = $this->get_score([$this->marker_1010]);
         // Assert
         $this->assertEquals($score, 2);
     }
@@ -80,7 +80,7 @@ class StageScoreTest extends TestCase {
         $this->sut->set_stage($jewels, $colour_map);
 
         // Act
-        $score = $this->sut->get_score([$this->marker_1010]);
+        $score = $this->get_score([$this->marker_1010]);
         // Assert
         $this->assertEquals($score, 2);
     }
@@ -93,7 +93,7 @@ class StageScoreTest extends TestCase {
         $this->sut->set_stage($jewels, $colour_map);
 
         // Act
-        $score = $this->sut->get_score([$this->marker_1010]);
+        $score = $this->get_score([$this->marker_1010]);
         // Assert
         $this->assertEquals($score, 4);
     }
@@ -106,7 +106,7 @@ class StageScoreTest extends TestCase {
         $this->sut->set_stage($jewels, $colour_map);
 
         // Act
-        $score = $this->sut->get_score([$this->marker_1010]);
+        $score = $this->get_score([$this->marker_1010]);
         // Assert
         $this->assertEquals($score, 4);
     }
@@ -119,7 +119,7 @@ class StageScoreTest extends TestCase {
         $this->sut->set_stage($jewels, $colour_map);
 
         // Act
-        $score = $this->sut->get_score([$this->marker_1010, $this->marker_1110]);
+        $score = $this->get_score([$this->marker_1010, $this->marker_1110]);
         // Assert
         $this->assertEquals($score, 3);
     }
@@ -132,7 +132,7 @@ class StageScoreTest extends TestCase {
         $this->sut->set_stage($jewels, $colour_map);
 
         // Act
-        $score = $this->sut->get_score([$this->marker_1010, $this->marker_1110]);
+        $score = $this->get_score([$this->marker_1010, $this->marker_1110]);
         // Assert
         $this->assertEquals($score, 4);
     }
@@ -145,22 +145,9 @@ class StageScoreTest extends TestCase {
         $this->sut->set_stage($jewels, $colour_map);
 
         // Act
-        $score = $this->sut->get_score([$this->marker_1110, $this->marker_1010]);
+        $score = $this->get_score([$this->marker_1110, $this->marker_1010]);
         // Assert
         $this->assertEquals($score, 4);
-    }
-
-    public function test_get_score_details_contains_score() {
-        // Arrange
-        $colour_map = [$this->get_key(10, 10) => 4, $this->get_key(11, 10) => 1, $this->get_key(10, 11) => 4];
-        $jewels = [$this->get_key(10, 10), $this->get_key(10, 11), $this->get_key(11, 10)];
-
-        $this->sut->set_stage($jewels, $colour_map);
-
-        // Act
-        $score_details = $this->sut->get_score_details([$this->marker_1110, $this->marker_1010]);
-        // Assert
-        $this->assertEquals($score_details['score'], 4);
     }
 
     public function test_get_score_details_contains_jewels_first_marker() {
@@ -196,5 +183,9 @@ class StageScoreTest extends TestCase {
     protected function get_key($horizontal, $vertical) {
         $location = ['horizontal' => $horizontal, 'vertical' => $vertical];
         return TopView::get_location_key($location);
+    }
+
+    protected function get_score($markers): int {
+        return $this->sut->get_score_details($markers)['score_increase'];
     }
 }

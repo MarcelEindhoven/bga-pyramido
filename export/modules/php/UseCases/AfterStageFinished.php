@@ -47,7 +47,7 @@ class AfterStageFinished extends \NieuwenhovenGames\BGA\Action {
         return $this;
     }
     protected function process_stage_score($player_id, $score_details): void {
-        $score = $score_details['score'];
+        $score = $score_details['score_increase'];
         $this->database->DbQuery( "UPDATE `player` SET `player_score` = `player_score` + ".$score." WHERE `player_id` = '".$player_id."'" );
         $this->notifications->notifyAllPlayers('score_details', '',
         [
