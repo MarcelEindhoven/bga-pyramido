@@ -224,7 +224,7 @@ describe('Use case choose place domino', function () {
             act();
             act();
             // Assert
-            sinon.assert.callCount(canvas.remove, 5);
+            sinon.assert.callCount(canvas.remove, 2 * 5);
         });
     });
     describe('placement selected', function () {

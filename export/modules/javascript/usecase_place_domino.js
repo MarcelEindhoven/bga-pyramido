@@ -45,9 +45,10 @@ define(['dojo/_base/declare'], (declare) => {
             this.ui.paint();
         },
         skip_empty_rotation() {
-            if (Object.values(this.candidate_positions)
-                .filter(candidate_position => { if (candidate_position.rotation == this.rotation) return candidate_position;})
-                .length == 0) this.rotate_until_valid_candidate_positions_found();
+            if (this.candidate_positions.length >0)
+                if (Object.values(this.candidate_positions)
+                    .filter(candidate_position => { if (candidate_position.rotation == this.rotation) return candidate_position;})
+                    .length == 0) this.rotate_until_valid_candidate_positions_found();
         },
         rotate_until_valid_candidate_positions_found() {
             this.rotation = this.rotation + 1;
