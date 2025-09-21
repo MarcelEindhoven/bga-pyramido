@@ -41,20 +41,24 @@ class AfterStageFinished extends \NieuwenhovenGames\BGA\Action {
             $this->process_stage_score(
                 $player_id,
                 Domain\StageScore::create($top_view->get_jewels(), $top_view->get_colour_map())->get_score_details($placed_markers),
-                $placed_markers
+                $placed_markers,
+                $top_view->get_jewels(),
+                $top_view->get_colour_map()
             );
         }
 
         return $this;
     }
-    protected function process_stage_score($player_id, $score_details, $placed_markers): void {
+    protected function process_stage_score($player_id, $score_details, $placed_markers, $jewels, $colour_map): void {
         $score = $score_details['score_increase'];
         $this->database->DbQuery( "UPDATE `player` SET `player_score` = `player_score` + ".$score." WHERE `player_id` = '".$player_id."'" );
         $this->notifications->notifyAllPlayers('score_details', '',
         [
             'player_id' => $player_id, 
             'score_details' => $score_details,
-            'placed_markers' => $placed_markers
+            'placed_markers' => $placed_markers,
+            'jewels' => $jewels,
+            'colour_map' => $colour_map
         ]);
     
     }

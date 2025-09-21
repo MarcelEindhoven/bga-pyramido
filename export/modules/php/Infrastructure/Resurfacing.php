@@ -140,7 +140,7 @@ class CurrentResurfacings
 
         $resurfacing['id'] = $resurfacing_specification['id'];
         $resurfacing['side'] = (int) ($resurfacing_specification['location_arg'] / (CurrentResurfacings::FACTOR_STAGE * CurrentResurfacings::FACTOR_HORIZONTAL * CurrentResurfacings::FACTOR_VERTICAL * CurrentResurfacings::FACTOR_ROTATION));
-        $resurfacing['colour'] = $resurfacing['side'] ? $resurfacing_specification['type_arg'] : $resurfacing_specification['type'];
+        $resurfacing['colour'] = $resurfacing['side'] ? 0 + $resurfacing_specification['type_arg'] : 0 + $resurfacing_specification['type'];
         CurrentTiles::convert_location_argument($resurfacing, $resurfacing_specification['location_arg'] % (CurrentResurfacings::FACTOR_STAGE * CurrentResurfacings::FACTOR_HORIZONTAL * CurrentResurfacings::FACTOR_VERTICAL * CurrentResurfacings::FACTOR_ROTATION));
 
         return $resurfacing;
@@ -158,8 +158,8 @@ class CurrentResurfacings
         $resurfacings_per_player = [];
         $resurfacings = $this->deck->getCardsInLocation(strval($player_id), 0);
         foreach ($resurfacings as $resurfacing_specification) {
-            $resurfacings_per_player[$resurfacing_specification['type']] = $this->get_resurfacing_first($resurfacing_specification);
-            $resurfacings_per_player[$resurfacing_specification['type_arg']] = $this->get_resurfacing_second($resurfacing_specification);
+            $resurfacings_per_player[0 + $resurfacing_specification['type']] = $this->get_resurfacing_first($resurfacing_specification);
+            $resurfacings_per_player[0 + $resurfacing_specification['type_arg']] = $this->get_resurfacing_second($resurfacing_specification);
         }
         return $resurfacings_per_player;
     }
@@ -167,7 +167,7 @@ class CurrentResurfacings
     public function get_resurfacing_first($resurfacing_specification) {
         $resurfacing = ['id' => '1', 'colour' => 0, 'stage' => 0];
 
-        $resurfacing['colour'] = $resurfacing_specification['type'];
+        $resurfacing['colour'] = 0 + $resurfacing_specification['type'];
         $resurfacing['id'] = $resurfacing_specification['id'];
 
         return $resurfacing;
@@ -176,7 +176,7 @@ class CurrentResurfacings
     public function get_resurfacing_second($resurfacing_specification) {
         $resurfacing = ['id' => '1', 'colour' => 0, 'stage' => 0];
 
-        $resurfacing['colour'] = $resurfacing_specification['type_arg'];
+        $resurfacing['colour'] = 0 + $resurfacing_specification['type_arg'];
         $resurfacing['id'] = $resurfacing_specification['id'] + 100;
 
         return $resurfacing;

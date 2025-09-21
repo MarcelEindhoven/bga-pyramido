@@ -362,7 +362,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
             this.notifqueue.setSynchronous( 'domino_placed', 1000 );
 
             dojo.subscribe( 'score_details', this, "notify_score_details" );
-            this.notifqueue.setSynchronous( 'score_details', 1000 );
+            this.notifqueue.setSynchronous( 'score_details', 10000 );
 
             dojo.subscribe( 'marker_placed', this, "notify_marker_placed" );
             this.notifqueue.setSynchronous( 'marker_placed', 300 );
@@ -395,16 +395,25 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
             console.log( notif );
 
             score_details = notif.args.score_details;
-            this.scoreCtrl[ notif.args.player_id ].incValue( score_details.score_increase );
+            player_id = notif.args.player_id
 
-            pyramid_container = this.token_containers['pyramid-' + notif.args.player_id];
+            pyramid_container = this.token_containers['pyramid-' + player_id];
 
-            jewels_per_marker_sorted = notif.args.jewels_per_marker_sorted;
+            jewels_per_marker_sorted = score_details.jewels_per_marker_sorted;
             Object.keys(jewels_per_marker_sorted).forEach(
                 colour => { Object.values(jewels_per_marker_sorted[colour]).forEach(
-                    jewel => { });
-            });
-            this.paint();
+                    jewel => { 
+                        jewel.stage = 5;
+                        jewel.colour = colour;
+                        jewel.id = Number(player_id) + 4 * jewel.colour + 4 * 6 * jewel.horizontal + 4 * 6 * 20 * jewel.vertical;
+                        marker = this.marker_factory.create_from(jewel);
+                        marker.scale_down();
+                        console.log( marker );
+                        this.token_containers['pyramid-' + player_id].add(marker);
+                        this.paint();
+                        });
+                    });
+            this.scoreCtrl[ player_id ].incValue( score_details.score_increase );
         },
 
         notify_candidate_tiles_for_resurfacing: function( notif )
