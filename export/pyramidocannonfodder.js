@@ -64,6 +64,8 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
             console.log( "Starting game setup" );
             console.log(gamedatas);
 
+            this.temporary_paintables = {};
+
             this.tile_factory = new tiles({
                 game: this,
                 document: document,
@@ -397,6 +399,8 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
             score_details = notif.args.score_details;
             player_id = notif.args.player_id
 
+            this.temporary_paintables[player_id] = {};
+
             pyramid_container = this.token_containers['pyramid-' + player_id];
 
             jewels_per_marker_sorted = score_details.jewels_per_marker_sorted;
@@ -408,6 +412,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
                         jewel.id = Number(player_id) + 4 * jewel.colour + 4 * 6 * jewel.horizontal + 4 * 6 * 20 * jewel.vertical;
                         marker = this.marker_factory.create_from(jewel);
                         marker.scale_down();
+                        this.temporary_paintables[player_id][marker.unique_id] = marker.unique_id;
                         console.log( marker );
                         this.token_containers['pyramid-' + player_id].add(marker);
                         this.paint();
@@ -473,6 +478,11 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
                         marker.return(specification);
                         marker_container.add(marker);
                     }
+                }
+                for (var unique_id in this.temporary_paintables[player_id]) {
+                    marker = pyramid_container.get(unique_id);
+                    pyramid_container.remove(marker);
+                    marker.destroy_canvas_token();
                 }
             }
 
