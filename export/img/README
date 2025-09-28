@@ -39,3 +39,5 @@ del markersx.png
 del markers.png
 
 cp *.png ..\Pyramido\export\img\
+
+magick -fuzz 6% .\box.bmp -transparent white  .\pyramido_box_transparent.png
