@@ -70,6 +70,7 @@
     background-image: url('img/dominoesx80.png');
     width: 80px;
     height: 80px;
+    box-shadow: 3px 3px 2px;
 }
 .domino80 {
     background-image: url('img/dominoesx80.png');
