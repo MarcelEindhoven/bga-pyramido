@@ -238,7 +238,7 @@ class Game extends \Table
     public function stAfterStageFinished(): void {
         $this->initialise();
 
-        $this->actions->stAfterStageFinished($this->getObjectListFromDB( "SELECT `player_id` `id`, `player_name` `name`, `player_score` `score` FROM `player`" ));
+        $this->actions->stAfterStageFinished($this);
     }
 
     public function stReturnAllMarkers(): void {

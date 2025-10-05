@@ -40,5 +40,11 @@ class Action {
     public function change_active_player($player_id) {
         $this->gamestate->changeActivePlayer($player_id);
     }
+
+    public function get_active_player_id() {
+        $active_player_list = $this->gamestate->getActivePlayerList();
+        return array_shift($active_player_list);
+    }
+    
 }
 ?>

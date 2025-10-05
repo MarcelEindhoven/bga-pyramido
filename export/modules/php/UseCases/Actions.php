@@ -147,7 +147,7 @@ class Actions {
         ReturnAllMarkers::create($this->gamestate)->set_notifications($this->notifications)->set_update_marker($update_marker)->set_get_current_data($this->get_current_data())->execute()->nextState();
     }
 
-    public function stAfterStageFinished(): void {
+    public function stAfterStageFinished($game): void {
         AfterStageFinished::create($this->gamestate)->set_notifications($this->notifications)->set_database($this->database)->set_get_current_data($this->get_current_data())->execute()->nextState();
     }
 
