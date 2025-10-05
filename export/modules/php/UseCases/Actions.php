@@ -56,11 +56,6 @@ class Actions {
         return $this;
     }
 
-    public function set_players($players) : Actions {
-        $this->players = $players;
-        return $this;
-    }
-
     public function set_notifications($notifications) : Actions {
         $this->notifications = $notifications;
         return $this;

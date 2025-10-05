@@ -123,7 +123,6 @@ class Game extends \Table
 
         $this->actions->set_notifications($this);
         $this->actions->set_database($this);
-        $this->actions->set_players($this->loadPlayersBasicInfos());
 
         // Note: the following statement crashes in setup stage
         $this->actions->set_player_id((int)$this->getActivePlayerId());
