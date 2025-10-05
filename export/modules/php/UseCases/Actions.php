@@ -163,8 +163,9 @@ class Actions {
     public function stAfterDominoPlaced(): void {
         AfterDominoPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_get_current_data($this->get_current_data())->execute()->nextState();
     }
+
     protected function get_current_data(): GetAllDatas {
-        return GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
+        return GetAllDatas::create($this->database, $this->decks)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
     }
 }
 ?>

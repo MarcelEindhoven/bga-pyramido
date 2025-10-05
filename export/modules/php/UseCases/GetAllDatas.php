@@ -24,7 +24,7 @@ use Bga\Games\PyramidoCannonFodder\Infrastructure;
 
 class GetAllDatas {
     protected array $decks = [];
-    protected array $players = [];
+    protected array $next_player_table = [];
     /**
      * 
      */
@@ -44,13 +44,6 @@ class GetAllDatas {
         return $this;
     }
 
-    public function set_players($next_player_table): GetAllDatas {
-        $this->next_player_table = $next_player_table;
-        $this->players = $next_player_table;
-
-        return $this;
-    }
-
     public function set_active_player_id($active_player_id): GetAllDatas {
         $this->active_player_id = $active_player_id;
         return $this;
@@ -65,15 +58,17 @@ class GetAllDatas {
      * Combine results from database with calculated results from domain
      */
     public function get(): array {
-        $results = ["players" => $this->get_results_from_database()];
+        $players = $this->get_results_from_database();
+        $results = ["players" => $players];
+
         $results['quarry'] = Infrastructure\CurrentMarket::create($this->decks['domino'])->get_market();
         $results['next'] = Infrastructure\CurrentMarket::create($this->decks['domino'])->get_next_market();
-        $results['markers'] = Infrastructure\CurrentMarkers::create($this->decks['marker'])->set_players($this->players)->get();
-        $results['resurfacings'] = Infrastructure\CurrentResurfacings::create($this->decks['resurfacing'])->set_players($this->players)->get();
-        $results['placed_resurfacings'] = Infrastructure\CurrentResurfacings::create($this->decks['resurfacing'])->set_players($this->players)->get_placed_resurfacings();
+        $results['markers'] = Infrastructure\CurrentMarkers::create($this->decks['marker'])->set_players($players)->get();
+        $results['resurfacings'] = Infrastructure\CurrentResurfacings::create($this->decks['resurfacing'])->set_players($players)->get();
+        $results['placed_resurfacings'] = Infrastructure\CurrentResurfacings::create($this->decks['resurfacing'])->set_players($players)->get_placed_resurfacings();
 
-        $tiles = Infrastructure\CurrentTiles::create($this->decks['domino'])->set_players($this->players)->get();
-        $placed_resurfacings = Infrastructure\CurrentResurfacings::create($this->decks['resurfacing'])->set_players($this->players)->get_placed_resurfacings();
+        $tiles = Infrastructure\CurrentTiles::create($this->decks['domino'])->set_players($players)->get();
+        $placed_resurfacings = Infrastructure\CurrentResurfacings::create($this->decks['resurfacing'])->set_players($players)->get_placed_resurfacings();
         $results['tiles'] = [];
         foreach ($tiles as $player_id => $tiles_per_player) {
             $pyramid = new Domain\Pyramid();
@@ -82,15 +77,20 @@ class GetAllDatas {
             $results['tiles'][$player_id] = $pyramid->get_tiles();
         }
 
-        $pyramid = new Domain\Pyramid();
-        $pyramid->set_tiles($results['tiles'][$this->current_player_id]);
-        $pyramid->get_adjacent_positions_first_stage();
-        $results['candidate_positions'] = $pyramid->get_candidate_positions();
-        $results['current_stage'] = $pyramid->get_stage_next_domino();
-        $results['candidate_tiles_for_marker'] = $pyramid->get_candidate_tiles_for_marker($results['markers'][$this->current_player_id]);
-        $results['candidate_tiles_for_resurfacing'] = $pyramid->get_candidate_tiles_for_resurfacing($results['markers'][$this->current_player_id]);
+        if ($this->is_current_player_no_spectator($players)) {
+            $pyramid = new Domain\Pyramid();
+            $pyramid->set_tiles($results['tiles'][$this->current_player_id]);
+            $pyramid->get_adjacent_positions_first_stage();
+            $results['candidate_positions'] = $pyramid->get_candidate_positions();
+            $results['current_stage'] = $pyramid->get_stage_next_domino();
+            $results['candidate_tiles_for_marker'] = $pyramid->get_candidate_tiles_for_marker($results['markers'][$this->current_player_id]);
+            $results['candidate_tiles_for_resurfacing'] = $pyramid->get_candidate_tiles_for_resurfacing($results['markers'][$this->current_player_id]);
+        }
 
         return $results;
+    }
+    protected function is_current_player_no_spectator($players) {
+        return array_key_exists($this->current_player_id, $players);
     }
 
     protected function get_results_from_database(): array {
