@@ -160,7 +160,7 @@ class Actions {
     }
 
     protected function get_current_data(): GetAllDatas {
-        return GetAllDatas::create($this->database, $this->decks)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
+        return GetAllDatas::create($this->database, $this->decks)->set_current_player_id($this->player_id);
     }
 }
 ?>

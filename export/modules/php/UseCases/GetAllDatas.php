@@ -44,11 +44,6 @@ class GetAllDatas {
         return $this;
     }
 
-    public function set_active_player_id($active_player_id): GetAllDatas {
-        $this->active_player_id = $active_player_id;
-        return $this;
-    }
-
     public function set_current_player_id($current_player_id): GetAllDatas {
         $this->current_player_id = $current_player_id;
         return $this;
