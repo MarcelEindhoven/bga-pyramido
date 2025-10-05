@@ -20,7 +20,6 @@ include_once(__DIR__.'/AIMarkerChosenAndPlaced.php');
 include_once(__DIR__.'/AINextDominoChosen.php');
 
 include_once(__DIR__.'/DominoChosenAndPlaced.php');
-include_once(__DIR__.'/FirstDominoChosen.php');
 include_once(__DIR__.'/MarkerChosenAndPlaced.php');
 include_once(__DIR__.'/ResurfacingChosenAndPlaced.php');
 include_once(__DIR__.'/NextDominoChosen.php');
@@ -157,6 +156,17 @@ class Actions {
 
     public function stAfterDominoPlaced(): void {
         AfterDominoPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_get_current_data($this->get_current_data())->execute()->nextState();
+    }
+
+    public function get_game_progression() {
+        $tiles_per_player = $this->get_current_data()->get()["tiles"];
+        $max_progression = 0;
+        $progression = 0;
+        foreach($tiles_per_player as $player_id => $tiles) {
+            $max_progression = $max_progression + 2*(10+6+3+1);
+            $progression = $progression + count($tiles);
+        }
+        return $progression * 100 / $max_progression;
     }
 
     protected function get_current_data(): GetAllDatas {

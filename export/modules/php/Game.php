@@ -208,9 +208,10 @@ class Game extends \Table
      */
     public function getGameProgression()
     {
+        $this->initialise();
         // TODO: compute and return the game progression
 
-        return 0;
+        return $this->actions->get_game_progression();
     }
 
     /**
