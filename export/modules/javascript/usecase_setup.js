@@ -25,29 +25,29 @@ define(['dojo/_base/declare'], (declare) => {
         setup(gamedatas) {
             setup_dependencies = {dojo: this.dojo, document: this.document, stock_class: this.stock_class, game: this.game, domino_factory: this.domino_factory, };
             this.market.setup(setup_dependencies, gamedatas);
-            this.setup_players(gamedatas.players);
+            this.setup_players(gamedatas.players, gamedatas.playerorder);
             this.setup_pyramid_tiles(gamedatas.tiles);
             this.setup_markers(gamedatas.markers);
             this.setup_resurfacings(gamedatas.resurfacings);
         },
-        setup_players(players) {
-            Object.values(players).forEach(player => {
+        setup_players(players, player_order) {
+            Object.values(player_order).forEach(player_id => {
                 this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
-                    <div id="player-table-${player.id}" style = "display: inline-block;">
-                        <div style = "display: inline-block;"><strong>${player.name}</strong></div>
-                        <div id="marker-${player.id}" style = "display: inline-block; width: 90px ; height: 140px"></div>
-                        <div id="resurfacing-${player.id}" style = "display: inline-block; width: 160px ; height: 240px"></div>
-                        <div id="pyramid-${player.id}" style = "display: inline-block; position: relative; width: 80px ; height: 80px"></div>
+                    <div id="player-table-${player_id}" style = "display: inline-block;">
+                        <div style = "display: inline-block;"><strong>${players[player_id].name}</strong></div>
+                        <div id="marker-${player_id}" style = "display: inline-block; width: 90px ; height: 140px"></div>
+                        <div id="resurfacing-${player_id}" style = "display: inline-block; width: 160px ; height: 240px"></div>
+                        <div id="pyramid-${player_id}" style = "display: inline-block; position: relative; width: 80px ; height: 80px"></div>
                     </div>
                 `);
 
-                element_id = 'resurfacing' + '-' + player.id;
+                element_id = 'resurfacing' + '-' + player_id;
                 this.create_canvas(element_id);
                 this.token_containers[element_id].set_pixels_per_tile(60);
 
-                this.create_canvas('pyramid' + '-' + player.id);
+                this.create_canvas('pyramid' + '-' + player_id);
 
-                element_id = 'marker' + '-' + player.id;
+                element_id = 'marker' + '-' + player_id;
                 this.create_canvas(element_id);
                 this.token_containers[element_id].set_pixels_per_tile(40);
                 this.token_containers[element_id].set_margin_between_tiles(10);
