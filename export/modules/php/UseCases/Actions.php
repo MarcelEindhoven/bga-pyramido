@@ -82,50 +82,43 @@ class Actions {
     public function stNextPlayer($active_player_id) {
         $this->player_id = $active_player_id;
 
-        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
-        NextPlayer::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($active_player_id)->set_deck($this->decks['domino'])->set_get_current_data($get_current_data)->execute()->nextState();
+        NextPlayer::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($active_player_id)->set_deck($this->decks['domino'])->set_get_current_data($this->get_current_data())->execute()->nextState();
     }
 
     public function stAISelectAndPlaceDomino(): void {
         $update_domino = Infrastructure\UpdateDomino::create($this->decks['domino']);
-        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
-        AIDominoChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_domino($update_domino)->set_get_current_data($get_current_data)
+        AIDominoChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_domino($update_domino)->set_get_current_data($this->get_current_data())
         ->execute()->nextState();
     }
 
     public function stAISelectAndPlaceMarker(): void {
         $update_marker = Infrastructure\UpdateMarker::create($this->decks['marker']);
-        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
-        AIMarkerChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_marker($update_marker)->set_get_current_data($get_current_data)
+        AIMarkerChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_marker($update_marker)->set_get_current_data($this->get_current_data())
         ->execute()->nextState();
     }
 
     public function action_tile_to_place_marker_chosen(array $tile_specification): void {
         $update_marker = Infrastructure\UpdateMarker::create($this->decks['marker']);
-        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
-        MarkerChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_marker($update_marker)->set_get_current_data($get_current_data)->set_tile_specification($tile_specification)
+        MarkerChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_marker($update_marker)->set_get_current_data($this->get_current_data())->set_tile_specification($tile_specification)
         ->execute()->nextState();
     }
 
     public function action_tile_to_place_resurfacing_chosen(array $tile_specification): void {
         $update_resurfacing = Infrastructure\UpdateResurfacing::create($this->decks['resurfacing']);
-        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
-        ResurfacingChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_resurfacing($update_resurfacing)->set_get_current_data($get_current_data)->set_tile_specification($tile_specification)
+        ResurfacingChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_resurfacing($update_resurfacing)->set_get_current_data($this->get_current_data())->set_tile_specification($tile_specification)
         ->execute()->nextState();
     }
 
     public function stAutomaticallyPlaceMarker(): void {
         $update_marker = Infrastructure\UpdateMarker::create($this->decks['marker']);
-        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
-        MarkerAutomaticallyChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_marker($update_marker)->set_get_current_data($get_current_data)
+        MarkerAutomaticallyChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_marker($update_marker)->set_get_current_data($this->get_current_data())
         ->execute()->nextState();
     }
 
     public function action_domino_chosen_and_placed(string $quarry_index, array $domino_specification): void {
         $update_domino = Infrastructure\UpdateDomino::create($this->decks['domino']);
         $domino_specification['stage'] = 1;
-        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
-        DominoChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_domino($update_domino)->set_get_current_data($get_current_data)
+        DominoChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_domino($update_domino)->set_get_current_data($this->get_current_data())
         ->set_quarry_index($quarry_index)->set_domino_specification($domino_specification)->execute()->nextState();
     }
 
@@ -142,40 +135,36 @@ class Actions {
     public function stAfterOptionalResurfacing(): void {
         $update_domino = Infrastructure\UpdateDomino::create($this->decks['domino']);
         $update_resurfacing = Infrastructure\UpdateResurfacing::create($this->decks['resurfacing']);
-        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
-        AfterOptionalResurfacing::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_domino($update_domino)->set_get_current_data($get_current_data)->set_update_resurfacing($update_resurfacing)->execute()->nextState();
+        AfterOptionalResurfacing::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_domino($update_domino)->set_get_current_data($this->get_current_data())->set_update_resurfacing($update_resurfacing)->execute()->nextState();
     }
 
     public function stMarkerOptionallyOnResurfacing(): void {
         $update_marker = Infrastructure\UpdateMarker::create($this->decks['marker']);
-        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
-        MarkerOptionallyOnResurfacing::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_marker($update_marker)->set_get_current_data($get_current_data)->execute()->nextState();
+        MarkerOptionallyOnResurfacing::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_marker($update_marker)->set_get_current_data($this->get_current_data())->execute()->nextState();
     }
 
     public function stAfterTurnFinished(): void {
-        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
-        AfterTurnFinished::create($this->gamestate)->set_notifications($this->notifications)->set_get_current_data($get_current_data)->execute()->nextState();
+        AfterTurnFinished::create($this->gamestate)->set_notifications($this->notifications)->set_get_current_data($this->get_current_data())->execute()->nextState();
     }
 
     public function stReturnAllMarkers(): void {
         $update_marker = Infrastructure\UpdateMarker::create($this->decks['marker']);
-        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
-        ReturnAllMarkers::create($this->gamestate)->set_notifications($this->notifications)->set_update_marker($update_marker)->set_get_current_data($get_current_data)->execute()->nextState();
+        ReturnAllMarkers::create($this->gamestate)->set_notifications($this->notifications)->set_update_marker($update_marker)->set_get_current_data($this->get_current_data())->execute()->nextState();
     }
 
     public function stAfterStageFinished(): void {
-        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
-        AfterStageFinished::create($this->gamestate)->set_notifications($this->notifications)->set_database($this->database)->set_get_current_data($get_current_data)->execute()->nextState();
+        AfterStageFinished::create($this->gamestate)->set_notifications($this->notifications)->set_database($this->database)->set_get_current_data($this->get_current_data())->execute()->nextState();
     }
 
     public function stCheckResurfacing(): void {
-        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
-        CheckResurfacing::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_get_current_data($get_current_data)->execute()->nextState();
+        CheckResurfacing::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_get_current_data($this->get_current_data())->execute()->nextState();
     }
 
     public function stAfterDominoPlaced(): void {
-        $get_current_data = GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
-        AfterDominoPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_get_current_data($get_current_data)->execute()->nextState();
+        AfterDominoPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_get_current_data($this->get_current_data())->execute()->nextState();
+    }
+    protected function get_current_data(): GetAllDatas {
+        return GetAllDatas::create($this->database, $this->decks)->set_players($this->players)->set_current_player_id($this->player_id)->set_active_player_id($this->player_id);
     }
 }
 ?>

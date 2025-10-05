@@ -44,8 +44,9 @@ class GetAllDatas {
         return $this;
     }
 
-    public function set_players($players): GetAllDatas {
-        $this->players = $players;
+    public function set_players($next_player_table): GetAllDatas {
+        $this->next_player_table = $next_player_table;
+        $this->players = $next_player_table;
 
         return $this;
     }
@@ -64,7 +65,7 @@ class GetAllDatas {
      * Combine results from database with calculated results from domain
      */
     public function get(): array {
-        $results = $this->get_results_from_database();
+        $results = ["players" => $this->get_results_from_database()];
         $results['quarry'] = Infrastructure\CurrentMarket::create($this->decks['domino'])->get_market();
         $results['next'] = Infrastructure\CurrentMarket::create($this->decks['domino'])->get_next_market();
         $results['markers'] = Infrastructure\CurrentMarkers::create($this->decks['marker'])->set_players($this->players)->get();
@@ -93,11 +94,9 @@ class GetAllDatas {
     }
 
     protected function get_results_from_database(): array {
-        $result = [];
-        $result["players"] = $this->database->getCollectionFromDb(
+        return $this->database->getCollectionFromDb(
             "SELECT `player_id` `id`, `player_name` `name`, `player_score` `score` FROM `player`"
         );
-        return $result;
     }
 }
 ?>

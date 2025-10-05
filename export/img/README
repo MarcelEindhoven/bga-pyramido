@@ -40,4 +40,4 @@ del markers.png
 
 cp *.png ..\Pyramido\export\img\
 
-magick -fuzz 6% .\box.bmp -transparent white  .\pyramido_box_transparent.png
+magick -fuzz 6% .\pyramido_box.png -transparent white   -geometry 280 .\pyramido_box_transparent.png
