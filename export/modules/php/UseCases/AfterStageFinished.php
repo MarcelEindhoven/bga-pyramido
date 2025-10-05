@@ -34,25 +34,43 @@ class AfterStageFinished extends \NieuwenhovenGames\BGA\Action {
 
     public function execute(): AfterStageFinished {
         // Calculate score
-        foreach ($this->get_current_data->get()['tiles'] as $player_id => $tiles_per_player) {
+        $least_stage_score = 999;
+        $current_data = $this->get_current_data->get();
+        foreach ($current_data['tiles'] as $player_id => $tiles_per_player) {
             $top_view = Domain\TopView::create($tiles_per_player);
-            $markers = $this->get_current_data->get()['markers'][$player_id];
+            $markers = $current_data['markers'][$player_id];
             $placed_markers = array_filter($markers, function($marker) {return 0 != $marker['stage'];});
+            $score_details = Domain\StageScore::create($top_view->get_jewels(), $top_view->get_colour_map())->get_score_details($placed_markers);
+            $player_name = $current_data["players"][$player_id]["name"];
             $this->process_stage_score(
                 $player_id,
-                Domain\StageScore::create($top_view->get_jewels(), $top_view->get_colour_map())->get_score_details($placed_markers),
+                $player_name,
+                $score_details,
                 $placed_markers,
                 $top_view->get_jewels(),
                 $top_view->get_colour_map()
             );
+            $score_increase = $score_details['score_increase'];
+            if ($score_increase < $least_stage_score) {
+                $least_stage_score = $score_increase;
+                $player_id_least_stage_score = $player_id;
+                $player_name_least_stage_score = $player_name;
+            }
         }
+        $this->notifications->notifyAllPlayers(
+            'least_stage_score',
+            "Player with least stage score is " . $player_name_least_stage_score,
+            []
+        );
 
         return $this;
     }
-    protected function process_stage_score($player_id, $score_details, $placed_markers, $jewels, $colour_map): void {
-        $score = $score_details['score_increase'];
-        $this->database->DbQuery( "UPDATE `player` SET `player_score` = `player_score` + ".$score." WHERE `player_id` = '".$player_id."'" );
-        $this->notifications->notifyAllPlayers('score_details', '',
+    protected function process_stage_score($player_id, $player_name, $score_details, $placed_markers, $jewels, $colour_map): void {
+        $score_increase = $score_details['score_increase'];
+        $this->database->DbQuery( "UPDATE `player` SET `player_score` = `player_score` + ".$score_increase." WHERE `player_id` = '".$player_id."'" );
+        $this->notifications->notifyAllPlayers(
+            'score_details',
+            'Stage score ' . $player_name . ' is ' . $score_increase,
         [
             'player_id' => $player_id, 
             'score_details' => $score_details,

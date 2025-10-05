@@ -36,5 +36,9 @@ class Action {
 
         $this->gamestate->nextState($transition_name);
     }
+
+    public function change_active_player($player_id) {
+        $this->gamestate->changeActivePlayer($player_id);
+    }
 }
 ?>
