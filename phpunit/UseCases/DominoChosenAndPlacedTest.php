@@ -72,7 +72,7 @@ class DominoChosenAndPlacedTest extends TestCase{
         $this->arrange();
 
         $this->mock_notifications->expects($this->exactly(1))->method('notifyAllPlayers')
-        ->with('domino_placed', 'domino_placed', 
+        ->with('domino_placed', '', 
         ['quarry_index' => $this->quarry_index
         , 'player_id' => $this->player_id
         , 'tiles' => ['a', 'b']

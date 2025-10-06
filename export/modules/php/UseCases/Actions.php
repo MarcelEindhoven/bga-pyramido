@@ -36,6 +36,17 @@ include_once(__DIR__.'/../Infrastructure/Marker.php');
 include_once(__DIR__.'/../Infrastructure/Resurfacing.php');
 use Bga\Games\PyramidoCannonFodder\Infrastructure;
 
+class Notifier {
+    function __construct($notifications) {
+        $this->notifications = $notifications;
+    }
+    public function notifyAllPlayers(string $notificationType, string $notificationLog, array $notificationArgs): void {
+        $this->notifications->notifyAllPlayers($notificationType, $this->notifications->clienttranslate($notificationLog), $notificationArgs);
+    }
+    public function notifyPlayer(int $playerId, string $notificationType, string $notificationLog, array $notificationArgs): void {
+        $this->notifications->notifyPlayer($playerId, $notificationType, $this->notifications->clienttranslate($notificationLog), $notificationArgs);
+    }
+}
 class Actions {
     protected array $decks = [];
     protected array $players = [];
@@ -56,7 +67,7 @@ class Actions {
     }
 
     public function set_notifications($notifications) : Actions {
-        $this->notifications = $notifications;
+        $this->notifications = new Notifier($notifications);
         return $this;
     }
 

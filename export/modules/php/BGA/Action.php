@@ -25,6 +25,15 @@ class Action {
         $this->notifications = $notifications;
         return $this;
     }
+    public function get_default_notification_arguments($player_id): array {
+        $current_data = $this->get_current_data->get();
+        $player_name = $current_data["players"][$player_id]["name"];
+        return             [
+            'player_id' => $player_id, 
+            'player_name' => $player_name,
+        ]
+;
+    }
 
     public function set_get_current_data($get_current_data) : Action {
         $this->get_current_data = $get_current_data;

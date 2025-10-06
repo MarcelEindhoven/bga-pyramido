@@ -85,6 +85,10 @@ class Game extends \Table
         return self::getCollectionFromDb($query);
     }
 
+    function clienttranslate(string $text): string {
+        return clienttranslate($text);
+    }
+
     /**
      * The framework demands that each action starts with the prefix "act"
      */
@@ -209,7 +213,6 @@ class Game extends \Table
     public function getGameProgression()
     {
         $this->initialise();
-        // TODO: compute and return the game progression
 
         return $this->actions->get_game_progression();
     }

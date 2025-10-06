@@ -33,6 +33,8 @@ class MarkerAutomaticallyChosenAndPlacedTest extends TestCase{
     protected array $current_data = [
         'tiles' => [77 => [1464 => ['colour'=> 3]]],
         'candidate_tiles_for_marker' => [1464 => ['horizontal' => 12, 'vertical' => 14, 'rotation' => 3, 'colour'=> 3]],
+        'players' => [77 => ['name'=> 'x']],
+
     ];
     protected array $marker_specification = ['horizontal' => 12, 'vertical' => 14, ];
     protected array $modified_marker_specification = ['stage' => 4, 'horizontal' => 12, 'vertical' => 14,];
@@ -65,7 +67,7 @@ class MarkerAutomaticallyChosenAndPlacedTest extends TestCase{
     }
 
     protected function arrange() {
-        $this->mock_get_current_data->expects($this->exactly(2))->method('get')->willReturn($this->current_data);
+        $this->mock_get_current_data->expects($this->exactly(3))->method('get')->willReturn($this->current_data);
         $this->mock_update_marker->expects($this->exactly(1))->method('get_marker')->with($this->player_id, ['colour'=> 3])->willReturn('x');
     }
 

@@ -16,6 +16,7 @@ namespace Bga\Games\PyramidoCannonFodder\UseCases;
 include_once(__DIR__.'/../BGA/Action.php');
 
 include_once(__DIR__.'/../Domain/Pyramid.php');
+include_once(__DIR__.'/../Domain/Colour.php');
 use Bga\Games\PyramidoCannonFodder\Domain;
 
 include_once(__DIR__.'/../Infrastructure/Domino.php');
@@ -44,14 +45,14 @@ class MarkerOptionallyOnResurfacing extends \NieuwenhovenGames\BGA\Action {
     }
 
     public function execute(): MarkerOptionallyOnResurfacing {
+        $notification_arguments = $this->get_default_notification_arguments($this->player_id);
         foreach($this->get_current_data->get()['candidate_tiles_for_marker']
                 as $tile) {
             $this->update_marker->move($this->player_id, $tile);
             $marker = $this->update_marker->get_marker($this->player_id, $tile);
-            $this->notifications->notifyAllPlayers('marker_placed', 'marker_placed',
-            ['player_id' => $this->player_id, 
-            'marker_specification' => $marker,
-            ]);
+            $notification_arguments['marker_specification'] = $marker;
+            $notification_arguments['colour'] = Domain\COLOURS[$marker['colour']];
+            $this->notifications->notifyAllPlayers('marker_placed', '${player_name} places ${colour} marker on resurfacing tile', $notification_arguments);
         }
 
         return $this;

@@ -32,6 +32,7 @@ class MarkerChosenAndPlacedTest extends TestCase{
 
     protected array $current_data = [
         'tiles' => [77 => [1464 => ['colour'=> 3]]],
+        'players' => [77 => ['name'=> 'x']],
     ];
     protected array $marker_specification = ['horizontal' => 12, 'vertical' => 14, ];
     protected array $modified_marker_specification = ['stage' => 4, 'horizontal' => 12, 'vertical' => 14,];
@@ -70,9 +71,10 @@ class MarkerChosenAndPlacedTest extends TestCase{
         $this->arrange();
 
         $this->mock_notifications->expects($this->exactly(1))->method('notifyAllPlayers')
-        ->with('marker_placed', 'marker_placed', 
-        [ 'player_id' => $this->player_id
-        , 'marker_specification' => 'x'
+        ->with('marker_placed', '', 
+        [ 'player_id' => $this->player_id,
+          'player_name' => 'x',
+          'marker_specification' => 'x'
         ]);
         // Act
         $this->act_default();
@@ -80,7 +82,7 @@ class MarkerChosenAndPlacedTest extends TestCase{
     }
 
     protected function arrange() {
-        $this->mock_get_current_data->expects($this->exactly(1))->method('get')->willReturn($this->current_data);
+        $this->mock_get_current_data->expects($this->exactly(2))->method('get')->willReturn($this->current_data);
         $this->mock_update_marker->expects($this->exactly(1))->method('get_marker')->with($this->player_id, ['colour'=> 3])->willReturn('x');
     }
 

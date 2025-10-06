@@ -47,10 +47,10 @@ class MarkerChosenAndPlaced extends \NieuwenhovenGames\BGA\Action {
         $this->update_marker->move($this->player_id, $tile);
 
         $marker = $this->update_marker->get_marker($this->player_id, $tile);
-        $this->notifications->notifyAllPlayers('marker_placed', 'marker_placed',
-        ['player_id' => $this->player_id, 
-        'marker_specification' => $marker,
-        ]);
+
+        $notification_arguments = $this->get_default_notification_arguments($this->player_id);
+        $notification_arguments['marker_specification'] = $marker;
+        $this->notifications->notifyAllPlayers('marker_placed', '', $notification_arguments);
 
         return $this;
     }

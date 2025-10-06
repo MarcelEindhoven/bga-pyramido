@@ -38,15 +38,14 @@ class AfterStageFinished extends \NieuwenhovenGames\BGA\Action {
         $current_data = $this->get_current_data->get();
         $player_id = $this->database->getActivePlayerId();
         $stage_start_player_id = $this->database->getPlayerAfter($player_id);
-        $player_name = $current_data["players"][$stage_start_player_id]["name"];
+
+        $default_notification_arguments = $this->get_default_notification_arguments($stage_start_player_id);
         $this->notifications->notifyAllPlayers(
             'current_stage_start_player',
             'Current stage start player is ${player_name}',
-            [
-                'player_id' => $stage_start_player_id, 
-                'player_name' => $player_name,
-            ]
+            $default_notification_arguments
         );
+
         $player_after_stage_starter_player_id = $this->database->getPlayerAfter($stage_start_player_id);
         $player_id = $player_after_stage_starter_player_id;
         do {
@@ -55,10 +54,8 @@ class AfterStageFinished extends \NieuwenhovenGames\BGA\Action {
             $markers = $current_data['markers'][$player_id];
             $placed_markers = array_filter($markers, function($marker) {return 0 != $marker['stage'];});
             $score_details = Domain\StageScore::create($top_view->get_jewels(), $top_view->get_colour_map())->get_score_details($placed_markers);
-            $player_name = $current_data["players"][$player_id]["name"];
             $this->process_stage_score(
                 $player_id,
-                $player_name,
                 $score_details,
                 $placed_markers,
                 $top_view->get_jewels(),
@@ -68,38 +65,36 @@ class AfterStageFinished extends \NieuwenhovenGames\BGA\Action {
             if ($score_increase < $least_stage_score) {
                 $least_stage_score = $score_increase;
                 $player_id_least_stage_score = $player_id;
-                $player_name_least_stage_score = $player_name;
             }
             $player_id = $this->database->getPlayerAfter($player_id);
         }
         while ($player_id != $player_after_stage_starter_player_id);
 
+        $default_notification_arguments = $this->get_default_notification_arguments($player_id_least_stage_score);
         $this->notifications->notifyAllPlayers(
             'least_stage_score',
             'Player with least stage score is ${player_name}',
-            [
-                'player_id' => $player_id_least_stage_score, 
-                'player_name' => $player_name_least_stage_score,
-            ]
+            $default_notification_arguments
         );
         $this->change_active_player($this->database->getPlayerBefore($player_id_least_stage_score));
 
         return $this;
     }
-    protected function process_stage_score($player_id, $player_name, $score_details, $placed_markers, $jewels, $colour_map): void {
+    protected function process_stage_score($player_id, $score_details, $placed_markers, $jewels, $colour_map): void {
         $score_increase = $score_details['score_increase'];
         $this->database->DbQuery( "UPDATE `player` SET `player_score` = `player_score` + ".$score_increase." WHERE `player_id` = '".$player_id."'" );
+
+        $notification_arguments = $this->get_default_notification_arguments($player_id);
+        $notification_arguments['score_details'] = $score_details;
+        $notification_arguments['placed_markers'] = $placed_markers;
+        $notification_arguments['jewels'] = $jewels;
+        $notification_arguments['colour_map'] = $colour_map;
+
         $this->notifications->notifyAllPlayers(
             'score_details',
             'Stage score ${player_name} is ' . $score_increase,
-        [
-            'player_id' => $player_id, 
-            'player_name' => $player_name,
-            'score_details' => $score_details,
-            'placed_markers' => $placed_markers,
-            'jewels' => $jewels,
-            'colour_map' => $colour_map
-        ]);
+            $notification_arguments
+        );
     
     }
 }

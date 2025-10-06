@@ -49,7 +49,7 @@ class DominoChosenAndPlaced extends \NieuwenhovenGames\BGA\Action {
         $this->update_domino->move($this->quarry_index, $this->player_id, $this->domino_specification);
 
         $domino = $this->update_domino->get_domino($this->player_id, $this->domino_specification);
-        $this->notifications->notifyAllPlayers('domino_placed', 'domino_placed',
+        $this->notifications->notifyAllPlayers('domino_placed', '',
         ['quarry_index' => $this->quarry_index, 
         'player_id' => $this->player_id, 
         'tiles' => [$this->update_domino->get_first_tile_for($domino), $this->update_domino->get_second_tile_for($domino), ],
