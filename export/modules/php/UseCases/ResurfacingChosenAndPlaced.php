@@ -15,6 +15,9 @@ namespace Bga\Games\PyramidoCannonFodder\UseCases;
 
 include_once(__DIR__.'/../BGA/Action.php');
 
+include_once(__DIR__.'/../Domain/Colour.php');
+use Bga\Games\PyramidoCannonFodder\Domain;
+
 include_once(__DIR__.'/../Infrastructure/Domino.php');
 use Bga\Games\PyramidoCannonFodder\Infrastructure;
 
@@ -41,22 +44,20 @@ class ResurfacingChosenAndPlaced extends \NieuwenhovenGames\BGA\Action {
     }
 
     public function execute(): ResurfacingChosenAndPlaced {
+        $notification_arguments = $this->get_default_notification_arguments($this->player_id);
+
         $this->tile_specification['stage'] = 4;
-        $removed_tile = $this->get_current_data->get()['tiles'][$this->player_id][Infrastructure\CurrentTiles::calculate_array_index($this->tile_specification)];
+        $notification_arguments['removed_tile'] = $this->get_current_data->get()['tiles'][$this->player_id][Infrastructure\CurrentTiles::calculate_array_index($this->tile_specification)];
 
         // $this->tile_specification['stage'] = $this->get_current_data->get()['current_stage'];
-        $unplaced = $this->update_resurfacing->get_both_unplaced($this->player_id, $this->tile_specification);
+        $notification_arguments['removed_resurfacings'] = $this->update_resurfacing->get_both_unplaced($this->player_id, $this->tile_specification);
 
         $this->update_resurfacing->move_to_pyramid($this->player_id, $this->tile_specification);
 
         // notify
-        $this->notifications->notifyAllPlayers('resurface', '',
-        [
-        'player_id' => $this->player_id, 
-        'removed_tile' => $removed_tile,
-        'added_tile' => $this->get_current_data->get()['tiles'][$this->player_id][Infrastructure\CurrentTiles::calculate_array_index($this->tile_specification)],
-        'removed_resurfacings' => $unplaced,
-        ]);
+        $notification_arguments['colour'] = Domain\COLOURS[$this->tile_specification['colour']];
+        $notification_arguments['added_tile'] = $this->get_current_data->get()['tiles'][$this->player_id][Infrastructure\CurrentTiles::calculate_array_index($this->tile_specification)];
+        $this->notifications->notifyAllPlayers('resurface', '${player_name} resurfaces with a ${colour} tile', $notification_arguments);
 
         return $this;
     }
