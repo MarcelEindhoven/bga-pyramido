@@ -64,13 +64,13 @@ class AfterOptionalResurfacing extends \NieuwenhovenGames\BGA\Action {
         $domino = $this->update_domino->get_domino($this->player_id, $domino_last_placed);
 
         $updated_tiles = $this->get_current_data->get()['tiles'][$this->player_id];
-        $this->notifications->notifyAllPlayers('tiles_new_stage', '',
-        [
-        'player_id' => $this->player_id, 
-        'tiles' => [
+
+        $notification_arguments = $this->get_default_notification_arguments($this->player_id);
+        $notification_arguments['tiles'] = [
             $updated_tiles[Infrastructure\CurrentTiles::calculate_array_index($this->update_domino->get_first_tile_for($domino))],
             $updated_tiles[Infrastructure\CurrentTiles::calculate_array_index($this->update_domino->get_second_tile_for($domino))],
-        ]]);
+        ];
+        $this->notifications->notifyAllPlayers('tiles_new_stage', '', $notification_arguments);
 
         return $this;
     }

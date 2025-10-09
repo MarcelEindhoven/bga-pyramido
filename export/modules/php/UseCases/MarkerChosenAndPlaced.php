@@ -15,6 +15,9 @@ namespace Bga\Games\PyramidoCannonFodder\UseCases;
 
 include_once(__DIR__.'/../BGA/Action.php');
 
+include_once(__DIR__.'/../Domain/Colour.php');
+use Bga\Games\PyramidoCannonFodder\Domain;
+
 include_once(__DIR__.'/../Infrastructure/Domino.php');
 use Bga\Games\PyramidoCannonFodder\Infrastructure;
 
@@ -50,7 +53,8 @@ class MarkerChosenAndPlaced extends \NieuwenhovenGames\BGA\Action {
 
         $notification_arguments = $this->get_default_notification_arguments($this->player_id);
         $notification_arguments['marker_specification'] = $marker;
-        $this->notifications->notifyAllPlayers('marker_placed', '', $notification_arguments);
+        $notification_arguments['colour'] = Domain\COLOURS[$marker['colour']];
+        $this->notifications->notifyAllPlayers('marker_placed', '${player_name} places ${colour} marker', $notification_arguments);
 
         return $this;
     }

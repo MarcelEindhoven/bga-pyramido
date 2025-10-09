@@ -47,6 +47,7 @@ class Notifier {
         $this->notifications->notifyPlayer($playerId, $notificationType, $this->notifications->clienttranslate($notificationLog), $notificationArgs);
     }
 }
+
 class Actions {
     protected array $decks = [];
     protected array $players = [];

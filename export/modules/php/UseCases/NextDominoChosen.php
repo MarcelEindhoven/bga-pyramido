@@ -44,7 +44,7 @@ class NextDominoChosen extends \NieuwenhovenGames\BGA\Action {
 
         $next_domino = $this->update_market->get_market_entries('next')[explode("-", $this->next_index)[1]];
 
-        $this->notifications->notifyAllPlayers('next_domino_chosen', 'next_domino_chosen',
+        $this->notifications->notifyAllPlayers('next_domino_chosen', '',
         ['next_index' => $this->next_index, 
         'quarry_index' => $this->quarry_index, 
         'next_domino' => $next_domino,
