@@ -34,9 +34,11 @@ define(['dojo/_base/declare'], (declare) => {
             Object.values(player_order).forEach(player_id => {
                 this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
                     <div id="player-table-${player_id}" style = "display: inline-block;">
-                        <div style = "display: inline-block;"><strong>${players[player_id].name}</strong></div>
-                        <div id="marker-${player_id}" style = "display: inline-block; width: 90px ; height: 140px"></div>
-                        <div id="resurfacing-${player_id}" style = "display: inline-block; width: 160px ; height: 240px"></div>
+                        <div style = "display: inline-block;">
+                            <div><strong>${players[player_id].name}</strong></div>
+                            <div id="marker-${player_id}" style = "display: inline-block; width: 90px ; height: 140px"></div>
+                            <div id="resurfacing-${player_id}" style = "display: inline-block; width: 160px ; height: 240px"></div>
+                        </div>
                         <div id="pyramid-${player_id}" style = "display: inline-block; position: relative; width: 80px ; height: 80px"></div>
                     </div>
                 `);
