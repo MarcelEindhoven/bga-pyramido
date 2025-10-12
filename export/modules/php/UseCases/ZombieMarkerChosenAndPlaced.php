@@ -16,13 +16,13 @@ namespace Bga\Games\PyramidoCannonFodder\UseCases;
 include_once(__DIR__.'/MarkerChosenAndPlaced.php');
 
 #[\AllowDynamicProperties]
-class AIMarkerChosenAndPlaced extends MarkerChosenAndPlaced {
-    static public function create($gamestate): AIMarkerChosenAndPlaced {
-        $object = new AIMarkerChosenAndPlaced($gamestate);
+class ZombieMarkerChosenAndPlaced extends MarkerChosenAndPlaced {
+    static public function create($gamestate): ZombieMarkerChosenAndPlaced {
+        $object = new ZombieMarkerChosenAndPlaced($gamestate);
         return $object;
     }
 
-    public function execute(): AIMarkerChosenAndPlaced {
+    public function execute(): ZombieMarkerChosenAndPlaced {
         $candidate_tiles_for_marker = $this->get_current_data->get()['candidate_tiles_for_marker'];
         if (count($candidate_tiles_for_marker) >0) {
             $this->set_tile_specification(end($candidate_tiles_for_marker));

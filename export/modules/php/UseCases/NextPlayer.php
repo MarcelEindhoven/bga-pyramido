@@ -41,7 +41,7 @@ class NextPlayer extends \NieuwenhovenGames\BGA\Action {
     }
 
     public function get_transition_name() : string {
-        if (substr($this->get_current_data->get()['players'][$this->player_id]['name'], 0, 3) === 'AI_')
+        if (substr($this->get_current_data->get()['players'][$this->player_id]['name'], 0, 3) === 'Zombie_')
             return 'ai_playing';
         return 'player_playing';
     }

@@ -9,7 +9,7 @@ namespace Bga\Games\PyramidoCannonFodder\UseCases;
 include_once(__DIR__.'/../../vendor/autoload.php');
 use PHPUnit\Framework\TestCase;
 
-include_once(__DIR__.'/../../export/modules/php/UseCases/AIMarkerChosenAndPlaced.php');
+include_once(__DIR__.'/../../export/modules/php/UseCases/ZombieMarkerChosenAndPlaced.php');
 
 include_once(__DIR__.'/../../export/modules/php/UseCases/GetAllDatas.php');
 
@@ -23,8 +23,8 @@ include_once(__DIR__.'/../_ide_helper.php');
 use Bga\Games\FrameworkInterfaces;
 
 #[\AllowDynamicProperties]
-class AIMarkerChosenAndPlacedTest extends TestCase{
-    protected ?AIMarkerChosenAndPlaced $sut = null;
+class ZombieMarkerChosenAndPlacedTest extends TestCase{
+    protected ?ZombieMarkerChosenAndPlaced $sut = null;
     protected ?FrameworkInterfaces\GameState $mock_gamestate = null;
     protected ?FrameworkInterfaces\Deck $mock_cards = null;
     protected ?FrameworkInterfaces\Table $mock_notifications = null;
@@ -43,7 +43,7 @@ class AIMarkerChosenAndPlacedTest extends TestCase{
 
     protected function setUp(): void {
         $this->mock_gamestate = $this->createMock(FrameworkInterfaces\GameState::class);
-        $this->sut = AIMarkerChosenAndPlaced::create($this->mock_gamestate);
+        $this->sut = ZombieMarkerChosenAndPlaced::create($this->mock_gamestate);
 
         $this->mock_notifications = $this->createMock(FrameworkInterfaces\Table::class);
         $this->sut->set_notifications($this->mock_notifications);

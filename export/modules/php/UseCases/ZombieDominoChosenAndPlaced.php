@@ -16,13 +16,13 @@ namespace Bga\Games\PyramidoCannonFodder\UseCases;
 include_once(__DIR__.'/DominoChosenAndPlaced.php');
 
 #[\AllowDynamicProperties]
-class AIDominoChosenAndPlaced extends DominoChosenAndPlaced {
-    static public function create($gamestate): AIDominoChosenAndPlaced {
-        $object = new AIDominoChosenAndPlaced($gamestate);
+class ZombieDominoChosenAndPlaced extends DominoChosenAndPlaced {
+    static public function create($gamestate): ZombieDominoChosenAndPlaced {
+        $object = new ZombieDominoChosenAndPlaced($gamestate);
         return $object;
     }
 
-    public function execute(): AIDominoChosenAndPlaced {
+    public function execute(): ZombieDominoChosenAndPlaced {
         parent::set_quarry_index('quarry-2');
 
         parent::set_domino_specification($this->get_domino_specification());

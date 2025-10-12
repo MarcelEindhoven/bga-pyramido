@@ -64,11 +64,11 @@ class NewGame
 
     public function setup(&$players): NewGame {
         $keys = array_keys($players);
-        // Assign player slots to AI by overwriting the player name
-        for ($AI_index = 0; $AI_index < $this->number_ai_players; $AI_index++) {
-            // Interleave human players with AI players
-            $this->skipFirstKeyIfPossible($keys, $this->number_ai_players - $AI_index);
-            $this->assignPlayerAsAI($players[$keys[array_key_first($keys)]], $AI_index + 1);
+        // Assign player slots to Zombie by overwriting the player name
+        for ($Zombie_index = 0; $Zombie_index < $this->number_ai_players; $Zombie_index++) {
+            // Interleave human players with Zombie players
+            $this->skipFirstKeyIfPossible($keys, $this->number_ai_players - $Zombie_index);
+            $this->assignPlayerAsZombie($players[$keys[array_key_first($keys)]], $Zombie_index + 1);
             unset($keys[array_key_first($keys)]);
         }
 
@@ -79,14 +79,14 @@ class NewGame
 
         return $this;
     }
-    protected function skipFirstKeyIfPossible(& $keys, $remaining_AI) {
-        if ($remaining_AI < count($keys)) {
+    protected function skipFirstKeyIfPossible(& $keys, $remaining_Zombie) {
+        if ($remaining_Zombie < count($keys)) {
             // First in the remaining list is a human player
             unset($keys[array_key_first($keys)]);
         }
     }
-    protected function assignPlayerAsAI(& $player, $AI_sequence_number) {
-        $player['player_name'] = 'AI_' . ($AI_sequence_number);
+    protected function assignPlayerAsZombie(& $player, $Zombie_sequence_number) {
+        $player['player_name'] = 'Zombie_' . ($Zombie_sequence_number);
     }
 
     public function setup_market() : NewGame{

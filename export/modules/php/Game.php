@@ -43,7 +43,7 @@ class Game extends \Table
         $this->initGameStateLabels([
             "my_first_global_variable" => 10,
             "my_second_global_variable" => 11,
-            "AI" => 100,
+            "Zombie" => 100,
             "my_second_game_variant" => 101,
         ]);        
 
@@ -269,22 +269,22 @@ class Game extends \Table
         $this->actions->stMarkerOptionallyOnResurfacing();
     }
 
-    public function stAISelectAndPlaceDomino(): void {
+    public function stZombieSelectAndPlaceDomino(): void {
         $this->initialise();
 
-        $this->actions->stAISelectAndPlaceDomino();
+        $this->actions->stZombieSelectAndPlaceDomino();
     }
 
-    public function stAISelectAndPlaceMarker(): void {
+    public function stZombieSelectAndPlaceMarker(): void {
         $this->initialise();
 
-        $this->actions->stAISelectAndPlaceMarker();
+        $this->actions->stZombieSelectAndPlaceMarker();
     }
 
-    public function stAIChooseNextDomino(): void {
+    public function stZombieChooseNextDomino(): void {
         $this->initialise();
 
-        $this->actions->stAIChooseNextDomino();
+        $this->actions->stZombieChooseNextDomino();
     }
 
     /**

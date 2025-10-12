@@ -1509,7 +1509,7 @@ const FEX_NOCODE = 100;
 /** Exception code to use when an input argument is invalid. */
 const FEX_bad_input_argument = 300;
 
-/** If you go over 64k, storeLegacyData function is going to FAIL and throws this exception code. */
+/** If you go over 64k, storeLegacyData function is going to FZombieL and throws this exception code. */
 const FEX_legacy_size_exceeded = 805;
 
 /** Exception code to use when the game action is not allowed. */

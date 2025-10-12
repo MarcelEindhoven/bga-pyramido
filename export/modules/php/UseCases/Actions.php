@@ -15,9 +15,9 @@ namespace Bga\Games\PyramidoCannonFodder\UseCases;
 
 include_once(__DIR__.'/GetAllDatas.php');
 
-include_once(__DIR__.'/AIDominoChosenAndPlaced.php');
-include_once(__DIR__.'/AIMarkerChosenAndPlaced.php');
-include_once(__DIR__.'/AINextDominoChosen.php');
+include_once(__DIR__.'/ZombieDominoChosenAndPlaced.php');
+include_once(__DIR__.'/ZombieMarkerChosenAndPlaced.php');
+include_once(__DIR__.'/ZombieNextDominoChosen.php');
 
 include_once(__DIR__.'/DominoChosenAndPlaced.php');
 include_once(__DIR__.'/MarkerChosenAndPlaced.php');
@@ -91,15 +91,15 @@ class Actions {
         NextPlayer::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($active_player_id)->set_deck($this->decks['domino'])->set_get_current_data($this->get_current_data())->execute()->nextState();
     }
 
-    public function stAISelectAndPlaceDomino(): void {
+    public function stZombieSelectAndPlaceDomino(): void {
         $update_domino = Infrastructure\UpdateDomino::create($this->decks['domino']);
-        AIDominoChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_domino($update_domino)->set_get_current_data($this->get_current_data())
+        ZombieDominoChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_domino($update_domino)->set_get_current_data($this->get_current_data())
         ->execute()->nextState();
     }
 
-    public function stAISelectAndPlaceMarker(): void {
+    public function stZombieSelectAndPlaceMarker(): void {
         $update_marker = Infrastructure\UpdateMarker::create($this->decks['marker']);
-        AIMarkerChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_marker($update_marker)->set_get_current_data($this->get_current_data())
+        ZombieMarkerChosenAndPlaced::create($this->gamestate)->set_notifications($this->notifications)->set_player_id($this->player_id)->set_update_marker($update_marker)->set_get_current_data($this->get_current_data())
         ->execute()->nextState();
     }
 
@@ -133,9 +133,9 @@ class Actions {
         NextDominoChosen::create($this->gamestate)->set_notifications($this->notifications)->set_update_market($update_market)->set_next_index($next_index)->set_quarry_index($quarry_index)->execute()->nextState();
     }
 
-    public function stAIChooseNextDomino(): void {
+    public function stZombieChooseNextDomino(): void {
         $update_market = Infrastructure\UpdateMarket::create($this->decks['domino']);
-        AINextDominoChosen::create($this->gamestate)->set_notifications($this->notifications)->set_update_market($update_market)->execute()->nextState();
+        ZombieNextDominoChosen::create($this->gamestate)->set_notifications($this->notifications)->set_update_market($update_market)->execute()->nextState();
     }
 
     public function stAfterOptionalResurfacing(): void {

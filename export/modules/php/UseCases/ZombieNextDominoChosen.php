@@ -16,13 +16,13 @@ namespace Bga\Games\PyramidoCannonFodder\UseCases;
 include_once(__DIR__.'/../BGA/Action.php');
 
 #[\AllowDynamicProperties]
-class AINextDominoChosen extends NextDominoChosen {
-    static public function create($gamestate): AINextDominoChosen {
-        $object = new AINextDominoChosen($gamestate);
+class ZombieNextDominoChosen extends NextDominoChosen {
+    static public function create($gamestate): ZombieNextDominoChosen {
+        $object = new ZombieNextDominoChosen($gamestate);
         return $object;
     }
 
-    public function execute(): AINextDominoChosen {
+    public function execute(): ZombieNextDominoChosen {
         parent::set_next_index('next-2');
         parent::set_quarry_index('quarry-2');
         parent::execute();

@@ -184,17 +184,17 @@ $machinestates = [
         "transitions" => ["player_playing" => 10, "ai_playing" => 50]
     ],
     50 => [
-        "name" => "selectAndPlaceDominoAI",
-        "description" => 'AI selects and places domino',
+        "name" => "selectAndPlaceDominoZombie",
+        "description" => 'Zombie selects and places domino',
         "type" => "game",
-        "action" => "stAISelectAndPlaceDomino",
+        "action" => "stZombieSelectAndPlaceDomino",
         "transitions" => ["" => 60, ]
     ],
     60 => [
-        "name" => "selectAndPlaceMarkerAI",
-        "description" => 'AI selects and places marker',
+        "name" => "selectAndPlaceMarkerZombie",
+        "description" => 'Zombie selects and places marker',
         "type" => "game",
-        "action" => "stAISelectAndPlaceMarker",
+        "action" => "stZombieSelectAndPlaceMarker",
         "transitions" => ["" => 67, ]
     ],
     67 => [
@@ -205,10 +205,10 @@ $machinestates = [
         "transitions" => ["" => 70,]
     ],
     70 => [
-        "name" => "chooseNextDominoAI",
-        "description" => 'AI chooses next domino',
+        "name" => "chooseNextDominoZombie",
+        "description" => 'Zombie chooses next domino',
         "type" => "game",
-        "action" => "stAIChooseNextDomino",
+        "action" => "stZombieChooseNextDomino",
         "transitions" => ["next_domino_chosen" => 31, ]
     ],
     // Final state.
