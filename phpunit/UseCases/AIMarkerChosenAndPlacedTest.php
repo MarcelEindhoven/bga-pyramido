@@ -38,6 +38,7 @@ class AIMarkerChosenAndPlacedTest extends TestCase{
             'candidate_tiles_for_marker' => [],
             'players' => [77 => ['name'=> 'x']],
     ];
+    protected array $updated_marker = ['colour' => 1];
     protected array $expected_marker_specification = ['stage' => 4, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0, ];
 
     protected function setUp(): void {
@@ -74,9 +75,13 @@ class AIMarkerChosenAndPlacedTest extends TestCase{
         $tile_index = Infrastructure\CurrentTiles::calculate_array_index($tile_specification);
         $this->current_data['tiles'][$this->player_id][$tile_index] = $tile;
         $this->current_data['candidate_tiles_for_marker'] = [$tile_specification];
-        $this->mock_get_current_data->expects($this->exactly(3))->method('get')->willReturn($this->current_data);
 
-        $expected_tile_specification = $tile_specification;
+        $this->mock_get_current_data->expects($this->exactly(3))->method('get')->willReturn(
+            $this->current_data);
+        $this->mock_update_marker->expects($this->once())->method('get_marker')
+            ->with($this->player_id, $tile)->willReturn($this->updated_marker);
+
+            $expected_tile_specification = $tile_specification;
         $this->arrange();
 
         // Act
@@ -88,7 +93,10 @@ class AIMarkerChosenAndPlacedTest extends TestCase{
         // Arrange
         $tile = ['stage' => 4, 'horizontal' => 10, 'vertical' => 10];
         $this->current_data['candidate_tiles_for_marker'] = [$tile, $tile];
+
         $this->mock_get_current_data->expects($this->exactly(3))->method('get')->willReturn($this->current_data);
+        $this->mock_update_marker->expects($this->once())->method('get_marker')
+            ->with($this->player_id, $this->current_data['tiles'][77][1054])->willReturn($this->updated_marker);
 
         $expected_tile_specification = $tile;
         $this->arrange();

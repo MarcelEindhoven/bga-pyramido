@@ -13,6 +13,9 @@ include_once(__DIR__.'/../../export/modules/php/UseCases/MarkerChosenAndPlaced.p
 
 include_once(__DIR__.'/../../export/modules/php/UseCases/GetAllDatas.php');
 
+include_once(__DIR__.'/../../export/modules/php/Domain/Colour.php');
+use Bga\Games\PyramidoCannonFodder\Domain;
+
 include_once(__DIR__.'/../../export/modules/php/Infrastructure/Marker.php');
 use Bga\Games\PyramidoCannonFodder\Infrastructure;
 
@@ -31,12 +34,13 @@ class MarkerChosenAndPlacedTest extends TestCase{
     protected int $player_id = 77;
 
     protected array $current_data = [
-        'tiles' => [77 => [1464 => ['colour'=> 3]]],
+        'tiles' => [77 => [1464 => ['colour' => 1]]],
         'players' => [77 => ['name'=> 'x']],
     ];
     protected array $marker_specification = ['horizontal' => 12, 'vertical' => 14, ];
     protected array $modified_marker_specification = ['stage' => 4, 'horizontal' => 12, 'vertical' => 14,];
     protected array $tile_specification = ['horizontal' => 12, 'vertical' => 14, 'rotation' => 3, ];
+    protected array $updated_marker = ['colour' => 1];
 
     protected function setUp(): void {
         $this->mock_gamestate = $this->createMock(FrameworkInterfaces\GameState::class);
@@ -60,7 +64,7 @@ class MarkerChosenAndPlacedTest extends TestCase{
         // Arrange
         $this->arrange();
 
-        $this->mock_update_marker->expects($this->exactly(1))->method('move')->with($this->player_id, ['colour'=> 3]);
+        $this->mock_update_marker->expects($this->exactly(1))->method('move')->with($this->player_id, $this->updated_marker);
         // Act
         $this->act_default();
         // Assert
@@ -71,11 +75,13 @@ class MarkerChosenAndPlacedTest extends TestCase{
         $this->arrange();
 
         $this->mock_notifications->expects($this->exactly(1))->method('notifyAllPlayers')
-        ->with('marker_placed', '', 
+        ->with('marker_placed', '${player_name} places ${colour} marker', 
         [ 'player_id' => $this->player_id,
           'player_name' => 'x',
-          'marker_specification' => 'x'
+          'marker_specification' => $this->updated_marker,
+          'colour' => Domain\COLOURS[$this->updated_marker['colour']],
         ]);
+     
         // Act
         $this->act_default();
         // Assert
@@ -83,7 +89,7 @@ class MarkerChosenAndPlacedTest extends TestCase{
 
     protected function arrange() {
         $this->mock_get_current_data->expects($this->exactly(2))->method('get')->willReturn($this->current_data);
-        $this->mock_update_marker->expects($this->exactly(1))->method('get_marker')->with($this->player_id, ['colour'=> 3])->willReturn('x');
+        $this->mock_update_marker->expects($this->exactly(1))->method('get_marker')->with($this->player_id, $this->updated_marker)->willReturn($this->updated_marker);
     }
 
     protected function act_default() {

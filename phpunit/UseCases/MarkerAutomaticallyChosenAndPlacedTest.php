@@ -39,6 +39,7 @@ class MarkerAutomaticallyChosenAndPlacedTest extends TestCase{
     protected array $marker_specification = ['horizontal' => 12, 'vertical' => 14, ];
     protected array $modified_marker_specification = ['stage' => 4, 'horizontal' => 12, 'vertical' => 14,];
     protected array $tile_specification = ['horizontal' => 12, 'vertical' => 14, 'rotation' => 3, ];
+    protected array $updated_marker = ['colour' => 3];
 
     protected function setUp(): void {
         $this->mock_gamestate = $this->createMock(FrameworkInterfaces\GameState::class);
@@ -68,7 +69,7 @@ class MarkerAutomaticallyChosenAndPlacedTest extends TestCase{
 
     protected function arrange() {
         $this->mock_get_current_data->expects($this->exactly(3))->method('get')->willReturn($this->current_data);
-        $this->mock_update_marker->expects($this->exactly(1))->method('get_marker')->with($this->player_id, ['colour'=> 3])->willReturn('x');
+        $this->mock_update_marker->expects($this->exactly(1))->method('get_marker')->with($this->player_id, $this->updated_marker)->willReturn($this->updated_marker);
     }
 
     protected function act_default() {
