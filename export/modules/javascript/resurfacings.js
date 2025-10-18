@@ -90,6 +90,11 @@ define(['dojo/_base/declare'], (declare) => {
                     this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
                         <div id="${this.unique_id}">
                     `);
+                    const upside = +this.colour % 2;
+                    const side = upside == 0 ? 'downside' : 'upside';
+                    console.log('colour = '+ +this.colour + ' binary = ' + upside + ' side = '+ side);
+                    this.game.addTooltip(this.unique_id, _('Resurfacing ' + side), '');
+
                     this.dojo.addClass(this.unique_id,'resurfacing' + this.pixels_per_tile);
                     const id_horizontal = +this.colour % 2;
                     const id_vertical = (+this.colour - id_horizontal) / 2;

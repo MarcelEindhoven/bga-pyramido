@@ -102,23 +102,26 @@ define(['dojo/_base/declare'], (declare) => {
         },
         setup_market_structure() {
             this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
-                <div id="market">
+                <div>
                     <table style="justify-content:center;">
                         <tr>
                             <table>
-                                <tr><td>........................................</td><td>.................................Qua</td><td>rry....................................</td><td>........................................</td></tr>
+                                <tr><td>........................................</td><td>..........................Quarry..</td><td>replenishments..............</td><td>........................................</td></tr>
                                 <tr id="next"></tr>
                             </table>
                         </tr>
                         <tr style="background-color:powderblue;">
                             <table>
-                                <tr><td>....................</td><td>........................................</td><td>..............Market..............</td><td>..........................................................</td></tr>
+                                <tr><td>....................</td><td>........................................</td><td>..............Quarry..............</td><td>..........................................................</td></tr>
                                 <tr id="quarry"><td class=".tile"><div style="display: inline-block" ></div></td></tr>
                             </table>
                         </tr>
                     </table>
                 </div>
             `);
+            this.game.addTooltip('next', _('Dominoes to replenish quarry'), '');
+            this.game.addTooltip('quarry', _('Building blocks available for pyramids'), '');
+
         },
         setup_market_next(next) {
             for (const x of Array(4).keys()) {

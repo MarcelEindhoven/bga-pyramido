@@ -39,6 +39,7 @@ define(['dojo/_base/declare'], (declare) => {
                     this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
                         <div id="${this.unique_id}">
                     `);
+                    this.set_stage(this.stage);
                     this.dojo.addClass(this.unique_id,'tile');
                     const id_horizontal = this.tile_id % this.TILES_PER_ROW;
                     const id_vertical = (this.tile_id-id_horizontal) / this.TILES_PER_ROW;
@@ -61,6 +62,20 @@ define(['dojo/_base/declare'], (declare) => {
                     this.dojo.removeClass(this.unique_id, 'selectable');
                     delete this.callback_object;
                     delete this.callback_method;
+                }
+                set_stage(stage) {
+                    this.stage = stage;
+                    let tooltip = 'undefined';
+                    switch(this.stage) {
+                        case 0: tooltip = '4x5 or 5x4'; break;
+                        case 1: tooltip = 'Tile in 4x5 or 5x4 grid'; break;
+                        case 2: tooltip = 'Tile in 3x4 or 4x3 grid'; break;
+                        case 3: tooltip = 'Tile in 2x3 or 3x2 grid'; break;
+                        case 4: tooltip = 'Latest placed domino'; break;
+                        default: tooltip = 'undefined'; break;
+                    }
+                    this.game.addTooltip(this.unique_id, _(tooltip), '');
+
                 }
                 tile_selected(tile) {
                     if ('callback_object' in this)

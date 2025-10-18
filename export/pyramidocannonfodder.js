@@ -103,6 +103,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
 
             // Setup game notifications to handle (see "setupNotifications" method below)
             this.setupNotifications();
+            this.addTooltipToClass('domino80', _('Pyramid building block'), '');
 
             this.paint();
             //this.experiment(gamedatas);
@@ -564,8 +565,9 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
             Object.values(notif.args.tiles).forEach(tile_specification => {
                 let factory = ('resurfacing' == tile_specification.class ? this.resurfacing_factory : this.tile_factory);
                 let id = factory.get_unique_id(tile_specification);
-                let removed_tile = this.token_containers['pyramid-' + notif.args.player_id].get(id);
-                removed_tile.stage = tile_specification.stage;
+                let new_stage_tile = this.token_containers['pyramid-' + notif.args.player_id].get(id);
+                new_stage_tile.set_stage(tile_specification.stage);
+                
             });
             this.paint();
         },

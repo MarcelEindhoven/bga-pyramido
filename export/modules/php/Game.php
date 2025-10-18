@@ -442,8 +442,6 @@ class Game extends \Table
     protected function zombieTurn(array $state, int $active_player): void
     {
         $state_name = $state["name"];
-        $this->notifyAllPlayers('zombieTurn', '${active_player} zombieTurn', 
-        ['state' => $state, 'active_player' => $active_player]);
 
         if ($state["type"] === "activeplayer") {
             $this->initialise();
