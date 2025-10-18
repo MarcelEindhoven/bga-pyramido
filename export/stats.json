@@ -1,1 +1,24 @@
-{}
+{
+    "player": {
+    "score_stage_1": {
+      "id": 11,
+      "name": "score stage 1",
+      "type": "int"
+    },
+    "score_stage_2": {
+      "id": 12,
+      "name": "score stage 2",
+      "type": "int"
+    },
+    "score_stage_3": {
+      "id": 13,
+      "name": "score stage 3",
+      "type": "int"
+    },
+    "score_stage_4": {
+      "id": 14,
+      "name": "score stage 4",
+      "type": "int"
+    }
+  }
+}

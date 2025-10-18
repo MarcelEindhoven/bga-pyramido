@@ -38,6 +38,7 @@ class AfterStageFinished extends \NieuwenhovenGames\BGA\Action {
         $current_data = $this->get_current_data->get();
         $player_id = $this->database->getActivePlayerId();
         $stage_start_player_id = $this->database->getPlayerAfter($player_id);
+        $stage = $current_data['current_stage'] - 1;
 
         $default_notification_arguments = $this->get_default_notification_arguments($stage_start_player_id);
         $this->notifications->notifyAllPlayers(
@@ -66,6 +67,7 @@ class AfterStageFinished extends \NieuwenhovenGames\BGA\Action {
                 $least_stage_score = $score_increase;
                 $player_id_least_stage_score = $player_id;
             }
+            $this->database->initStat("player", "score_stage_" . $stage, $score_increase, $player_id);
             $player_id = $this->database->getPlayerAfter($player_id);
         }
         while ($player_id != $player_after_stage_starter_player_id);
