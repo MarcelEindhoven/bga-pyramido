@@ -49,6 +49,9 @@ class ZombieDominoChosenAndPlaced extends DominoChosenAndPlaced {
                 ($candidate_position['vertical'] >= 10) && 
                 ($candidate_position['rotation'] == 1);
         });
+        if (count($candidate_positions) == 0) {
+            return [];
+        }
 
         return array_shift($candidate_positions);
     }
