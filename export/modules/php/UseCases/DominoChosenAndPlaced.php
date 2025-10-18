@@ -60,4 +60,8 @@ class DominoChosenAndPlaced extends \NieuwenhovenGames\BGA\Action {
 
         return $this;
     }
+
+    public function get_transition_name() : string {
+        return 'normal_play';
+    }
 }

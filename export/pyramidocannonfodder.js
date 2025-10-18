@@ -141,7 +141,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
             if( this.isCurrentPlayerActive() ) {
                 switch( stateName )
                 {
-                case 'selectAndPlaceQuarry':
+                case 'selectAndPlaceDomino':
                     this.usecase_place_domino = new usecase_place_domino({ui: this, market: this.market, pyramid: this.token_containers['pyramid-' + this.player_id], domino_factory: this.domino_factory});
                     this.usecase_place_domino.set_candidate_positions(this.gamedatas.candidate_positions);
                     this.usecase_place_domino.subscribe(this, 'domino_placed');
@@ -284,7 +284,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
             {
                 switch( stateName )
                 {
-                    case 'selectAndPlaceQuarry':
+                    case 'selectAndPlaceDomino':
                             this.addActionButton('Rotate', _('Rotate'), () => this.usecase_place_domino.rotate(), null, null, 'gray');
                         break;
                     case 'selectResurfacingTile':
@@ -389,6 +389,9 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
 
             dojo.subscribe( 'candidate_tiles_for_resurfacing', this, "notify_candidate_tiles_for_resurfacing" );
             this.notifqueue.setSynchronous( 'candidate_tiles_for_resurfacing', 3 );
+
+            dojo.subscribe( 'zombieTurn', this, "notify_zombieTurn" );
+            this.notifqueue.setSynchronous( 'zombieTurn', 3 );
         },
 
         notify_score_details: function( notif )
@@ -427,6 +430,12 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
             console.log( notif );
 
             this.gamedatas.candidate_tiles_for_resurfacing = notif.args.candidate_tiles_for_resurfacing;
+        },
+
+        notify_zombieTurn: function( notif )
+        {
+            console.log( 'notify_zombieTurn' );
+            console.log( notif.args );
         },
 
         notify_candidate_tiles_for_marker: function( notif )

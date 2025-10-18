@@ -57,17 +57,17 @@ class NewGame
         return $this;
     }
 
-    public function set_number_ai_players(int $number_ai_players) : NewGame {
-        $this->number_ai_players = $number_ai_players;
+    public function set_number_zombieplayers(int $number_zombieplayers) : NewGame {
+        $this->number_zombieplayers = $number_zombieplayers;
         return $this;
     }
 
     public function setup(&$players): NewGame {
         $keys = array_keys($players);
         // Assign player slots to Zombie by overwriting the player name
-        for ($Zombie_index = 0; $Zombie_index < $this->number_ai_players; $Zombie_index++) {
+        for ($Zombie_index = 0; $Zombie_index < $this->number_zombieplayers; $Zombie_index++) {
             // Interleave human players with Zombie players
-            $this->skipFirstKeyIfPossible($keys, $this->number_ai_players - $Zombie_index);
+            $this->skipFirstKeyIfPossible($keys, $this->number_zombieplayers - $Zombie_index);
             $this->assignPlayerAsZombie($players[$keys[array_key_first($keys)]], $Zombie_index + 1);
             unset($keys[array_key_first($keys)]);
         }

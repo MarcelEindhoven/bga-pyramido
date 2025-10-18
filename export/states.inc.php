@@ -65,7 +65,7 @@ $machinestates = [
     // Note: ID=2 => your first state
 
     10 => [
-        "name" => "selectAndPlaceQuarry",
+        "name" => "selectAndPlaceDomino",
         "description" => clienttranslate('${actplayer} must place a domino'),
         "descriptionmyturn" => clienttranslate('${you} must place a domino'),
         "type" => "activeplayer",
@@ -74,7 +74,7 @@ $machinestates = [
             // these actions are called from the front with bgaPerformAction, and matched to the function on the game.php file
             "action_domino_chosen_and_placed", 
         ],
-        "transitions" => ["" => 11,]
+        "transitions" => ["normal_play" => 11, "zombiePass" => 31]
     ],
     11 => [
         "name" => "afterDominoPlaced",
@@ -180,15 +180,15 @@ $machinestates = [
         "type" => "game",
         "action" => "stNextPlayer",
         "updateGameProgression" => true,
-        "possibleactions" => array("player_playing", "ai_playing"),
-        "transitions" => ["player_playing" => 10, "ai_playing" => 50]
+        "possibleactions" => array("player_playing", "zombieplaying"),
+        "transitions" => ["player_playing" => 10, "zombieplaying" => 50]
     ],
     50 => [
         "name" => "selectAndPlaceDominoZombie",
         "description" => 'Zombie selects and places domino',
         "type" => "game",
         "action" => "stZombieSelectAndPlaceDomino",
-        "transitions" => ["" => 60, ]
+        "transitions" => ["normal_play" => 60, ]
     ],
     60 => [
         "name" => "selectAndPlaceMarkerZombie",

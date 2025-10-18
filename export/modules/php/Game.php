@@ -372,7 +372,7 @@ class Game extends \Table
         $this->trace('setupNewGame');
         $this->trace(phpversion());
 
-        NewGame\NewGame::create($this->decks)->set_number_ai_players($this->tableOptions->get(100))->setup($players);
+        NewGame\NewGame::create($this->decks)->set_number_zombieplayers($this->tableOptions->get(100))->setup($players);
 
         // Set the colors of the players with HTML color code. The default below is red/green/blue/orange/brown. The
         // number of colors defined here must correspond to the maximum number of players allowed for the gams.
@@ -442,9 +442,23 @@ class Game extends \Table
     protected function zombieTurn(array $state, int $active_player): void
     {
         $state_name = $state["name"];
+        $this->notifyAllPlayers('zombieTurn', '${active_player} zombieTurn', 
+        ['state' => $state, 'active_player' => $active_player]);
 
         if ($state["type"] === "activeplayer") {
+            $this->initialise();
+
             switch ($state_name) {
+                case 'selectAndPlaceDomino':
+                    $this->actions->stZombieSelectAndPlaceDomino();
+                    break;
+                case 'selectMarkerTile':
+                    $this->actions->stZombieSelectAndPlaceMarker();
+                    break;
+                case 'selectResurfacingTile':
+                case 'selectNextDomino':
+                    $this->actions->stZombieChooseNextDomino();
+                    break;
                 default:
                 {
                     $this->gamestate->nextState("zombiePass");
@@ -461,6 +475,6 @@ class Game extends \Table
             return;
         }
 
-        throw new \feException("Zombie mode not supported at this game state: \"{$state_name}\".");
+        //throw new \feException("Zombie mode not supported at this game state: \"{$state_name}\".");
     }
 }
