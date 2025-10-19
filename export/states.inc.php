@@ -176,7 +176,7 @@ $machinestates = [
     ],
     35 => [
         "name" => "nextPlayer",
-        "description" => 'Choosing next player',
+        "description" => clienttranslate('Choosing next player'),
         "type" => "game",
         "action" => "stNextPlayer",
         "updateGameProgression" => true,
@@ -185,14 +185,14 @@ $machinestates = [
     ],
     50 => [
         "name" => "selectAndPlaceDominoZombie",
-        "description" => 'Zombie selects and places domino',
+        "description" => clienttranslate('Zombie selects and places domino'),
         "type" => "game",
         "action" => "stZombieSelectAndPlaceDomino",
         "transitions" => ["normal_play" => 60, ]
     ],
     60 => [
         "name" => "selectAndPlaceMarkerZombie",
-        "description" => 'Zombie selects and places marker',
+        "description" => clienttranslate('Zombie selects and places marker'),
         "type" => "game",
         "action" => "stZombieSelectAndPlaceMarker",
         "transitions" => ["" => 67, ]
@@ -206,7 +206,7 @@ $machinestates = [
     ],
     70 => [
         "name" => "chooseNextDominoZombie",
-        "description" => 'Zombie chooses next domino',
+        "description" => clienttranslate('Zombie chooses next domino'),
         "type" => "game",
         "action" => "stZombieChooseNextDomino",
         "transitions" => ["next_domino_chosen" => 31, ]

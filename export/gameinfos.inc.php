@@ -20,7 +20,7 @@ $gameinfos = [
     'publisher_website' => 'https://www.jeuxsynapsesgames.com/',
 
     // Board Game Geek ID of the publisher
-    'publisher_bgg_id' => 329484,
+    'publisher_bgg_id' => 39502,
 
     // Board game geek ID of the game
     'bgg_id' => 329484,
