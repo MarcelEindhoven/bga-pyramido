@@ -39,6 +39,11 @@ define(['dojo/_base/declare'], (declare) => {
                     this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
                         <div id="${this.unique_id}">
                     `);
+                    this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
+                        <div id="${this.unique_id}_shadow">
+                    `);
+                    this.dojo.addClass(this.unique_id + '_shadow', 'shadow');
+
                     this.set_stage(this.stage);
                     this.dojo.addClass(this.unique_id,'tile');
                     const id_horizontal = this.tile_id % this.TILES_PER_ROW;
@@ -91,12 +96,14 @@ define(['dojo/_base/declare'], (declare) => {
                  * During setup, must be called twice!
                  */
                 paint() {
-                    //console.log(this.unique_id, this.element_id, this.x, this.y);
+                    console.log(this.unique_id, this.element_id, this.x, this.y);
                     //this.game.placeOnObjectPos(this.unique_id, this.element_id, this.x, this.y);
-                    if (this.rotation_class)
+                    if (this.rotation_class) {
                         this.dojo.removeClass(this.unique_id, this.rotation_class);
+                    }
 
                     this.game.slideToObjectPos(this.unique_id, this.element_id, this.x, this.y).play();
+                    this.game.slideToObjectPos(this.unique_id + '_shadow', this.element_id, this.x, this.y).play();
 
                     this.rotation_class = 'rotate' + this.rotation;
                     this.dojo.addClass(this.unique_id, this.rotation_class);
@@ -106,6 +113,7 @@ define(['dojo/_base/declare'], (declare) => {
                 }
                 destroy_canvas_token() {
                     this.dojo.destroy(this.unique_id);
+                    this.dojo.destroy(this.unique_id + '_shadow');
                 }
             }
             result = new Tile({document: this.document, dojo: this.dojo, game: this.game, get_unique_id: this.get_unique_id,});

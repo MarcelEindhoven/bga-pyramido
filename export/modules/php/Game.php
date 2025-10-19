@@ -354,16 +354,6 @@ class Game extends \Table
     }
 
     /**
-     * Returns the game name.
-     *
-     * IMPORTANT: Please do not modify.
-     */
-    protected function getGameName()
-    {
-        return "pyramidocannonfodder";
-    }
-
-    /**
      * This method is called only once, when a new game is launched. In this method, you must setup the game
      *  according to the game rules, so that the game is ready to be played.
      */
