@@ -46,8 +46,13 @@ define(['dojo/_base/declare'], (declare) => {
 
                     this.dojo.addClass(this.unique_id, 'selectable');
                     this.dojo.connect(this.game.get_element(this.unique_id), 'onclick', this, 'domino_selected');
-                    this.dojo.connect(this.game.get_element(this.unique_id), 'onmouseover', this, 'onmouseover');
-                    this.dojo.connect(this.game.get_element(this.unique_id), 'onmouseout', this, 'onmouseout');
+                    // Mouse events do not work as expected on iPad
+                    // this.dojo.connect(this.game.get_element(this.unique_id), 'onmouseover', this, 'onmouseover');
+                    // this.dojo.connect(this.game.get_element(this.unique_id), 'onmouseout', this, 'onmouseout');
+                }
+                subscribe_focus(callback_object, callback_method) {
+                    this.callback_object_focus = callback_object;
+                    this.callback_method_focus = callback_method;
                 }
                 create_canvas_token() {
                     this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
@@ -59,6 +64,9 @@ define(['dojo/_base/declare'], (declare) => {
                     this.dojo.destroy(this.unique_id);
                 }
                 onmouseover(selected_element_id) {
+                    this.ongainfocus();
+                }
+                ongainfocus() {
                     console.log(this.unique_id, this.element_id);
                     this.dojo.removeClass(this.unique_id, 'domino' + this.pixels_per_tile);
                     this.small_pixels_per_tile = this.pixels_per_tile;
@@ -67,11 +75,16 @@ define(['dojo/_base/declare'], (declare) => {
                     this.paint();
                 }
                 onmouseout(selected_element_id) {
-                    console.log(this.unique_id, this.element_id);
-                    this.dojo.removeClass(this.unique_id, 'domino' + this.pixels_per_tile);
-                    this.pixels_per_tile = this.small_pixels_per_tile;
-                    this.style_canvas_token();
-                    this.paint();
+                    this.onlosefocus();
+                }
+                onlosefocus() {
+                    if (this.pixels_per_tile == this.DEFAULT_PIXELS_PER_TILE) {
+                        console.log(this.unique_id, this.element_id);
+                        this.dojo.removeClass(this.unique_id, 'domino' + this.pixels_per_tile);
+                        this.pixels_per_tile = this.small_pixels_per_tile;
+                        this.style_canvas_token();
+                        this.paint();
+                    }
                 }
                 style_canvas_token() {
                     this.dojo.addClass(this.unique_id, 'domino' + this.pixels_per_tile);
@@ -80,7 +93,12 @@ define(['dojo/_base/declare'], (declare) => {
                     this.dojo.style(this.unique_id, 'backgroundPosition', '-' + this.pixels_per_tile * id_horizontal * 2 + 'px -' + this.pixels_per_tile * id_vertical + 'px');
                 }
                 domino_selected(selected_element_id) {
-                    this.callback_object[this.callback_method](this);
+                    if (this.pixels_per_tile != this.DEFAULT_PIXELS_PER_TILE) {
+                        this.callback_object_focus[this.callback_method_focus](this);
+                        this.ongainfocus();
+                    }
+                    else
+                        this.callback_object[this.callback_method](this);
                 }
                 get_bounding_box() {
                     if (this.rotation == 0) {

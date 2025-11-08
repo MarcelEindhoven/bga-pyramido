@@ -76,6 +76,7 @@ define(['dojo/_base/declare'], (declare) => {
                 candidate_domino.unique_id = candidate_domino.unique_id + candidate_position.horizontal + candidate_position.vertical;
 
                 candidate_domino.subscribe(this, 'placement_selected');
+                candidate_domino.subscribe_focus(this, 'ongainfocus');
 
                 this.pyramid.add(candidate_domino);
                 this.candidate_dominoes[candidate_domino.unique_id] = candidate_domino;
@@ -86,6 +87,12 @@ define(['dojo/_base/declare'], (declare) => {
                 this.pyramid.remove(candidate_domino);
                 candidate_domino.destroy_canvas_token();
                 delete this.candidate_dominoes[candidate_domino.unique_id];
+            });
+        },
+        // Called when a candidate domino gains focus so other dominoes lose focus
+        ongainfocus() {
+            Object.values(this.candidate_dominoes).forEach(candidate_domino => {
+                candidate_domino.onlosefocus();
             });
         },
         placement_selected(domino) {

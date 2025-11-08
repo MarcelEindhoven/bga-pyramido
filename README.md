@@ -10,7 +10,7 @@ git config user.name "MarcelEindhoven"
 user MarcelEindhoven0
 https://studio.boardgamearena.com/controlpanel
 https://studio.boardgamearena.com/studio
-https://studio.boardgamearena.com/studiogame?game=pyramidocannonfodder
+https://studio.boardgamearena.com/studiogame?game=pyramido
 
 ## Development environment
 ### PHP

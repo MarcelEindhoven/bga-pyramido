@@ -36,16 +36,18 @@ define(['dojo/_base/declare'], (declare) => {
                     this.clone(specification);
                     this.unique_id = this.get_unique_id(specification);
 
-                    this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
-                        <div id="${this.unique_id}">
-                    `);
+                    // Create shadow first to be underneath
                     this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
                         <div id="${this.unique_id}_shadow">
                     `);
                     this.dojo.addClass(this.unique_id + '_shadow', 'shadow');
 
-                    this.set_stage(this.stage);
+                    this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
+                        <div id="${this.unique_id}">
+                    `);
                     this.dojo.addClass(this.unique_id,'tile');
+
+                    this.set_stage(this.stage);
                     const id_horizontal = this.tile_id % this.TILES_PER_ROW;
                     const id_vertical = (this.tile_id-id_horizontal) / this.TILES_PER_ROW;
 
@@ -83,6 +85,7 @@ define(['dojo/_base/declare'], (declare) => {
 
                 }
                 tile_selected(tile) {
+                    console.log('tile_selected');
                     if ('callback_object' in this)
                         this.callback_object[this.callback_method](tile);
                 }
@@ -102,8 +105,8 @@ define(['dojo/_base/declare'], (declare) => {
                         this.dojo.removeClass(this.unique_id, this.rotation_class);
                     }
 
-                    this.game.slideToObjectPos(this.unique_id, this.element_id, this.x, this.y).play();
                     this.game.slideToObjectPos(this.unique_id + '_shadow', this.element_id, this.x, this.y).play();
+                    this.game.slideToObjectPos(this.unique_id, this.element_id, this.x, this.y).play();
 
                     this.rotation_class = 'rotate' + this.rotation;
                     this.dojo.addClass(this.unique_id, this.rotation_class);
