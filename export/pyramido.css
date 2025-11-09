@@ -1,24 +1,23 @@
 /**
  *------
  * BGA framework: Gregory Isabelli & Emmanuel Colin & BoardGameArena
- * PyramidoCannonFodder implementation : © Marcel van Nieuwenhoven marcel.eindhoven@hotmail.com
+ * Pyramido implementation : © Marcel van Nieuwenhoven marcel.eindhoven@hotmail.com
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
  * -----
  *
- * pyramidocannonfodder.css
+ * pyramido.css
  *
- * PyramidoCannonFodder stylesheet
+ * Pyramido stylesheet
  *
  */
 
 /*
     This is the CSS stylesheet of your game User Interface.
     
-    Styles defined on this file will be applied to the HTML elements you define in your
-    HTML template (pyramidocannonfodder_pyramidocannonfodder.tpl), and to HTML elements you create dynamically
-    (in pyramidocannonfodder.js).
+    Styles defined on this file will be applied to HTML elements you create dynamically
+    (in pyramido.js).
     
     Usually, you are using CSS to:
     

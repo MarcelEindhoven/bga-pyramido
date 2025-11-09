@@ -1,5 +1,5 @@
 <?php
-namespace Bga\Games\PyramidoCannonFodder\NewGame;
+namespace Bga\Games\Pyramido\NewGame;
 /**
  *------
  * Pyramido implementation unit tests : © Marcel van Nieuwenhoven marcel.eindhoven@hotmail.com
@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 include_once(__DIR__.'/../../export/modules/php/NewGame/DominoNewGame.php');
 
 include_once(__DIR__.'/../../export/modules/php/Infrastructure/Domino.php');
-use Bga\Games\PyramidoCannonFodder\Infrastructure;
+use Bga\Games\Pyramido\Infrastructure;
 
 class DominoNewGameTest extends TestCase{
     protected ?DominoNewGame $sut = null;

@@ -1,5 +1,5 @@
 <?php
-namespace Bga\Games\PyramidoCannonFodder\Domain;
+namespace Bga\Games\Pyramido\Domain;
 /**
  *------
  * Pyramido implementation unit tests : © Marcel van Nieuwenhoven marcel.eindhoven@hotmail.com

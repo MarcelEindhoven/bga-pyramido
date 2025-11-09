@@ -2,7 +2,7 @@
 /**
  *------
  * BGA framework: Gregory Isabelli & Emmanuel Colin & BoardGameArena
- * PyramidoCannonFodder implementation : © Marcel van Nieuwenhoven marcel.eindhoven@hotmail.com
+ * Pyramido implementation : © Marcel van Nieuwenhoven marcel.eindhoven@hotmail.com
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -11,7 +11,7 @@
  */
 declare(strict_types=1);
 
-namespace Bga\Games\PyramidoCannonFodder\UseCases;
+namespace Bga\Games\Pyramido\UseCases;
 
 include_once(__DIR__.'/GetAllDatas.php');
 
@@ -34,7 +34,7 @@ include_once(__DIR__.'/CheckResurfacing.php');
 include_once(__DIR__.'/../Infrastructure/Domino.php');
 include_once(__DIR__.'/../Infrastructure/Marker.php');
 include_once(__DIR__.'/../Infrastructure/Resurfacing.php');
-use Bga\Games\PyramidoCannonFodder\Infrastructure;
+use Bga\Games\Pyramido\Infrastructure;
 
 class Notifier {
     function __construct($notifications) {

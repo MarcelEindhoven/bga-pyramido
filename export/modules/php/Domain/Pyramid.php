@@ -2,7 +2,7 @@
 /**
  *------
  * BGA framework: Gregory Isabelli & Emmanuel Colin & BoardGameArena
- * PyramidoCannonFodder implementation : © Marcel van Nieuwenhoven marcel.eindhoven@hotmail.com
+ * Pyramido implementation : © Marcel van Nieuwenhoven marcel.eindhoven@hotmail.com
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -11,10 +11,10 @@
  */
 declare(strict_types=1);
 
-namespace Bga\Games\PyramidoCannonFodder\Domain;
+namespace Bga\Games\Pyramido\Domain;
 
 include_once(__DIR__.'/../Infrastructure/Domino.php');
-use Bga\Games\PyramidoCannonFodder\Infrastructure;
+use Bga\Games\Pyramido\Infrastructure;
 
 #[\AllowDynamicProperties]
 class Pyramid
@@ -157,8 +157,11 @@ class Pyramid
         }
     }
     public function get_occupied_array($stage): array {
+        return $this->get_occupied_array_for_tiles($this->get_tiles_stage($stage));
+    }
+    public function get_occupied_array_for_tiles($tiles): array {
         $occupied = [];
-        foreach ($this->get_tiles_stage($stage) as $tile) {
+        foreach ($tiles as $tile) {
             $horizontal = $tile['horizontal'];
             $vertical = $tile['vertical'];
 
@@ -167,11 +170,16 @@ class Pyramid
         return $occupied;
     }
     public function get_bounding_box_first_stage() {
+        return $this->get_bounding_box($this->get_tiles_stage(1));
+    }
+    public function get_bounding_box($tiles): array {
+        //print("get_bounding_box\n");
+        // print_r($tiles);
         $horizontal_min = 10;
         $horizontal_max = 10;
         $vertical_min = 10;
         $vertical_max = 10;
-        foreach ($this->get_tiles_stage(1) as $tile) {
+        foreach ($tiles as $tile) {
             $horizontal = $tile['horizontal'];
             $vertical = $tile['vertical'];
             if ($horizontal > $horizontal_max) $horizontal_max = $horizontal;
@@ -201,10 +209,6 @@ class Pyramid
 
     public function get_adjacent_positions_first_stage_with_tiles(): array {
         $candidates = [];
-        $occupied = $this->get_occupied_array(1);
-        [$horizontal_min, $horizontal_max, $vertical_min, $vertical_max] = $this->get_bounding_box_first_stage();
-        $allowed_size_vertical = $horizontal_max - $horizontal_min < 8? 10:8;
-        $allowed_size_horizontal = $vertical_max - $vertical_min < 8? 10:8;
         foreach ($this->tiles as $tile) {
             $horizontal = $tile['horizontal'];
             $vertical = $tile['vertical'];
@@ -214,6 +218,14 @@ class Pyramid
             $candidates[$this->calculate_key_horizontal_vertical([$horizontal, $vertical - 2])] = [$horizontal, $vertical - 2];
             $candidates[$this->calculate_key_horizontal_vertical([$horizontal, $vertical + 2])] = [$horizontal, $vertical + 2];
         }
+
+        return $this->combine ($candidates, $this->get_occupied_including_forbidden_spaces($this->tiles), 1);
+    }
+    public function get_occupied_including_forbidden_spaces($tiles): array {
+        $occupied = $this->get_occupied_array_for_tiles($tiles);
+        [$horizontal_min, $horizontal_max, $vertical_min, $vertical_max] = $this->get_bounding_box($tiles);
+        $allowed_size_vertical = $horizontal_max - $horizontal_min < 8? 10:8;
+        $allowed_size_horizontal = $vertical_max - $vertical_min < 8? 10:8;
         for ($i = 0; $i <= 21; $i = $i + 2) {
             $occupied[$this->calculate_key_horizontal_vertical([$i, $vertical_max - $allowed_size_vertical])] = 999;
             $occupied[$this->calculate_key_horizontal_vertical([$i, $vertical_min + $allowed_size_vertical])] = 999;
@@ -226,9 +238,9 @@ class Pyramid
         $occupied[$this->calculate_key_horizontal_vertical([$horizontal_min + 8, $vertical_max - 8])] = 999;
         $occupied[$this->calculate_key_horizontal_vertical([$horizontal_min + 8, $vertical_min + 8])] = 999;
 
-        return $this->combine ($candidates, $occupied, 1);
+        return $occupied;
     }
-    protected function combine($candidates, $occupied, $stage): array {
+    public function combine($candidates, $occupied, $stage): array {
         $candidate_positions = [];
         foreach ($candidates as $position) {
             for ($rotation = 0; $rotation <= 3; $rotation++) {
@@ -250,15 +262,68 @@ class Pyramid
         $candidate_positions[$this->calculate_key_horizontal_vertical_rotation($position)] = ['horizontal' => $position[0], 'vertical' => $position[1], 'rotation' => $position[2], 'stage' => $stage, ];
     }
 
-    protected function is_candidate_position_free($occupied, $position, $rotation) {
+    public function is_candidate_position_free($occupied, $position, $rotation) {
         if (array_key_exists($this->calculate_key_horizontal_vertical($position), $occupied)) return false;
-        return !array_key_exists($this->calculate_key_horizontal_vertical($this->get_position_second_tile($position, $rotation)), $occupied);
+        if (array_key_exists($this->calculate_key_horizontal_vertical($this->get_position_second_tile($position, $rotation)), $occupied)) return false;
+        $new_occupied = $occupied + [
+            $this->calculate_key_horizontal_vertical($position) => 999,
+            $this->calculate_key_horizontal_vertical($this->get_position_second_tile($position, $rotation)) => 999,
+        ];
+        //print_r($position);
+        //print_r(array_keys($new_occupied));
+
+        if (! self::can_neighbour_areas_be_filled_with_dominoes($new_occupied, $position)) {
+            return false;
+        }
+        if (! self::can_neighbour_areas_be_filled_with_dominoes($new_occupied, $this->get_position_second_tile($position, $rotation))) return false;
+        return true;
+    }
+    public function can_neighbour_areas_be_filled_with_dominoes($occupied, $position): bool {
+        foreach (self::get_neighbours($position) as $neighbour) {
+            if (!self::can_area_be_filled_with_dominoes($occupied, $neighbour)) return false;
+        }
+        return true;
+    }
+    public function can_area_be_filled_with_dominoes($occupied, $first_free_position): bool {
+        if ((count($this->get_free_contiguous_area($occupied, $first_free_position)) % 2) != 0) {
+            // print_r($first_free_position);
+            // print_r(array_keys($occupied));
+            // print_r($this->get_free_contiguous_area($occupied, $first_free_position));
+            // print(count($this->get_free_contiguous_area($occupied, $first_free_position)));
+        }
+        return (count($this->get_free_contiguous_area($occupied, $first_free_position)) % 2) == 0;
+    }
+    public function get_free_contiguous_area($occupied, $first_free_position): array {
+        $area = [];
+        $candidates = [$first_free_position];
+        $occupied_new = $occupied;
+        while ($candidates) {
+            $candidate = array_shift($candidates);
+            // print_r($candidate);
+            $location_key = $this->calculate_key_horizontal_vertical($candidate);
+            if (!array_key_exists($location_key, $occupied_new)) {
+                $area[] = $candidate;
+                // Use "+" when the keys are used and array_merge when the values are used
+                $candidates = array_merge($candidates, $this->get_neighbours($candidate));
+                $occupied_new[$location_key] = $candidate;
+                // print_r($candidates);
+            }
+        }
+        return $area;
+    }
+    static public function get_neighbours($position): array {
+        return [
+            [$position[0] + 2, $position[1]],
+            [$position[0] - 2, $position[1]],
+            [$position[0], $position[1] + 2],
+            [$position[0], $position[1] - 2],
+        ];
     }
     protected function get_position_second_tile($position_first_tile, $rotation) : array {
         $offset_second_tile = $this->get_offset_second_tile($rotation);
         return [$position_first_tile[0] + $offset_second_tile[0], $position_first_tile[1] + $offset_second_tile[1]];
     }
-    protected function get_offset_second_tile($rotation) : array {
+    static protected function get_offset_second_tile($rotation) : array {
         if ($rotation == 0) return [2,0];
         if ($rotation == 1) return [0,2];
         if ($rotation == 2) return [-2,0];
@@ -275,7 +340,7 @@ class Pyramid
      * Calculate key that is unique for each possible combination of horizontal and vertical
      * BUG: position 11, 1 results in the same key as 1, 11, fortunately this combination cannot happen
      */
-    protected function calculate_key_horizontal_vertical($position) {
+    static public function calculate_key_horizontal_vertical($position) {
         return '' . $position[0] . $position[1];
     }
 

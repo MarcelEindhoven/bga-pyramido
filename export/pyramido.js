@@ -1,15 +1,15 @@
 /**
  *------
  * BGA framework: Gregory Isabelli & Emmanuel Colin & BoardGameArena
- * PyramidoCannonFodder implementation : © Marcel van Nieuwenhoven marcel.eindhoven@hotmail.com
+ * Pyramido implementation : © Marcel van Nieuwenhoven marcel.eindhoven@hotmail.com
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
  * -----
  *
- * pyramidocannonfodder.js
+ * pyramido.js
  *
- * PyramidoCannonFodder user interface script
+ * Pyramido user interface script
  *
  * In this file, you are describing the logic of your user interface, in Javascript language.
  *
@@ -36,9 +36,9 @@ define([
 ],
 function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings, 
     usecase_setup, usecase_choose_domino, usecase_place_domino, usecase_choose_next_domino, usecase_place_marker, usecase_choose_resurfacing, usecase_place_resurfacing) {
-    return declare("bgagame.pyramidocannonfodder", ebg.core.gamegui, {
+    return declare("bgagame.pyramido", ebg.core.gamegui, {
         constructor: function(){
-            console.log('pyramidocannonfodder constructor');
+            console.log('pyramido constructor');
 
             // Here, you can init the global variables of your user interface
             // Example:
@@ -354,7 +354,7 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
             In this method, you associate each of your game notifications with your local method to handle it.
 
             Note: game notification names correspond to "notifyAllPlayers" and "notifyPlayer" calls in
-                  your pyramidocannonfodder.game.php file.
+                  your pyramido.game.php file.
 
         */
         setupNotifications: function()

@@ -1,5 +1,5 @@
 <?php
-namespace Bga\Games\PyramidoCannonFodder\UseCases;
+namespace Bga\Games\Pyramido\UseCases;
 /**
  *------
  * Pyramido implementation unit tests : © Marcel van Nieuwenhoven marcel.eindhoven@hotmail.com
@@ -14,10 +14,10 @@ include_once(__DIR__.'/../../export/modules/php/UseCases/ZombieDominoChosenAndPl
 include_once(__DIR__.'/../../export/modules/php/UseCases/GetAllDatas.php');
 
 include_once(__DIR__.'/../../export/modules/php/Domain/Pyramid.php');
-use Bga\Games\PyramidoCannonFodder\Domain;
+use Bga\Games\Pyramido\Domain;
 
 include_once(__DIR__.'/../../export/modules/php/Infrastructure/Domino.php');
-use Bga\Games\PyramidoCannonFodder\Infrastructure;
+use Bga\Games\Pyramido\Infrastructure;
 
 include_once(__DIR__.'/../_ide_helper.php');
 use Bga\Games\FrameworkInterfaces;
@@ -67,7 +67,8 @@ class ZombieDominoChosenAndPlacedTest extends TestCase{
     public function test_execute_choose_next_domino() {
         // Arrange
         $initial_right = ['stage' => 1, 'horizontal' => 12, 'vertical' => 10, 'rotation' => 0];
-        $pyramid = Domain\Pyramid::create([$initial_right]);
+        $initial_left = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0];
+        $pyramid = Domain\Pyramid::create([$initial_right, $initial_left]);
         $this->current_data['candidate_positions'] = $pyramid->get_adjacent_positions_first_stage();
         $this->expected_domino_specification = ['stage' => 4, 'horizontal' => 14, 'vertical' => 10, 'rotation' => 0, ];
         $this->arrange();

@@ -1,5 +1,5 @@
 <?php
-namespace Bga\Games\PyramidoCannonFodder\UseCases;
+namespace Bga\Games\Pyramido\UseCases;
 /**
  *------
  * Pyramido implementation unit tests : © Marcel van Nieuwenhoven marcel.eindhoven@hotmail.com
@@ -14,7 +14,7 @@ include_once(__DIR__.'/../../export/modules/php/UseCases/AfterOptionalResurfacin
 include_once(__DIR__.'/../../export/modules/php/UseCases/GetAllDatas.php');
 
 include_once(__DIR__.'/../../export/modules/php/Infrastructure/Domino.php');
-use Bga\Games\PyramidoCannonFodder\Infrastructure;
+use Bga\Games\Pyramido\Infrastructure;
 
 include_once(__DIR__.'/../_ide_helper.php');
 use Bga\Games\FrameworkInterfaces;

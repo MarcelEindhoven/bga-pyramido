@@ -1,5 +1,5 @@
 <?php
-namespace Bga\Games\PyramidoCannonFodder\UseCases;
+namespace Bga\Games\Pyramido\UseCases;
 /**
  *------
  * Pyramido implementation unit tests : © Marcel van Nieuwenhoven marcel.eindhoven@hotmail.com
@@ -14,10 +14,10 @@ include_once(__DIR__.'/../../export/modules/php/UseCases/ZombieMarkerChosenAndPl
 include_once(__DIR__.'/../../export/modules/php/UseCases/GetAllDatas.php');
 
 include_once(__DIR__.'/../../export/modules/php/Domain/Pyramid.php');
-use Bga\Games\PyramidoCannonFodder\Domain;
+use Bga\Games\Pyramido\Domain;
 
 include_once(__DIR__.'/../../export/modules/php/Infrastructure/Marker.php');
-use Bga\Games\PyramidoCannonFodder\Infrastructure;
+use Bga\Games\Pyramido\Infrastructure;
 
 include_once(__DIR__.'/../_ide_helper.php');
 use Bga\Games\FrameworkInterfaces;
