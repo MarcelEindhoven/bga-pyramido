@@ -23,11 +23,28 @@ class StageTest extends TestCase{
     const STAGE_4_LEFT = [13,13];
     const STAGE_4_RIGHT = [15,13];
     const STAGE_3_TOP_LEFT_DOMINO = [[12,12], [14,12]];
-    const STAGE_3_BOTTOM_RIGHT_DOMINO = [[16,14], [14,14]];
+    const STAGE_3_BOTTOM_RIGHT_DOMINO = [[14,14], [16,14]];
 
     protected ?StageTilePositions $sut = null;
 
     protected function setUp(): void {
+    }
+
+    public function test_create_stage_domino() {
+        // Arrange
+        $horizontal1 = 5;
+        $vertical1 = 7;
+        $horizontal2 = 5;
+        $vertical2 = 9;
+
+        // Act
+        $sut = StageDomino::create_from_coordinates([$horizontal1, $vertical1], [$horizontal2, $vertical2]);
+
+        // Assert
+        $this->assertEquals($horizontal1, $sut[0]['horizontal']);
+        $this->assertEquals($vertical1, $sut[0]['vertical']);
+        $this->assertEquals($horizontal2, $sut[1]['horizontal']);
+        $this->assertEquals($vertical2, $sut[1]['vertical']);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('position_key')]
@@ -125,6 +142,29 @@ class StageTest extends TestCase{
         ];
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('higher_create_candidate_dominoes')]
+    public function test_higher_create_candidate_dominoes($stage, $expected_horizontal_candidates, $expected_vertical_candidates) {
+        // Arrange
+        $sut = $this->create_higher_stage($stage, [], StageTest::FIRST_STAGE_BOUNDING_BOX);
+
+        // Act
+        $horizontal_candidate_dominoes = $sut->create_horizontal_candidate_dominoes();
+        $vertical_candidate_dominoes = $sut->create_vertical_candidate_dominoes();
+
+        // Assert
+        $this->assertEquals($this->convert_into_StageDominos($expected_horizontal_candidates), $horizontal_candidate_dominoes);
+        $this->assertEquals($this->convert_into_StageDominos($expected_vertical_candidates), $vertical_candidate_dominoes);
+    }
+    static public function higher_create_candidate_dominoes(): array {
+        return [
+            [4, [[StageTest::STAGE_4_LEFT, StageTest::STAGE_4_RIGHT]], []],
+            [3, [StageTest::STAGE_3_TOP_LEFT_DOMINO, [[14, 12], [16, 12]],
+             [[12, 14], [14, 14]], StageTest::STAGE_3_BOTTOM_RIGHT_DOMINO], 
+             [[[12,12], [12,14]], [[14,12], [14,14]], [[16,12], [16,14]]]
+        ],
+        ];
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('higher_get_free_contiguous_area')]
     public function test_higher_get_free_contiguous_area($stage, $tile_positions, $first_free_position, $size_expected_result) {
         // Arrange
@@ -215,6 +255,13 @@ class StageTest extends TestCase{
         ];
     }
 
+    protected function convert_into_StageDominos($dominoe_coordinates): array {
+        $dominoes = [];
+        foreach($dominoe_coordinates as $dominoe_coordinate) {
+            $dominoes[] = StageDomino::create_from_coordinates($dominoe_coordinate[0], $dominoe_coordinate[1]);
+        }
+        return $dominoes;
+    }
     protected function convert_into_Tiles($positions): array {
         $tile_positions = [];
         foreach($positions as $position) {
