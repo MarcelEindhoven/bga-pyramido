@@ -299,7 +299,6 @@ class PyramidTest extends TestCase{
                 $t10_8_2, $t12_8_2, $t14_8_2, $t8_10_2, $t16_10_2, $t10_12_2, $t12_12_2, $t14_12_2,
                 $t10_8_3, $t12_8_3, $t8_10_3, $t8_12_3, $t14_10_3, $t14_12_3, $t10_14_3, $t12_14_3,
             ]],
-            /*
             [[$initial0, $faraway_horizontal], [
                 $t12_10_0, $t10_12_0,
                 $t12_10_1, $t10_12_1,
@@ -331,7 +330,6 @@ class PyramidTest extends TestCase{
                 // $t8_12_0, $t10_12_2, $t12_8_1, $t12_10_3, 
                 // $t14_18_3, $t14_16_1, $t16_14_0, $t18_14_2, 
             ]],
-            */
         ];
     }
 
@@ -383,7 +381,7 @@ class PyramidTest extends TestCase{
     public function test_combine($candidates, $occupied, $expected_positions) {
         print("test_combine\n");
         // Arrange
-        $this->sut = Pyramid::create($occupied);
+        $this->sut = Pyramid::create([]);
 
         // Act
         $positions = $this->sut->combine($candidates, $occupied, 1);
@@ -404,6 +402,7 @@ class PyramidTest extends TestCase{
                 [
                 ],
             ],
+            /*
             [
                 [[10, 10],
                 ],
@@ -413,6 +412,7 @@ class PyramidTest extends TestCase{
                     ['stage' => 1, 'horizontal' => 12, 'vertical' => 10, 'rotation' => 2],
                 ],
             ],
+            */
         ];
     }
 

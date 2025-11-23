@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace Bga\Games\Pyramido\Domain;
 
-include_once(__DIR__.'/../Infrastructure/Domino.php');
-use Bga\Games\Pyramido\Infrastructure;
+include_once(__DIR__.'/Stage.php');
 
 #[\AllowDynamicProperties]
 class Pyramid
@@ -84,10 +83,6 @@ class Pyramid
         return 1;
     }
 
-    public function get_tiles_for_stage($stage): array {
-        return array_filter($this->tiles, function($tile) use ($stage) {return $stage == $tile['stage'];});
-    }
-
     public function get_candidate_tiles_for_marker($markers): array {
         $tiles_last_placed_with_jewels =  array_filter($this->get_last_placed_tiles(), function($tile) {
             return count($tile['jewels']) > 0;
@@ -125,10 +120,30 @@ class Pyramid
     }
 
     public function get_candidate_positions_stage($stage): array {
+        $bounding_box = FirstStageTilePositions::create_and_fill(
+            $this->get_tiles_stage(1)
+            )->get_bounding_box();
+        $stage_tile_positions = HigherStageTilePositions::create_and_fill(
+            $stage, 
+            $this->get_tiles_stage($stage),
+            $bounding_box);
         $candidates = $this->get_possible_positions($stage);
         $occupied = $this->get_occupied_array($stage);
         $this->create_border($occupied, $stage);
         return $this->combine($candidates, $occupied, $stage);
+    }
+    public function filter_candidates($stage_tile_positions, $candidates) {
+        foreach ($candidates as $key => $candidate) {
+            if (! $stage_tile_positions->can_domino_be_placed($candidate)) {
+                unset($candidates[$key]);
+            }
+        }
+        return $candidates;
+    }
+//        return $this->filter_candidates($stage_tile_positions, $candidates);
+
+    public function get_tiles_for_stage($stage): array {
+        return array_filter($this->tiles, function($tile) use ($stage) {return $stage == $tile['stage'];});
     }
 
     protected function get_possible_positions($stage): array {
@@ -241,6 +256,12 @@ class Pyramid
         return $occupied;
     }
     public function combine($candidates, $occupied, $stage): array {
+        if ($stage == 1)
+            $occupied = $this->get_occupied_including_forbidden_spaces($this->tiles);
+        else {
+            $occupied = $this->get_occupied_array($stage);
+            $this->create_border($occupied, $stage);
+        }
         $candidate_positions = [];
         foreach ($candidates as $position) {
             for ($rotation = 0; $rotation <= 3; $rotation++) {
@@ -257,6 +278,10 @@ class Pyramid
         }
         return $candidate_positions;
     }
+    public function register_candidate_if_feasible(& $candidate_positions, $candidate, $rotation, $stage) {
+        if ($this->is_candidate_position_free($candidate_positions, $candidate, $rotation))
+            $this->register_candidate_position($candidate_positions, $candidate, $stage);
+    }
     protected function register_candidate_position(& $candidate_positions, $position, $stage) {
         if (array_key_exists($this->calculate_key_horizontal_vertical_rotation($position), $candidate_positions)) return;
         $candidate_positions[$this->calculate_key_horizontal_vertical_rotation($position)] = ['horizontal' => $position[0], 'vertical' => $position[1], 'rotation' => $position[2], 'stage' => $stage, ];
@@ -265,13 +290,16 @@ class Pyramid
     public function is_candidate_position_free($occupied, $position, $rotation) {
         if (array_key_exists($this->calculate_key_horizontal_vertical($position), $occupied)) return false;
         if (array_key_exists($this->calculate_key_horizontal_vertical($this->get_position_second_tile($position, $rotation)), $occupied)) return false;
+        //print_r($position);
+        //print_r(array_keys($new_occupied));
+        return $this->can_domino_neighbour_areas_be_filled_with_dominoes($occupied, $position, $rotation);
+    }
+
+    public function can_domino_neighbour_areas_be_filled_with_dominoes($occupied, $position, $rotation): bool {
         $new_occupied = $occupied + [
             $this->calculate_key_horizontal_vertical($position) => 999,
             $this->calculate_key_horizontal_vertical($this->get_position_second_tile($position, $rotation)) => 999,
         ];
-        //print_r($position);
-        //print_r(array_keys($new_occupied));
-
         if (! self::can_neighbour_areas_be_filled_with_dominoes($new_occupied, $position)) {
             return false;
         }
@@ -333,8 +361,8 @@ class Pyramid
     /**
      * Calculate key that is unique for each possible combination of horizontal and vertical and rotation
      */
-    protected function calculate_key_horizontal_vertical_rotation($position) {
-        return $this->calculate_key_horizontal_vertical($position) . $position[2];
+    static protected function calculate_key_horizontal_vertical_rotation($position) {
+        return Pyramid::calculate_key_horizontal_vertical($position) . $position[2];
     }
     /**
      * Calculate key that is unique for each possible combination of horizontal and vertical
