@@ -47,6 +47,53 @@ class StageTest extends TestCase{
         $this->assertEquals($vertical2, $sut[1]['vertical']);
     }
 
+    public function test_create_horizontal_dominoes() {
+        // Arrange
+        $stage = 3;
+        $horizontal1 = 3;
+        $vertical1 = 7;
+        $horizontal2 = 5;
+        $vertical2 = 7;
+        $sut = StageDomino::create_from_coordinates([$horizontal1, $vertical1], [$horizontal2, $vertical2]);
+
+        // Act
+        $dominoes = $sut->create_horizontal_dominoes($stage);
+
+        // Assert
+        $this->assertEquals($horizontal1, $dominoes[0]['horizontal']);
+        $this->assertEquals($vertical1, $dominoes[0]['vertical']);
+        $this->assertEquals($stage, $dominoes[0]['stage']);
+        $this->assertEquals(0, $dominoes[0]['rotation']);
+
+        $this->assertEquals($horizontal2, $dominoes[1]['horizontal']);
+        $this->assertEquals($vertical2, $dominoes[1]['vertical']);
+        $this->assertEquals(2, $dominoes[1]['rotation']);
+    }
+
+    public function test_create_vertical_dominoes() {
+        // Arrange
+        $stage = 2;
+        $horizontal1 = 5;
+        $vertical1 = 7;
+        $horizontal2 = 5;
+        $vertical2 = 9;
+        $sut = StageDomino::create_from_coordinates([$horizontal1, $vertical1], [$horizontal2, $vertical2]);
+
+        // Act
+        $dominoes = $sut->create_vertical_dominoes($stage);
+
+        // Assert
+        $this->assertEquals($horizontal1, $dominoes[0]['horizontal']);
+        $this->assertEquals($vertical1, $dominoes[0]['vertical']);
+        $this->assertEquals($stage, $dominoes[0]['stage']);
+        $this->assertEquals(1, $dominoes[0]['rotation']);
+
+        $this->assertEquals($horizontal2, $dominoes[1]['horizontal']);
+        $this->assertEquals($vertical2, $dominoes[1]['vertical']);
+        $this->assertEquals($stage, $dominoes[1]['stage']);
+        $this->assertEquals(3, $dominoes[1]['rotation']);
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('position_key')]
     public function test_position_key($horizontal, $vertical, $expected_key_value) {
         // Arrange

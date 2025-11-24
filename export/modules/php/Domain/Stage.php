@@ -53,6 +53,9 @@ class StageTilePosition extends \ArrayObject {
  * Array of StageTilePosition
  */
 class StageDomino extends \ArrayObject {
+    /**
+     * First coordinates must be smaller than second, so to the left or to the top
+     */
     static public function create_from_coordinates($coordinates1, $coordinates2): StageDomino {
         $object = new StageDomino([
             StageTilePosition::create_from_coordinates($coordinates1),
@@ -63,6 +66,18 @@ class StageDomino extends \ArrayObject {
     public function __construct($positions) {
         foreach ($positions as $key => $value)
             $this[] = $value;
+    }
+
+    public function create_horizontal_dominoes($stage): array {
+        return [['horizontal' => $this[0]['horizontal'], 'vertical' => $this[0]['vertical'], 'rotation' => 0, 'stage' => $stage, ],
+                ['horizontal' => $this[1]['horizontal'], 'vertical' => $this[1]['vertical'], 'rotation' => 2, 'stage' => $stage,]
+    ];
+    }
+
+    public function create_vertical_dominoes($stage): array {
+        return [['horizontal' => $this[0]['horizontal'], 'vertical' => $this[0]['vertical'], 'rotation' => 1, 'stage' => $stage, ],
+                ['horizontal' => $this[1]['horizontal'], 'vertical' => $this[1]['vertical'], 'rotation' => 3, 'stage' => $stage,]
+    ];
     }
 }
 
