@@ -38,13 +38,49 @@ class StageTest extends TestCase{
         $vertical2 = 9;
 
         // Act
-        $sut = StageDomino::create_from_coordinates([$horizontal1, $vertical1], [$horizontal2, $vertical2]);
+        $sut = DominoHorizontalVertical::create_from_coordinates([$horizontal1, $vertical1], [$horizontal2, $vertical2]);
 
         // Assert
         $this->assertEquals($horizontal1, $sut[0]['horizontal']);
         $this->assertEquals($vertical1, $sut[0]['vertical']);
         $this->assertEquals($horizontal2, $sut[1]['horizontal']);
         $this->assertEquals($vertical2, $sut[1]['vertical']);
+    }
+
+    public function test_key_not_swapped() {
+        // Arrange
+        $horizontal1 = 5;
+        $vertical1 = 7;
+        $horizontal2 = 5;
+        $vertical2 = 9;
+        $sut = DominoHorizontalVertical::create_from_coordinates([$horizontal1, $vertical1], [$horizontal2, $vertical2]);
+        $expected_key = StageTilePosition::create($horizontal1, $vertical1)->key() +
+                        StageTilePosition::FACTOR_HORIZONTAL * StageTilePosition::FACTOR_HORIZONTAL * 
+                        StageTilePosition::create($horizontal2, $vertical2)->key();
+
+        // Act
+        $key = $sut->key();
+
+        // Assert
+        $this->assertEquals($expected_key, $key);
+    }
+
+    public function test_key_swapped() {
+        // Arrange
+        $horizontal1 = 5;
+        $vertical1 = 7;
+        $horizontal2 = 5;
+        $vertical2 = 9;
+        $sut = DominoHorizontalVertical::create_from_coordinates([$horizontal2, $vertical2], [$horizontal1, $vertical1]);
+        $expected_key = StageTilePosition::create($horizontal1, $vertical1)->key() +
+                        StageTilePosition::FACTOR_HORIZONTAL * StageTilePosition::FACTOR_HORIZONTAL * 
+                        StageTilePosition::create($horizontal2, $vertical2)->key();
+
+        // Act
+        $key = $sut->key();
+
+        // Assert
+        $this->assertEquals($expected_key, $key);
     }
 
     public function test_create_horizontal_dominoes() {
@@ -54,10 +90,10 @@ class StageTest extends TestCase{
         $vertical1 = 7;
         $horizontal2 = 5;
         $vertical2 = 7;
-        $sut = StageDomino::create_from_coordinates([$horizontal1, $vertical1], [$horizontal2, $vertical2]);
+        $sut = DominoHorizontalVertical::create_from_coordinates([$horizontal1, $vertical1], [$horizontal2, $vertical2]);
 
         // Act
-        $dominoes = $sut->create_horizontal_dominoes($stage);
+        $dominoes = $sut->create_dominoes_with_rotation($stage);
 
         // Assert
         $this->assertEquals($horizontal1, $dominoes[0]['horizontal']);
@@ -77,10 +113,10 @@ class StageTest extends TestCase{
         $vertical1 = 7;
         $horizontal2 = 5;
         $vertical2 = 9;
-        $sut = StageDomino::create_from_coordinates([$horizontal1, $vertical1], [$horizontal2, $vertical2]);
+        $sut = DominoHorizontalVertical::create_from_coordinates([$horizontal1, $vertical1], [$horizontal2, $vertical2]);
 
         // Act
-        $dominoes = $sut->create_vertical_dominoes($stage);
+        $dominoes = $sut->create_dominoes_with_rotation($stage);
 
         // Assert
         $this->assertEquals($horizontal1, $dominoes[0]['horizontal']);
@@ -192,15 +228,14 @@ class StageTest extends TestCase{
     #[\PHPUnit\Framework\Attributes\DataProvider('higher_create_candidate_dominoes')]
     public function test_higher_create_candidate_dominoes($stage, $expected_horizontal_candidates, $expected_vertical_candidates) {
         // Arrange
+        $expected_candidates = array_merge($expected_horizontal_candidates, $expected_vertical_candidates);
         $sut = $this->create_higher_stage($stage, [], StageTest::FIRST_STAGE_BOUNDING_BOX);
 
         // Act
-        $horizontal_candidate_dominoes = $sut->create_horizontal_candidate_dominoes();
-        $vertical_candidate_dominoes = $sut->create_vertical_candidate_dominoes();
+        $candidate_dominoes = $sut->create_candidate_dominoes();
 
         // Assert
-        $this->assertEquals($this->convert_into_StageDominos($expected_horizontal_candidates), $horizontal_candidate_dominoes);
-        $this->assertEquals($this->convert_into_StageDominos($expected_vertical_candidates), $vertical_candidate_dominoes);
+        $this->assertEquals($this->convert_into_DominoHorizontalVerticals($expected_candidates), $candidate_dominoes);
     }
     static public function higher_create_candidate_dominoes(): array {
         return [
@@ -232,6 +267,81 @@ class StageTest extends TestCase{
     }
     protected function create_higher_stage($stage, $tile_positions, $bounding_box_first_stage) {
         return HigherStageTilePositions::create_and_fill($stage, $this->convert_into_Tiles($tile_positions), $bounding_box_first_stage);
+    }
+
+    public function test_first_stage_dominoes_no_tile() {
+        // Arrange
+        $sut = $this->create_first_stage([]);
+
+        // Act
+        $dominoes = $sut->create_candidate_dominoes();
+
+        // Assert
+        $this->assertEquals(2, count($dominoes));
+        $this->assertEqualsCanonicalizing($this->convert_into_DominoHorizontalVerticals([
+            [[10,10], [12,10]],
+            [[10,10], [10,12]],
+        ]), $dominoes);
+    }
+
+    public function test_first_stage_get_candidate_dominoes_no_tile() {
+        // Arrange
+        $sut = $this->create_first_stage([]);
+
+        // Act
+        $sut->are_empty_spaces_inevitable(DominoHorizontalVertical::create_from_coordinates([10,10], [12,10]));
+        $this->assertEquals(true, $sut->can_domino_be_placed(DominoHorizontalVertical::create_from_coordinates([10,10], [12,10])));
+        $dominoes = $sut->create_candidate_dominoes();
+        $candidates = [];
+        foreach ($dominoes as $domino2d) {
+            if ($sut->can_domino_be_placed($domino2d)) {
+                print ("candidate found\n");
+                array_merge($candidates, $domino2d->create_dominoes_with_rotation(1));
+            }
+        }
+                foreach ($candidates as $candidate) {
+                    print_r($candidate);
+                }
+        $dominoes = $sut->get_candidate_dominoes();
+
+        // Assert
+        $this->assertEquals(4, count($dominoes));
+    }
+
+    public function test_first_stage_get_candidate_dominoes_twin_tile() {
+        // Arrange
+        $sut = $this->create_first_stage([StageTest::STAGE_1_TOP_LEFT, [12, 10]]);
+
+        // Act
+        $dominoes = $sut->get_candidate_dominoes();
+
+        // Assert
+        $this->assertEquals(32, count($dominoes));
+    }
+
+    public function test_first_stage_dominoes_single_tile() {
+        // Arrange
+        $sut = $this->create_first_stage([StageTest::STAGE_1_TOP_LEFT]);
+
+        // Act
+        $dominoes = $sut->create_candidate_dominoes();
+
+        // Assert
+        $this->assertEquals(12, count($dominoes));
+        $this->assertEqualsCanonicalizing($this->convert_into_DominoHorizontalVerticals([
+            [[8,8], [10,8]], // Horizontal dominoes
+            [[10,8], [12,8]], 
+            [[6,10], [8,10]], 
+            [[12,10], [14,10]], 
+            [[8,12], [10,12]],
+            [[10,12], [12,12]],
+            [[8,8], [8,10]], // Vertical dominoes
+            [[8,10], [8,12]], 
+            [[10,8], [10,6]], 
+            [[10,12], [10,14]], 
+            [[12,10], [12,8]], 
+            [[12,12], [12,10]],
+        ]), $dominoes);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('first_stage_border')]
@@ -302,10 +412,10 @@ class StageTest extends TestCase{
         ];
     }
 
-    protected function convert_into_StageDominos($dominoe_coordinates): array {
+    protected function convert_into_DominoHorizontalVerticals($dominoe_coordinates): array {
         $dominoes = [];
         foreach($dominoe_coordinates as $dominoe_coordinate) {
-            $dominoes[] = StageDomino::create_from_coordinates($dominoe_coordinate[0], $dominoe_coordinate[1]);
+            $dominoes[] = DominoHorizontalVertical::create_from_coordinates($dominoe_coordinate[0], $dominoe_coordinate[1]);
         }
         return $dominoes;
     }
