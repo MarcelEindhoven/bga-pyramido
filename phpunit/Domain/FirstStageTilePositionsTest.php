@@ -67,17 +67,6 @@ class FirstStageTilePositionsTest extends TestCase{
         $this->assertEquals(4 * 2 * 2 * 2, count($dominoes));
     }
 
-    public function test_first_stage_get_free_contiguous_area_2x2plus2() {
-        // Arrange
-        $sut = $this->create_first_stage([FirstStageTilePositionsTest::STAGE_1_TOP_LEFT, [12, 10], [10,12], [12,12], [8,8], [10,8]]);
-
-        // Act
-        $free_contiguous_area = $sut->get_free_contiguous_area($this->convert_into_Tile([8,6]));
-
-        // Assert
-        $this->assertEquals(7 * 7 - 4 - 6, count($free_contiguous_area));
-    }
-
     public function test_first_stage_dominoes_single_tile() {
         // Arrange
         $sut = $this->create_first_stage([FirstStageTilePositionsTest::STAGE_1_TOP_LEFT]);
@@ -103,29 +92,6 @@ class FirstStageTilePositionsTest extends TestCase{
         ]), $dominoes);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('first_stage_border')]
-    public function test_first_stage_border($tile_positions, $occupied_positions, $unoccupied_positions) {
-        // Arrange
-
-        // Act
-        $sut = $this->create_first_stage($tile_positions);
-
-        // Assert
-        foreach($this->convert_into_Tiles($unoccupied_positions) as $position)
-            $this->assertFalse($sut->is_position_occupied($position));
-        foreach($this->convert_into_Tiles($occupied_positions) as $position)
-            $this->assertTrue($sut->is_position_occupied($position));
-    }
-    static public function first_stage_border(): array {
-        return [
-            [
-                [FirstStageTilePositionsTest::STAGE_1_TOP_LEFT, FirstStageTilePositionsTest::STAGE_1_BOTTOM_RIGHT_44],
-                [[10, 10],],
-                [[8, 10], [10, 8]],
-            ],
-        ];
-    }
-
     #[\PHPUnit\Framework\Attributes\DataProvider('first_stage_bounding_box')]
     public function test_first_stage_bounding_box($tile_positions, $expected_bounding_box) {
         // Arrange
@@ -136,6 +102,14 @@ class FirstStageTilePositionsTest extends TestCase{
 
         // Assert
         $this->assertEquals($expected_bounding_box, $bounding_box);
+    }
+    static public function first_stage_bounding_box(): array {
+        return [
+            [
+                [FirstStageTilePositionsTest::STAGE_1_TOP_LEFT, FirstStageTilePositionsTest::STAGE_1_BOTTOM_RIGHT_44],
+                [10, 10, 16, 16],
+            ],
+        ];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('first_empty_spaces')]
@@ -159,16 +133,27 @@ class FirstStageTilePositionsTest extends TestCase{
         ];
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('all_bounding_boxes')]
+    public function test_all_bounding_boxes_none($tile_positions, $bounding_boxes_expected) {
+        // Arrange
+        $sut = $this->create_first_stage($tile_positions);
+
+        // Act
+        $all_bounding_boxes = $sut->get_all_bounding_boxes();
+        print_r($all_bounding_boxes);
+
+        // Assert
+        $this->assertEquals($bounding_boxes_expected, $all_bounding_boxes);
+    }
+    static public function all_bounding_boxes(): array {
+        return[
+            [[[10, 10], [18, 18]], []],
+            [[[10, 10], [18, 16]], [[10, 10, 18, 16]]],
+        ];
+    }
+
     protected function create_first_stage($tile_positions) {
         return FirstStageTilePositions::create_and_fill($this->convert_into_Tiles($tile_positions));
-    }
-    static public function first_stage_bounding_box(): array {
-        return [
-            [
-                [FirstStageTilePositionsTest::STAGE_1_TOP_LEFT, FirstStageTilePositionsTest::STAGE_1_BOTTOM_RIGHT_44],
-                [10, 10, 16, 16],
-            ],
-        ];
     }
 
     protected function convert_into_DominoHorizontalVerticals($dominoe_coordinates): array {

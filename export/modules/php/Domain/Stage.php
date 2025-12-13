@@ -31,6 +31,7 @@ class StageTilePositions
      * The horizontal and vertical distance between 2 jewels is an integer number.
      */
     public array $tile_positions = [];
+    // Obsolete, Move to bounded class
     public array $occupied_positions = [];
     public int $stage = 1;
 
@@ -75,7 +76,7 @@ class StageTilePositions
         return  array_key_exists(StageTilePosition::create_from_position($position)->key(), $this->occupied_positions);
     }
     /**
-     * Because a domino always consists of 2 tiles, the space available for dominoes within a rectangle must be an even number of tiles
+     * Move to bounded class
      */
     public function are_empty_spaces_inevitable($positions_candidate_domino): bool {
         $tile_positions = $this->tile_positions;
@@ -93,6 +94,7 @@ class StageTilePositions
     }
     /**
      * Returns array of StageTilePosition, can be empty
+     * Move to bounded class
      */
     public function get_free_contiguous_area($first_free_position): array {
         $area = [];
@@ -111,6 +113,9 @@ class StageTilePositions
         }
         return $area;
     }
+    /**
+     * Move to bounded class
+     */
     protected function occupy($position): StageTilePositions {
         $tile = StageTilePosition::create($position[0], $position[1]);
         $this->occupied_positions[$tile->key()] = $tile;
@@ -125,6 +130,20 @@ class FirstStageTilePositions extends StageTilePositions {
         $object->create_border_positions();
         return $object;
     }
+    /**
+     * Get all possible future bounding boxes
+     */
+    public function get_all_bounding_boxes(): array {
+        $bounding_boxes = [];
+        [$horizontal_min, $vertical_min, $horizontal_max, $vertical_max] = $this->get_bounding_box();
+        for ($hmin = $horizontal_max - 8; $hmin <= $horizontal_min; $hmin = $hmin +2)
+            for ($vmin = $vertical_max - 6; $vmin <= $vertical_min; $vmin = $vmin +2)
+                $bounding_boxes[] = [$hmin, $vmin, $hmin + 8, $vmin + 6];
+        return $bounding_boxes;
+    }
+    /**
+     * Obsolete
+     */
     public function create_border_positions(): FirstStageTilePositions {
         [$horizontal_min, $vertical_min, $horizontal_max, $vertical_max] = $this->get_bounding_box();
 
