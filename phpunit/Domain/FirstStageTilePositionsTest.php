@@ -149,6 +149,7 @@ class FirstStageTilePositionsTest extends TestCase{
         return[
             [[[10, 10], [18, 18]], []],
             [[[10, 10], [18, 16]], [[10, 10, 18, 16]]],
+            [[[10, 10], [16, 18]], [[10, 10, 16, 18]]],
         ];
     }
 

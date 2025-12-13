@@ -135,10 +135,14 @@ class FirstStageTilePositions extends StageTilePositions {
      */
     public function get_all_bounding_boxes(): array {
         $bounding_boxes = [];
+        // 5x4 and 4x5
         [$horizontal_min, $vertical_min, $horizontal_max, $vertical_max] = $this->get_bounding_box();
         for ($hmin = $horizontal_max - 8; $hmin <= $horizontal_min; $hmin = $hmin +2)
             for ($vmin = $vertical_max - 6; $vmin <= $vertical_min; $vmin = $vmin +2)
                 $bounding_boxes[] = [$hmin, $vmin, $hmin + 8, $vmin + 6];
+        for ($hmin = $horizontal_max - 6; $hmin <= $horizontal_min; $hmin = $hmin +2)
+            for ($vmin = $vertical_max - 8; $vmin <= $vertical_min; $vmin = $vmin +2)
+                $bounding_boxes[] = [$hmin, $vmin, $hmin + 6, $vmin + 8];
         return $bounding_boxes;
     }
     /**
