@@ -116,14 +116,16 @@ class Pyramid
     public function get_candidate_positions(): array {
         $stage = $this->get_stage_next_domino();
         if ($stage > 1) return $this->get_candidate_positions_stage($stage);
-        return $this->get_adjacent_positions_first_stage();
+        return FirstStageTilePositions::create_and_fill(
+            $this->get_tiles_stage(1)
+            )->get_candidate_dominoes();
     }
 
     public function get_candidate_positions_stage($stage): array {
         $bounding_box = FirstStageTilePositions::create_and_fill(
             $this->get_tiles_stage(1)
             )->get_bounding_box();
-        $stage_tile_positions = HigherStageTilePositions::create_and_fill(
+        $stage_tile_positions = BoundedStageTilePositions::create_and_fill(
             $stage, 
             $this->get_tiles_stage($stage),
             $bounding_box);

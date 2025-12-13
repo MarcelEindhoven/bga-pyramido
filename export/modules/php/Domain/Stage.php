@@ -13,90 +13,8 @@ declare(strict_types=1);
 
 namespace Bga\Games\Pyramido\Domain;
 
-/**
- * Horizontal and vertical coordinate within stage
- */
-class StageTilePosition extends \ArrayObject {
-    const FACTOR_HORIZONTAL = 100; // Maximum range coordinates is between 0 and 20
-    static public function create_from_position($position): StageTilePosition {
-        $object = new StageTilePosition($position);
-        return $object;
-    }
-    static public function create_from_coordinates($coordinates): StageTilePosition {
-        $object = new StageTilePosition(['horizontal'=> $coordinates[0], 'vertical' => $coordinates[1]]);
-        return $object;
-    }
-    static public function create($horizontal, $vertical): StageTilePosition {
-        $object = new StageTilePosition(['horizontal'=> $horizontal, 'vertical' => $vertical]);
-        return $object;
-    }
-    public function __construct($position) {
-        foreach ($position as $key => $value)
-            $this[$key] = $value;
-    }
-
-    public function key(): int {
-        return $this['horizontal'] + $this['vertical'] * StageTilePosition::FACTOR_HORIZONTAL;
-    }
-
-    public function get_neighbours(): array {
-        return [
-            StageTilePosition::create($this['horizontal'] + 2, $this['vertical']),
-            StageTilePosition::create($this['horizontal'] - 2, $this['vertical']),
-            StageTilePosition::create($this['horizontal'], $this['vertical'] + 2),
-            StageTilePosition::create($this['horizontal'], $this['vertical'] - 2),
-        ];
-    }
-}
-
-/**
- * Array of 2 StageTilePosition, converts coordinates into StageTilePositions into 2 dominoes
- */
-class DominoHorizontalVertical extends \ArrayObject {
-    /**
-     * First coordinates must be smaller than second, so to the left or to the top
-     */
-    static public function create_from_coordinates($coordinates1, $coordinates2): DominoHorizontalVertical {
-        if ($coordinates1[0] < $coordinates2[0] || $coordinates1[1] < $coordinates2[1]) {
-            $smaller = $coordinates1;
-            $larger = $coordinates2;
-        } else {
-            $smaller = $coordinates2;
-            $larger = $coordinates1;
-        }
-        $object = new DominoHorizontalVertical([
-            StageTilePosition::create_from_coordinates($smaller),
-            StageTilePosition::create_from_coordinates($larger)
-        ]);
-        return $object;
-    }
-    public function __construct($positions) {
-        foreach ($positions as $key => $value)
-            $this[] = $value;
-    }
-
-    public function key(): int {
-        return $this[0]->key() + $this[1]->key() * StageTilePosition::FACTOR_HORIZONTAL * StageTilePosition::FACTOR_HORIZONTAL;
-    }
-
-    public function create_dominoes_with_rotation($stage): array {
-        return $this[0]['horizontal'] === $this[1]['horizontal']
-            ? $this->create_vertical_dominoes($stage)
-            : $this->create_horizontal_dominoes($stage);
-    }
-
-    public function create_horizontal_dominoes($stage): array {
-        return [['horizontal' => $this[0]['horizontal'], 'vertical' => $this[0]['vertical'], 'rotation' => 0, 'stage' => $stage, ],
-                ['horizontal' => $this[1]['horizontal'], 'vertical' => $this[1]['vertical'], 'rotation' => 2, 'stage' => $stage,]
-    ];
-    }
-
-    public function create_vertical_dominoes($stage): array {
-        return [['horizontal' => $this[0]['horizontal'], 'vertical' => $this[0]['vertical'], 'rotation' => 1, 'stage' => $stage, ],
-                ['horizontal' => $this[1]['horizontal'], 'vertical' => $this[1]['vertical'], 'rotation' => 3, 'stage' => $stage,]
-    ];
-    }
-}
+include_once(__DIR__.'/DominoHorizontalVertical.php');
+include_once(__DIR__.'/StageTilePosition.php');
 
 /**
  * Collection of tile positions that helps to determine if a domino can be placed
@@ -157,7 +75,7 @@ class StageTilePositions
         return  array_key_exists(StageTilePosition::create_from_position($position)->key(), $this->occupied_positions);
     }
     /**
-     * Because a domino always consists of 2 tiles, the space available for dominoes must be an even number of tiles
+     * Because a domino always consists of 2 tiles, the space available for dominoes within a rectangle must be an even number of tiles
      */
     public function are_empty_spaces_inevitable($positions_candidate_domino): bool {
         $tile_positions = $this->tile_positions;
@@ -285,25 +203,25 @@ class FirstStageTilePositions extends StageTilePositions {
     }
 }
 
-class HigherStageTilePositions extends StageTilePositions {
+class BoundedStageTilePositions extends StageTilePositions {
     public array $bounding_box_first_stage;
 
-    static public function create_and_fill($stage, $tile_positions, $bounding_box_first_stage): HigherStageTilePositions {
-        $object = new HigherStageTilePositions($tile_positions);
+    static public function create_and_fill($stage, $tile_positions, $bounding_box_first_stage): BoundedStageTilePositions {
+        $object = new BoundedStageTilePositions($tile_positions);
         $object->set_bounding_box_first_stage($bounding_box_first_stage);
         $object->set_stage($stage);
         $object->create_border_positions();
         return $object;
     }
-    public function set_bounding_box_first_stage($bounding_box): HigherStageTilePositions {
+    public function set_bounding_box_first_stage($bounding_box): BoundedStageTilePositions {
         $this->bounding_box_first_stage = $bounding_box;
         return $this;
     }    
-    public function set_stage($stage): HigherStageTilePositions {
+    public function set_stage($stage): BoundedStageTilePositions {
         $this->stage = $stage;
         return $this;
     }
-    public function create_border_positions(): HigherStageTilePositions {
+    public function create_border_positions(): BoundedStageTilePositions {
         $min_horizontal = $this->bounding_box_first_stage[0] + ($this->stage - 3);
         $max_horizontal = $this->bounding_box_first_stage[2] - ($this->stage - 3);
         $min_vertical = $this->bounding_box_first_stage[1] + ($this->stage - 3);
@@ -319,8 +237,8 @@ class HigherStageTilePositions extends StageTilePositions {
         }
         return $this;
     }
-    protected function get_with_additional_positions($tile_positions): HigherStageTilePositions {
-        return HigherStageTilePositions::create_and_fill($this->stage, $tile_positions, $this->bounding_box_first_stage);
+    protected function get_with_additional_positions($tile_positions): BoundedStageTilePositions {
+        return BoundedStageTilePositions::create_and_fill($this->stage, $tile_positions, $this->bounding_box_first_stage);
     }
     public function create_candidate_dominoes(): array {
         [$horizontal_min, $vertical_min, $horizontal_max, $vertical_max] = $this->bounding_box_first_stage;
