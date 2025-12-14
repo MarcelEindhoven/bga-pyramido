@@ -75,18 +75,21 @@ class StageTilePositions
     public function is_position_occupied($position): bool {
         return  array_key_exists(StageTilePosition::create_from_position($position)->key(), $this->occupied_positions);
     }
+    protected function get_with_additional_positions($additional_tile_positions): StageTilePositions {
+        $tile_positions = $this->tile_positions;
+        foreach ( $additional_tile_positions as $additional_tile_position )
+            $tile_positions[$additional_tile_position->key()] = $additional_tile_position;
+
+        return $this->get_with_positions($tile_positions);
+    }
     /**
      * Move to bounded class
      */
     public function are_empty_spaces_inevitable($positions_candidate_domino): bool {
-        $tile_positions = $this->tile_positions;
-        $tile_positions[$positions_candidate_domino[0]->key()] = $positions_candidate_domino[0];
-        $tile_positions[$positions_candidate_domino[1]->key()] = $positions_candidate_domino[1];
-        $include_candidate_domino = $this->get_with_additional_positions($tile_positions);
+        $include_candidate_domino = $this->get_with_additional_positions($positions_candidate_domino);
         foreach ($positions_candidate_domino as $position) {
             foreach (StageTilePosition::create_from_position($position)->get_neighbours() as $neighbour) {
-                $free_contiguous_area = $include_candidate_domino->get_free_contiguous_area($neighbour);
-                if (count($free_contiguous_area) % 2 != 0)
+                if ($include_candidate_domino->are_empty_spaces_inevitable_for_neighbour($neighbour))
                     return true;
             }
         }
@@ -146,6 +149,24 @@ class FirstStageTilePositions extends StageTilePositions {
         return $bounding_boxes;
     }
     /**
+     * To be filled in
+     */
+    public function are_empty_spaces_inevitable_for_neighbour($neighbour): bool {
+        # If neighbour cannot be placed because it is placed on an existing tile, it cannot cause problems
+        if (array_key_exists($neighbour->key(), $this->tile_positions)) return false;
+        $all_bounding_boxes = $this->get_with_additional_positions([$neighbour])->get_all_bounding_boxes();
+        # If neighbour cannot be placed because it falls outside any box, it cannot cause problems
+        if (!$all_bounding_boxes) return false;
+        # If any bounding box can be found that supports this neighbour, then this neighbour is not a problem
+        foreach ($all_bounding_boxes as $bounding_box) {
+            $candidate = BoundedStageTilePositions::create_and_fill(1, $this->tile_positions, $bounding_box);
+            if (! $candidate->are_empty_spaces_inevitable_for_neighbour($neighbour))
+                return false;
+        }
+        # Neighbour can be placed and empty spaces are inevitable in each 5x4 and 4x5 layout
+        return true;
+    }
+    /**
      * Obsolete
      */
     public function create_border_positions(): FirstStageTilePositions {
@@ -185,7 +206,7 @@ class FirstStageTilePositions extends StageTilePositions {
         return [$horizontal_min, $vertical_min, $horizontal_max, $vertical_max];
     }
 
-    protected function get_with_additional_positions($tile_positions): FirstStageTilePositions {
+    protected function get_with_positions($tile_positions): FirstStageTilePositions {
         return FirstStageTilePositions::create_and_fill($tile_positions);
     }
     public function create_candidate_dominoes(): array {
@@ -260,8 +281,16 @@ class BoundedStageTilePositions extends StageTilePositions {
         }
         return $this;
     }
-    protected function get_with_additional_positions($tile_positions): BoundedStageTilePositions {
+    protected function get_with_positions($tile_positions): BoundedStageTilePositions {
         return BoundedStageTilePositions::create_and_fill($this->stage, $tile_positions, $this->bounding_box_first_stage);
+    }
+    /**
+     * Check neighbours of a position on the provided stage tile set
+     * and return true if any neighbour has a free contiguous area with odd size.
+     */
+    public function are_empty_spaces_inevitable_for_neighbour($neighbour): bool {
+        $free_contiguous_area = $this->get_free_contiguous_area($neighbour);
+        return (count($free_contiguous_area) % 2 != 0);
     }
     public function create_candidate_dominoes(): array {
         [$horizontal_min, $vertical_min, $horizontal_max, $vertical_max] = $this->bounding_box_first_stage;

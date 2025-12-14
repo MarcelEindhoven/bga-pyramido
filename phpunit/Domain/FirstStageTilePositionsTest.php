@@ -128,7 +128,12 @@ class FirstStageTilePositionsTest extends TestCase{
             [FirstStageTilePositionsTest::STAGE_3_BOTTOM_RIGHT_DOMINO, FirstStageTilePositionsTest::STAGE_3_TOP_LEFT_DOMINO, false],
             [[[10,10], [16, 16]], [[16,18], [14,18]], false], // opposite 4x4 corners
             [[[10,10], [16, 16]], [[12,18], [14,18]], true], // opposite 4x4 corners
-            [[[10,16], [12, 16], [14, 16], [16, 16], [14, 14], [16, 14], [12, 12], [14, 12]], [[14,10], [16,10]], true],
+            [
+                [
+                            [12, 12], [14, 12],
+                                        [14, 14], [16, 14], 
+                    [10,16], [12, 16], [14, 16], [16, 16], 
+                ], [[14,10], [16,10]], true],
             [[[10,16], [12, 16], [14, 16], [16, 16], [14, 14], [16, 14], [12, 12], [14, 12]], [[14,10], [12,10]], false],
         ];
     }
@@ -150,6 +155,29 @@ class FirstStageTilePositionsTest extends TestCase{
             [[[10, 10], [18, 18]], []],
             [[[10, 10], [18, 16]], [[10, 10, 18, 16]]],
             [[[10, 10], [16, 18]], [[10, 10, 16, 18]]],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('are_empty_spaces_inevitable_for_neighbour')]
+    public function test_are_empty_spaces_inevitable_for_neighbour($tile_positions, $neighbour_coordinates, $expected_result) {
+        // Arrange
+        $sut = $this->create_first_stage($tile_positions);
+        $neighbour = StageTilePosition::create_from_coordinates($neighbour_coordinates);
+
+        // Act
+        $are_empty_spaces_inevitable = $sut->are_empty_spaces_inevitable_for_neighbour($neighbour);
+
+        // Assert
+        $this->assertEquals($expected_result, $are_empty_spaces_inevitable);
+    }
+    static public function are_empty_spaces_inevitable_for_neighbour(): array {
+        return [
+            [[[10,10], [12,10], [14,10], [16,10],
+            [10,12],                 [16,12],
+            [10,14],                 [16,14],
+            [10,16], [12,16], [14,16], [16,16]], [10, 8], false],
+            [[[10,16], [12,16], [14,16], [16,16]], [10, 16], false],
+            [[[10,10], [18,16]], [20, 16], false],
         ];
     }
 
