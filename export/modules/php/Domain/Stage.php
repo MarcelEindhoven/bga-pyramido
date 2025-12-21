@@ -89,7 +89,7 @@ class StageTilePositions
         $include_candidate_domino = $this->get_with_additional_positions($positions_candidate_domino);
         foreach ($positions_candidate_domino as $position) {
             foreach (StageTilePosition::create_from_position($position)->get_neighbours() as $neighbour) {
-                if ($include_candidate_domino->are_empty_spaces_inevitable_for_neighbour($neighbour))
+                if ($include_candidate_domino->are_empty_spaces_inevitable_for_position($neighbour))
                     return true;
             }
         }
@@ -119,10 +119,41 @@ class StageTilePositions
 }
 
 class FirstStageTilePositions extends StageTilePositions {
+    /**
+     * bounding box as [$horizontal_min, $vertical_min, $horizontal_max, $vertical_max]
+     * These coordinates contain the border tiles
+     */
+    public array $bounding_box = [];
+
     static public function create_and_fill($tile_positions): FirstStageTilePositions {
         $object = new FirstStageTilePositions($tile_positions);
+        $object->calculate_bounding_box();
         return $object;
     }
+
+    public function calculate_bounding_box(): void {
+        $horizontal_min = 10;
+        $horizontal_max = 10;
+        $vertical_min = 10;
+        $vertical_max = 10;
+        foreach ($this->tile_positions as $tile_position) {
+            $horizontal = $tile_position['horizontal'];
+            $vertical = $tile_position['vertical'];
+            if ($horizontal > $horizontal_max) $horizontal_max = $horizontal;
+            if ($horizontal < $horizontal_min) $horizontal_min = $horizontal;
+            if ($vertical > $vertical_max) $vertical_max = $vertical;
+            if ($vertical < $vertical_min) $vertical_min = $vertical;
+        }
+        $this->bounding_box = [$horizontal_min, $vertical_min, $horizontal_max, $vertical_max];
+    }
+    public function get_bounding_box(): array {
+        return $this->bounding_box;
+    }
+
+    protected function get_with_positions($tile_positions): FirstStageTilePositions {
+        return FirstStageTilePositions::create_and_fill($tile_positions);
+    }
+
     /**
      * Get all possible future bounding boxes as [$horizontal_min, $vertical_min, $horizontal_max, $vertical_max]
      */
@@ -138,49 +169,17 @@ class FirstStageTilePositions extends StageTilePositions {
                 $bounding_boxes[] = [$hmin, $vmin, $hmin + 6, $vmin + 8];
         return $bounding_boxes;
     }
-    /**
-     * To be filled in
-     */
-    public function are_empty_spaces_inevitable_for_neighbour($neighbour): bool {
-        # If neighbour cannot be placed because it is placed on an existing tile, it cannot cause problems
-        if (array_key_exists($neighbour->key(), $this->tile_positions)) return false;
-
-        $all_bounding_boxes = $this->get_with_additional_positions([$neighbour])->get_all_bounding_boxes();
-        # If neighbour cannot be placed because it falls outside any box, it cannot cause problems
-        if (!$all_bounding_boxes) return false;
-
-        # If any bounding box can be found that supports this neighbour, then this neighbour is not a problem
-        foreach ($all_bounding_boxes as $bounding_box) {
-            $candidate = BoundedStageTilePositions::create_and_fill(1, $this->tile_positions, $bounding_box);
-            if (! $candidate->are_empty_spaces_inevitable_for_neighbour($neighbour))
-                return false;
-        }
-        # Neighbour can be placed and empty spaces are inevitable in each 5x4 and 4x5 layout
+    public function is_valid (): bool {
+        $bounding_box = $this->get_bounding_box();
+        if (($bounding_box[3] - $bounding_box[1] >= 8) && ($bounding_box[2] - $bounding_box[0] >= 8))
+            return false;
+        if ($bounding_box[3] - $bounding_box[1] > 8)
+            return false;
+        if ($bounding_box[2] - $bounding_box[0] > 8)
+            return false;
         return true;
     }
-    /**
-     * Get bounding box as [$horizontal_min, $vertical_min, $horizontal_max, $vertical_max]
-     * These coordinates contain the border tiles
-     */
-    public function get_bounding_box(): array {
-        $horizontal_min = 10;
-        $horizontal_max = 10;
-        $vertical_min = 10;
-        $vertical_max = 10;
-        foreach ($this->tile_positions as $tile_position) {
-            $horizontal = $tile_position['horizontal'];
-            $vertical = $tile_position['vertical'];
-            if ($horizontal > $horizontal_max) $horizontal_max = $horizontal;
-            if ($horizontal < $horizontal_min) $horizontal_min = $horizontal;
-            if ($vertical > $vertical_max) $vertical_max = $vertical;
-            if ($vertical < $vertical_min) $vertical_min = $vertical;
-        }
-        return [$horizontal_min, $vertical_min, $horizontal_max, $vertical_max];
-    }
 
-    protected function get_with_positions($tile_positions): FirstStageTilePositions {
-        return FirstStageTilePositions::create_and_fill($tile_positions);
-    }
     public function create_candidate_dominoes(): array {
         if (empty($this->tile_positions)) {
             return $this->create_initial_candidate_domino();
@@ -212,10 +211,31 @@ class FirstStageTilePositions extends StageTilePositions {
             $domino_vertical = DominoHorizontalVertical::create_from_coordinates(
                     [$horizontal + $delta[1], $vertical + $delta[0]],
                     [$horizontal + $delta[1], $vertical + $delta[0] + 2]);
-            $candidates[$domino_horizontal->key()] = $domino_horizontal;
-            $candidates[$domino_vertical->key()] = $domino_vertical;
+            // Check if domino falls within any bounding box
+            if ($this->get_with_additional_positions($domino_horizontal)->is_valid())
+                $candidates[$domino_horizontal->key()] = $domino_horizontal;
+            if ($this->get_with_additional_positions($domino_vertical)->is_valid())
+                $candidates[$domino_vertical->key()] = $domino_vertical;
         }
         return $candidates;
+    }
+
+    public function are_empty_spaces_inevitable_for_position($neighbour): bool {
+        # If neighbour cannot be placed because it is placed on an existing tile, it cannot cause problems
+        if (array_key_exists($neighbour->key(), $this->tile_positions)) return false;
+
+        $all_bounding_boxes = $this->get_with_additional_positions([$neighbour])->get_all_bounding_boxes();
+        # If neighbour cannot be placed because it falls outside any box, it cannot cause problems
+        if (!$all_bounding_boxes) return false;
+
+        # If any bounding box can be found that supports this neighbour, then this neighbour is not a problem
+        foreach ($all_bounding_boxes as $bounding_box) {
+            $candidate = BoundedStageTilePositions::create_and_fill(1, $this->tile_positions, $bounding_box);
+            if (! $candidate->are_empty_spaces_inevitable_for_position($neighbour))
+                return false;
+        }
+        # Neighbour can be placed and empty spaces are inevitable in each 5x4 and 4x5 layout
+        return true;
     }
 }
 
@@ -253,14 +273,16 @@ class BoundedStageTilePositions extends StageTilePositions {
         }
         return $this;
     }
+
     protected function get_with_positions($tile_positions): BoundedStageTilePositions {
         return BoundedStageTilePositions::create_and_fill($this->stage, $tile_positions, $this->bounding_box_first_stage);
     }
+
     /**
      * Check neighbours of a position on the provided stage tile set
      * and return true if any neighbour has a free contiguous area with odd size.
      */
-    public function are_empty_spaces_inevitable_for_neighbour($neighbour): bool {
+    public function are_empty_spaces_inevitable_for_position($neighbour): bool {
         $free_contiguous_area = $this->get_free_contiguous_area($neighbour);
         return (count($free_contiguous_area) % 2 != 0);
     }

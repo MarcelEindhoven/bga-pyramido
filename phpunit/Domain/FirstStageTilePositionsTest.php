@@ -30,7 +30,51 @@ class FirstStageTilePositionsTest extends TestCase{
     protected function setUp(): void {
     }
 
-    public function test_first_stage_dominoes_no_tile() {
+    #[\PHPUnit\Framework\Attributes\DataProvider('is_valid')]
+    public function test_is_valid($tile_positions, $expected_is_valid) {
+        // Arrange
+        $sut = $this->create_first_stage($tile_positions);
+
+        // Act
+        $is_valid = $sut->is_valid();
+
+        // Assert
+        $this->assertEquals($expected_is_valid, $is_valid);
+    }
+    static public function is_valid(): array {
+        return [
+            [[FirstStageTilePositionsTest::STAGE_1_TOP_LEFT, FirstStageTilePositionsTest::STAGE_1_BOTTOM_RIGHT_54],
+                true,],
+            [[FirstStageTilePositionsTest::STAGE_1_TOP_LEFT, [18,18]],
+                false,],
+            [[FirstStageTilePositionsTest::STAGE_1_TOP_LEFT, [10,20]],
+                false,],
+            [[FirstStageTilePositionsTest::STAGE_1_TOP_LEFT, [20,10]],
+                false,],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('bounding_box')]
+    public function test_bounding_box($tile_positions, $expected_bounding_box) {
+        // Arrange
+        $sut = $this->create_first_stage($tile_positions);
+
+        // Act
+        $bounding_box = $sut->get_bounding_box();
+
+        // Assert
+        $this->assertEquals($expected_bounding_box, $bounding_box);
+    }
+    static public function bounding_box(): array {
+        return [
+            [
+                [FirstStageTilePositionsTest::STAGE_1_TOP_LEFT, FirstStageTilePositionsTest::STAGE_1_BOTTOM_RIGHT_44],
+                [10, 10, 16, 16],
+            ],
+        ];
+    }
+
+    public function test__dominoes_no_tile() {
         // Arrange
         $sut = $this->create_first_stage([]);
 
@@ -45,7 +89,7 @@ class FirstStageTilePositionsTest extends TestCase{
         ]), $dominoes);
     }
 
-    public function test_first_stage_get_candidate_dominoes_no_tile() {
+    public function test__get_candidate_dominoes_no_tile() {
         // Arrange
         $sut = $this->create_first_stage([]);
 
@@ -56,7 +100,32 @@ class FirstStageTilePositionsTest extends TestCase{
         $this->assertEquals(4, count($dominoes));
     }
 
-    public function test_first_stage_get_candidate_dominoes_twin_tile() {
+    #[\PHPUnit\Framework\Attributes\DataProvider('create_candidate_dominoes_for_tile')]
+    public function test_create_candidate_dominoes_for_tile(array $tile_positions, array $tile, array $expected_dominoes) {
+        // Arrange
+        $sut = $this->create_first_stage($tile_positions);
+
+        // Act
+        $dominoes = $sut->create_candidate_dominoes_for_tile($this->convert_into_tile($tile));
+
+        // Assert
+        $this->assertEqualsCanonicalizing($this->convert_into_DominoHorizontalVerticals($expected_dominoes), $dominoes);
+    }
+    static public function create_candidate_dominoes_for_tile(): array {
+        return[
+            [
+                [[10, 10], [12, 10], [14, 10], [16, 10]],
+                [10, 10],
+                [[[8,8], [10,8]], [[10,8], [12,8]],
+                 [[12, 10], [14, 10]],
+                 [[8,12], [10,12]], [[10,12], [12,12]], 
+                 [[10,6], [10,8]], [[10,12], [10,14]],
+                 [[8,8], [8,10]], [[8,10], [8,12]], [[12,8], [12,10]], [[12,10], [12,12]]],
+            ]
+        ];
+    }
+
+    public function test_get_candidate_dominoes_twin_tile() {
         // Arrange
         $sut = $this->create_first_stage([FirstStageTilePositionsTest::STAGE_1_TOP_LEFT, [12, 10]]);
 
@@ -67,7 +136,7 @@ class FirstStageTilePositionsTest extends TestCase{
         $this->assertEquals(4 * 2 * 2 * 2, count($dominoes));
     }
 
-    public function test_first_stage_dominoes_single_tile() {
+    public function test__dominoes_single_tile() {
         // Arrange
         $sut = $this->create_first_stage([FirstStageTilePositionsTest::STAGE_1_TOP_LEFT]);
 
@@ -91,34 +160,44 @@ class FirstStageTilePositionsTest extends TestCase{
             [[12,12], [12,10]],
         ]), $dominoes);
     }
-
-    #[\PHPUnit\Framework\Attributes\DataProvider('first_stage_bounding_box')]
-    public function test_first_stage_bounding_box($tile_positions, $expected_bounding_box) {
+/*
+    public function test_create_candidate_dominoes_four_wide() {
         // Arrange
-        $sut = $this->create_first_stage($tile_positions);
+        $sut = $this->create_first_stage([[12, 10], [14, 10], [16, 10], [18, 10]]);
 
         // Act
-        $bounding_box = $sut->get_bounding_box();
+        $dominoes = $sut->create_candidate_dominoes();
 
         // Assert
-        $this->assertEquals($expected_bounding_box, $bounding_box);
+        $this->assertEqualsCanonicalizing($this->convert_into_DominoHorizontalVerticals([
+            [[10,8], [12,8]], // Horizontal dominoes
+            [[12,8], [14,8]],
+            [[14,8], [16,8]],
+            [[16,8], [18,8]],
+            [[18,8], [20,8]],
+            [[10,12], [12,12]], // Horizontal dominoes
+            [[12,12], [14,12]],
+            [[14,12], [16,12]],
+            [[16,12], [18,12]],
+            [[18,12], [20,12]],
+            [[12,6], [12,8]], // Vertical dominoes
+            [[14,6], [14,8]],
+            [[16,6], [16,8]],
+            [[18,6], [18,8]],
+            [[12,12], [12,14]], 
+            [[14,12], [14,14]],
+            [[16,12], [16,14]],
+            [[18,12], [18,14]],
+        ]), $dominoes);
     }
-    static public function first_stage_bounding_box(): array {
-        return [
-            [
-                [FirstStageTilePositionsTest::STAGE_1_TOP_LEFT, FirstStageTilePositionsTest::STAGE_1_BOTTOM_RIGHT_44],
-                [10, 10, 16, 16],
-            ],
-        ];
-    }
-
+*/
     #[\PHPUnit\Framework\Attributes\DataProvider('first_empty_spaces')]
     public function test_first_empty_spaces($tile_positions, $candidate_domino, $expected_result) {
         // Arrange
         $sut = $this->create_first_stage($tile_positions);
 
         // Act
-        $are_empty_spaces_inevitable = $sut->are_empty_spaces_inevitable($this->convert_into_Tiles($candidate_domino));
+        $are_empty_spaces_inevitable = $sut->are_empty_spaces_inevitable($this->convert_into_tiles($candidate_domino));
 
         // Assert
         $this->assertEquals($expected_result, $are_empty_spaces_inevitable);
@@ -160,19 +239,19 @@ class FirstStageTilePositionsTest extends TestCase{
         ];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('are_empty_spaces_inevitable_for_neighbour')]
-    public function test_are_empty_spaces_inevitable_for_neighbour($tile_positions, $neighbour_coordinates, $expected_result) {
+    #[\PHPUnit\Framework\Attributes\DataProvider('are_empty_spaces_inevitable_for_position')]
+    public function test_are_empty_spaces_inevitable_for_position($tile_positions, $neighbour_coordinates, $expected_result) {
         // Arrange
         $sut = $this->create_first_stage($tile_positions);
         $neighbour = StageTilePosition::create_from_coordinates($neighbour_coordinates);
 
         // Act
-        $are_empty_spaces_inevitable = $sut->are_empty_spaces_inevitable_for_neighbour($neighbour);
+        $are_empty_spaces_inevitable = $sut->are_empty_spaces_inevitable_for_position($neighbour);
 
         // Assert
         $this->assertEquals($expected_result, $are_empty_spaces_inevitable);
     }
-    static public function are_empty_spaces_inevitable_for_neighbour(): array {
+    static public function are_empty_spaces_inevitable_for_position(): array {
         return [
             [[[10,10], [12,10], [14,10], [16,10],
             [10,12],                 [16,12],
@@ -184,7 +263,7 @@ class FirstStageTilePositionsTest extends TestCase{
     }
 
     protected function create_first_stage($tile_positions) {
-        return FirstStageTilePositions::create_and_fill($this->convert_into_Tiles($tile_positions));
+        return FirstStageTilePositions::create_and_fill($this->convert_into_tiles($tile_positions));
     }
 
     protected function convert_into_DominoHorizontalVerticals($dominoe_coordinates): array {
@@ -194,14 +273,14 @@ class FirstStageTilePositionsTest extends TestCase{
         }
         return $dominoes;
     }
-    protected function convert_into_Tiles($coordinates): array {
+    protected function convert_into_tiles($coordinates): array {
         $tile_positions = [];
         foreach($coordinates as $coordinate) {
             $tile_positions[] = StageTilePosition::create($coordinate[0], $coordinate[1]);
         }
         return $tile_positions;
     }
-    protected function convert_into_Tile($coordinates): array {
+    protected function convert_into_tile($coordinates): array {
         return ['horizontal' => $coordinates[0], 'vertical' => $coordinates[1]];
     }
 }
