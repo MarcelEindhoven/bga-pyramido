@@ -128,12 +128,14 @@ class FirstStageTilePositionsTest extends TestCase{
             [FirstStageTilePositionsTest::STAGE_3_BOTTOM_RIGHT_DOMINO, FirstStageTilePositionsTest::STAGE_3_TOP_LEFT_DOMINO, false],
             [[[10,10], [16, 16]], [[16,18], [14,18]], false], // opposite 4x4 corners
             [[[10,10], [16, 16]], [[12,18], [14,18]], true], // opposite 4x4 corners
-            [
-                [
-                            [12, 12], [14, 12],
+            [   [           [12, 12], [14, 12],
                                         [14, 14], [16, 14], 
                     [10,16], [12, 16], [14, 16], [16, 16], 
                 ], [[14,10], [16,10]], true],
+            [   [           [12, 12], [14, 12],
+                                        [14, 14], [16, 14], 
+                    [10,16], [12, 16], [14, 16], [16, 16], 
+                ], [[12,18], [14,18]], true],
             [[[10,16], [12, 16], [14, 16], [16, 16], [14, 14], [16, 14], [12, 12], [14, 12]], [[14,10], [12,10]], false],
         ];
     }

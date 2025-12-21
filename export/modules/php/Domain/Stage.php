@@ -116,25 +116,15 @@ class StageTilePositions
         }
         return $area;
     }
-    /**
-     * Move to bounded class
-     */
-    protected function occupy($position): StageTilePositions {
-        $tile = StageTilePosition::create($position[0], $position[1]);
-        $this->occupied_positions[$tile->key()] = $tile;
-
-        return $this;
-    }
 }
 
 class FirstStageTilePositions extends StageTilePositions {
     static public function create_and_fill($tile_positions): FirstStageTilePositions {
         $object = new FirstStageTilePositions($tile_positions);
-        $object->create_border_positions();
         return $object;
     }
     /**
-     * Get all possible future bounding boxes
+     * Get all possible future bounding boxes as [$horizontal_min, $vertical_min, $horizontal_max, $vertical_max]
      */
     public function get_all_bounding_boxes(): array {
         $bounding_boxes = [];
@@ -154,9 +144,11 @@ class FirstStageTilePositions extends StageTilePositions {
     public function are_empty_spaces_inevitable_for_neighbour($neighbour): bool {
         # If neighbour cannot be placed because it is placed on an existing tile, it cannot cause problems
         if (array_key_exists($neighbour->key(), $this->tile_positions)) return false;
+
         $all_bounding_boxes = $this->get_with_additional_positions([$neighbour])->get_all_bounding_boxes();
         # If neighbour cannot be placed because it falls outside any box, it cannot cause problems
         if (!$all_bounding_boxes) return false;
+
         # If any bounding box can be found that supports this neighbour, then this neighbour is not a problem
         foreach ($all_bounding_boxes as $bounding_box) {
             $candidate = BoundedStageTilePositions::create_and_fill(1, $this->tile_positions, $bounding_box);
@@ -167,30 +159,10 @@ class FirstStageTilePositions extends StageTilePositions {
         return true;
     }
     /**
-     * Obsolete
+     * Get bounding box as [$horizontal_min, $vertical_min, $horizontal_max, $vertical_max]
+     * These coordinates contain the border tiles
      */
-    public function create_border_positions(): FirstStageTilePositions {
-        [$horizontal_min, $vertical_min, $horizontal_max, $vertical_max] = $this->get_bounding_box();
-
-        $allowed_size_vertical = $horizontal_max - $horizontal_min < 8? 10:8;
-        $allowed_size_horizontal = $vertical_max - $vertical_min < 8? 10:8;
-        for ($i = 0; $i <= 21; $i = $i + 2) {
-            $this->occupy([$i, $vertical_max - $allowed_size_vertical]);
-            $this->occupy([$i, $vertical_min + $allowed_size_vertical]);
-            $this->occupy([$horizontal_max - $allowed_size_horizontal, $i]);
-            $this->occupy([$horizontal_min + $allowed_size_horizontal, $i]);
-        }
-        // If bounding box within 4x4, disable corners
-        $this->occupy([$horizontal_max - 8, $vertical_max - 8]);
-        $this->occupy([$horizontal_max - 8, $vertical_min + 8]);
-        $this->occupy([$horizontal_min + 8, $vertical_max - 8]);
-        $this->occupy([$horizontal_min + 8, $vertical_min + 8]);
-
-        return $this;
-    }
     public function get_bounding_box(): array {
-        //print("get_bounding_box\n");
-        // print_r($tiles);
         $horizontal_min = 10;
         $horizontal_max = 10;
         $vertical_min = 10;
@@ -305,11 +277,10 @@ class BoundedStageTilePositions extends StageTilePositions {
                 $candidates[] = DominoHorizontalVertical::create_from_coordinates([$h, $v], [$h, $v + 2]);
         return $candidates;
     }
-    public function create_vertical_candidate_dominoes(): array {
-        [$horizontal_min, $vertical_min, $horizontal_max, $vertical_max] = $this->bounding_box_first_stage;
-        $stage = $this->stage;
-        // Fill candidate array from bounding box
-        $candidates = [];
-        return $candidates;
+    protected function occupy($position): StageTilePositions {
+        $tile = StageTilePosition::create($position[0], $position[1]);
+        $this->occupied_positions[$tile->key()] = $tile;
+
+        return $this;
     }
 }
