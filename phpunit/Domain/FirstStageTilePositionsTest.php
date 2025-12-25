@@ -37,6 +37,7 @@ class FirstStageTilePositionsTest extends TestCase{
 
         // Act
         $is_valid = $sut->is_valid();
+        print_r($sut->get_bounding_box());
 
         // Assert
         $this->assertEquals($expected_is_valid, $is_valid);
@@ -51,6 +52,11 @@ class FirstStageTilePositionsTest extends TestCase{
                 false,],
             [[FirstStageTilePositionsTest::STAGE_1_TOP_LEFT, [20,10]],
                 false,],
+            [[
+                                                                     [14, 8], [16,8],
+             FirstStageTilePositionsTest::STAGE_1_TOP_LEFT, [12,10], [14,10], [16,10], [18,10],
+                                                                                       [18,12],],
+                true,],
         ];
     }
 
@@ -74,7 +80,7 @@ class FirstStageTilePositionsTest extends TestCase{
         ];
     }
 
-    public function test__dominoes_no_tile() {
+    public function test_dominoes_no_tile() {
         // Arrange
         $sut = $this->create_first_stage([]);
 
@@ -89,7 +95,7 @@ class FirstStageTilePositionsTest extends TestCase{
         ]), $dominoes);
     }
 
-    public function test__get_candidate_dominoes_no_tile() {
+    public function test_get_candidate_dominoes_no_tile() {
         // Arrange
         $sut = $this->create_first_stage([]);
 
@@ -100,18 +106,18 @@ class FirstStageTilePositionsTest extends TestCase{
         $this->assertEquals(4, count($dominoes));
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('create_candidate_dominoes_for_tile')]
-    public function test_create_candidate_dominoes_for_tile(array $tile_positions, array $tile, array $expected_dominoes) {
+    #[\PHPUnit\Framework\Attributes\DataProvider('create_touching_dominoes')]
+    public function test_create_touching_dominoes(array $tile_positions, array $tile, array $expected_dominoes) {
         // Arrange
         $sut = $this->create_first_stage($tile_positions);
 
         // Act
-        $dominoes = $sut->create_candidate_dominoes_for_tile($this->convert_into_tile($tile));
+        $dominoes = $sut->create_touching_dominoes($this->convert_into_tile($tile));
 
         // Assert
         $this->assertEqualsCanonicalizing($this->convert_into_DominoHorizontalVerticals($expected_dominoes), $dominoes);
     }
-    static public function create_candidate_dominoes_for_tile(): array {
+    static public function create_touching_dominoes(): array {
         return[
             [
                 [[10, 10], [12, 10], [14, 10], [16, 10]],
@@ -121,8 +127,30 @@ class FirstStageTilePositionsTest extends TestCase{
                  [[8,12], [10,12]], [[10,12], [12,12]], 
                  [[10,6], [10,8]], [[10,12], [10,14]],
                  [[8,8], [8,10]], [[8,10], [8,12]], [[12,8], [12,10]], [[12,10], [12,12]]],
+                [                       [14,8], [16,8],
+                    [10, 10], [12, 10], [14, 10], [16, 10]],
+                [10, 10],
+                [[[8,8], [10,8]], [[10,8], [12,8]],
+                 [[12, 10], [14, 10]],
+                 [[8,12], [10,12]], [[10,12], [12,12]], 
+                 [[10,6], [10,8]], [[10,12], [10,14]],
+                 [[8,8], [8,10]], [[8,10], [8,12]], [[12,8], [12,10]], [[12,10], [12,12]]],
             ]
         ];
+    }
+
+    public function test_create_multiple_candidate_dominoes() {
+        // Arrange
+        $sut = $this->create_first_stage([
+                                                                     [14, 8], [16,8],
+            FirstStageTilePositionsTest::STAGE_1_TOP_LEFT, [12, 10], [14, 10], [16, 10],
+        ]);
+
+        // Act
+        $dominoes = $sut->create_multiple_candidate_dominoes();
+
+        // Assert
+        $this->assertEquals(3+5+5+5 + 2+4+4+5+5+3, count($dominoes));
     }
 
     public function test_get_candidate_dominoes_twin_tile() {
@@ -211,10 +239,10 @@ class FirstStageTilePositionsTest extends TestCase{
                                         [14, 14], [16, 14], 
                     [10,16], [12, 16], [14, 16], [16, 16], 
                 ], [[14,10], [16,10]], true],
-            [   [           [12, 12], [14, 12],
-                                        [14, 14], [16, 14], 
-                    [10,16], [12, 16], [14, 16], [16, 16], 
-                ], [[12,18], [14,18]], true],
+            [   [           [12, 10], [14, 10],
+                                        [14, 12], [16, 12], 
+                    [10, 14], [12, 14], [14, 14], [16, 14], 
+                ],           [[12, 16], [14, 16]], true],
             [[[10,16], [12, 16], [14, 16], [16, 16], [14, 14], [16, 14], [12, 12], [14, 12]], [[14,10], [12,10]], false],
         ];
     }
@@ -257,6 +285,9 @@ class FirstStageTilePositionsTest extends TestCase{
             [10,12],                 [16,12],
             [10,14],                 [16,14],
             [10,16], [12,16], [14,16], [16,16]], [10, 8], false],
+            [[                            [14,8], [16,8],
+                [8,10], [10,10], [12,10], [14,10], [16,10],
+                [8,12],], [8,14], false],
             [[[10,16], [12,16], [14,16], [16,16]], [10, 16], false],
             [[[10,10], [18,16]], [20, 16], false],
         ];

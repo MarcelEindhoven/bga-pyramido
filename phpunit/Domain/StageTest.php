@@ -30,67 +30,8 @@ class StageTest extends TestCase{
     protected function setUp(): void {
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('is_position_occupied')]
-    public function test_is_position_occupied($tile_positions, $position, $expected_result) {
-        // Arrange
-        $this->sut = StageTilePositions::create($this->convert_into_Tiles($tile_positions));
-
-        // Act
-        $is_position_occupied =$this->sut->is_position_occupied($this->convert_into_Tile($position));
-
-        // Assert
-        $this->assertEquals($expected_result, $is_position_occupied);
-    }
-    static public function is_position_occupied(): array {
-        return [
-            [[], [10, 10], false],
-            [[[10,10]], [10, 10], true],
-            [[[5,5], [10,10]], [7, 7], false],
-            [[[5,5], [10,10]], [5, 5], true],
-        ];
-    }
-
-    #[\PHPUnit\Framework\Attributes\DataProvider('higher_border')]
-    public function test_higher_border($stage, $occupied_positions, $unoccupied_positions) {
-        // Arrange
-
-        // Act
-        $sut = $this->create_higher_stage($stage, [], StageTest::FIRST_STAGE_BOUNDING_BOX);
-
-        // Assert
-        foreach($this->convert_into_Tiles($unoccupied_positions) as $position)
-            $this->assertFalse($sut->is_position_occupied($position));
-        foreach($this->convert_into_Tiles($occupied_positions) as $position)
-            $this->assertTrue($sut->is_position_occupied($position));
-    }
-    static public function higher_border(): array {
-        return [
-            [4, [[11,11], [13,11], [15,11], [17,11], [11,13], [11,15], [17,13], [17,15], [13,15], [15,15]], [StageTest::STAGE_4_LEFT, StageTest::STAGE_4_RIGHT]],
-            [2, [[9,9], [13,9], [15,9], [17,9], [9,13], [19,17], [9, 17]], [[13,13], [15,13], [11,11], [17,11], [11,15], [17,15]]],
-        ];
-    }
-
-    #[\PHPUnit\Framework\Attributes\DataProvider('higher_empty_spaces')]
-    public function test_higher_empty_spaces($stage, $tile_positions, $candidate_domino, $expected_result) {
-        // Arrange
-        $sut = $this->create_higher_stage($stage, $tile_positions, StageTest::FIRST_STAGE_BOUNDING_BOX);
-
-        // Act
-        $are_empty_spaces_inevitable = $sut->are_empty_spaces_inevitable($this->convert_into_Tiles($candidate_domino));
-
-        // Assert
-        $this->assertEquals($expected_result, $are_empty_spaces_inevitable);
-    }
-    static public function higher_empty_spaces(): array {
-        return [
-            [4, [], [StageTest::STAGE_4_LEFT, StageTest::STAGE_4_RIGHT], false],
-            [3, [], StageTest::STAGE_3_TOP_LEFT_DOMINO, false],
-            [3, StageTest::STAGE_3_BOTTOM_RIGHT_DOMINO, StageTest::STAGE_3_TOP_LEFT_DOMINO, true],
-        ];
-    }
-
-    #[\PHPUnit\Framework\Attributes\DataProvider('higher_create_candidate_dominoes')]
-    public function test_higher_create_candidate_dominoes($stage, $expected_horizontal_candidates, $expected_vertical_candidates) {
+    #[\PHPUnit\Framework\Attributes\DataProvider('create_candidate_dominoes')]
+    public function test_create_candidate_dominoes($stage, $expected_horizontal_candidates, $expected_vertical_candidates) {
         // Arrange
         $expected_candidates = array_merge($expected_horizontal_candidates, $expected_vertical_candidates);
         $sut = $this->create_higher_stage($stage, [], StageTest::FIRST_STAGE_BOUNDING_BOX);
@@ -101,7 +42,7 @@ class StageTest extends TestCase{
         // Assert
         $this->assertEquals($this->convert_into_DominoHorizontalVerticals($expected_candidates), $candidate_dominoes);
     }
-    static public function higher_create_candidate_dominoes(): array {
+    static public function create_candidate_dominoes(): array {
         return [
             [4, [[StageTest::STAGE_4_LEFT, StageTest::STAGE_4_RIGHT]], []],
             [3, [StageTest::STAGE_3_TOP_LEFT_DOMINO, [[14, 12], [16, 12]],
@@ -111,8 +52,8 @@ class StageTest extends TestCase{
         ];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('higher_get_free_contiguous_area')]
-    public function test_higher_get_free_contiguous_area($stage, $tile_positions, $first_free_position, $size_expected_result) {
+    #[\PHPUnit\Framework\Attributes\DataProvider('get_free_contiguous_area')]
+    public function test_get_free_contiguous_area($stage, $tile_positions, $first_free_position, $size_expected_result) {
         // Arrange
         $sut = $this->create_higher_stage($stage, $tile_positions, StageTest::FIRST_STAGE_BOUNDING_BOX);
 
@@ -122,11 +63,28 @@ class StageTest extends TestCase{
         // Assert
         $this->assertEquals($size_expected_result, count($free_contiguous_area));
     }
-    static public function higher_get_free_contiguous_area(): array {
+    static public function get_free_contiguous_area(): array {
         return [
             [4, [StageTest::STAGE_4_LEFT], StageTest::STAGE_4_LEFT, 0],
             [4, [], StageTest::STAGE_4_LEFT, 2],
             [4, [StageTest::STAGE_4_LEFT], StageTest::STAGE_4_RIGHT, 1],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('is_valid')]
+    public function test_is_valid($stage, $tile_positions, $expected_result) {
+        // Arrange
+        $sut = $this->create_higher_stage($stage, $tile_positions, StageTest::FIRST_STAGE_BOUNDING_BOX);
+
+        // Act
+        $result = $sut->is_valid();
+
+        // Assert
+        $this->assertEquals($expected_result, $result);
+    }
+    static public function is_valid(): array {
+        return [
+            [4, [StageTest::STAGE_4_LEFT, StageTest::STAGE_4_RIGHT], true],
         ];
     }
     protected function create_higher_stage($stage, $tile_positions, $bounding_box_first_stage) {
