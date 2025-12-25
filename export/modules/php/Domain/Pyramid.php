@@ -125,14 +125,10 @@ class Pyramid
         $bounding_box = FirstStageTilePositions::create_and_fill(
             $this->get_tiles_stage(1)
             )->get_bounding_box();
-        $stage_tile_positions = BoundedStageTilePositions::create_and_fill(
+        return BoundedStageTilePositions::create_and_fill(
             $stage, 
             $this->get_tiles_stage($stage),
-            $bounding_box);
-        $candidates = $this->get_possible_positions($stage);
-        $occupied = $this->get_occupied_array($stage);
-        $this->create_border($occupied, $stage);
-        return $this->combine($candidates, $occupied, $stage);
+            $bounding_box)->get_candidate_dominoes();
     }
     public function filter_candidates($stage_tile_positions, $candidates) {
         foreach ($candidates as $key => $candidate) {

@@ -30,8 +30,8 @@ class StageTest extends TestCase{
     protected function setUp(): void {
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('create_candidate_dominoes')]
-    public function test_create_candidate_dominoes($stage, $expected_horizontal_candidates, $expected_vertical_candidates) {
+    #[\PHPUnit\Framework\Attributes\DataProvider('create_initial_dominoes')]
+    public function test_create_initial_dominoes($stage, $expected_horizontal_candidates, $expected_vertical_candidates) {
         // Arrange
         $expected_candidates = array_merge($expected_horizontal_candidates, $expected_vertical_candidates);
         $sut = $this->create_higher_stage($stage, [], StageTest::FIRST_STAGE_BOUNDING_BOX);
@@ -40,15 +40,46 @@ class StageTest extends TestCase{
         $candidate_dominoes = $sut->create_candidate_dominoes();
 
         // Assert
-        $this->assertEquals($this->convert_into_DominoHorizontalVerticals($expected_candidates), $candidate_dominoes);
+        $this->assertEqualsCanonicalizing($this->convert_into_DominoHorizontalVerticals($expected_candidates), $candidate_dominoes);
     }
-    static public function create_candidate_dominoes(): array {
+    static public function create_initial_dominoes(): array {
         return [
             [4, [[StageTest::STAGE_4_LEFT, StageTest::STAGE_4_RIGHT]], []],
             [3, [StageTest::STAGE_3_TOP_LEFT_DOMINO, [[14, 12], [16, 12]],
              [[12, 14], [14, 14]], StageTest::STAGE_3_BOTTOM_RIGHT_DOMINO], 
-             [[[12,12], [12,14]], [[14,12], [14,14]], [[16,12], [16,14]]]
+             [[[12,12], [12,14]], [[14,12], [14,14]], [[16,12], [16,14]]],
         ],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('create_candidate_dominoes')]
+    public function test_create_candidate_dominoes($stage, $tiles, $expected_horizontal_candidates, $expected_vertical_candidates) {
+        // Arrange
+        $expected_candidates = array_merge($expected_horizontal_candidates, $expected_vertical_candidates);
+        $sut = $this->create_higher_stage($stage, $tiles, StageTest::FIRST_STAGE_BOUNDING_BOX);
+
+        // Act
+        $candidate_dominoes = $sut->create_candidate_dominoes();
+
+        // Assert
+        $this->assertEqualsCanonicalizing($this->convert_into_DominoHorizontalVerticals($expected_candidates), $candidate_dominoes);
+    }
+    static public function create_candidate_dominoes(): array {
+        return [
+            [4, [StageTest::STAGE_4_LEFT, StageTest::STAGE_4_RIGHT], [], []],
+            [3, [[14, 12], [16, 12]], [
+                StageTest::STAGE_3_BOTTOM_RIGHT_DOMINO], 
+                [[[12,12], [12,14]]],
+            ],
+            [2, [[11, 11], [13, 11]], [
+                                                        [[15,11], [17,11]],
+                [[11,13], [13,13]], [[13,13], [15,13]], [[15,13], [17,13]],
+                [[11,15], [13,15]], [[13,15], [15,15]], [[15,15], [17,15]],],
+                
+                                                        [[[15,11], [15,13]], [[17,11], [17,13]],
+                [[11,13], [11,15]], [[13,13], [13,15]], [[15,13], [15,15]], [[17,13], [17,15]],],
+                                                            
+            ],
         ];
     }
 
@@ -68,6 +99,21 @@ class StageTest extends TestCase{
             [4, [StageTest::STAGE_4_LEFT], StageTest::STAGE_4_LEFT, 0],
             [4, [], StageTest::STAGE_4_LEFT, 2],
             [4, [StageTest::STAGE_4_LEFT], StageTest::STAGE_4_RIGHT, 1],
+            [3, [], StageTest::STAGE_3_TOP_LEFT_DOMINO[0], 3 * 2],
+            [3, [StageTest::STAGE_3_TOP_LEFT_DOMINO[0]], StageTest::STAGE_3_TOP_LEFT_DOMINO[1], 5],
+            [3, [StageTest::STAGE_3_TOP_LEFT_DOMINO[0], StageTest::STAGE_3_TOP_LEFT_DOMINO[1]], StageTest::STAGE_3_BOTTOM_RIGHT_DOMINO[1], 4],
+            [3, [StageTest::STAGE_3_TOP_LEFT_DOMINO[0], StageTest::STAGE_3_TOP_LEFT_DOMINO[1]], StageTest::STAGE_3_TOP_LEFT_DOMINO[1], 0],
+            [3, [
+                StageTest::STAGE_3_TOP_LEFT_DOMINO[0],
+                StageTest::STAGE_3_TOP_LEFT_DOMINO[1],
+                StageTest::STAGE_3_BOTTOM_RIGHT_DOMINO[0],
+                StageTest::STAGE_3_BOTTOM_RIGHT_DOMINO[1]
+            ], [12,14], 1],
+            [2, [], [11,11], 4 * 3],
+            [2, [
+                [11,11], [13,11],
+                         [13,13], [15,13],
+            ], [11,13], 4 * 3 - 4],
         ];
     }
 
