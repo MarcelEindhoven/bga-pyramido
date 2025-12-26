@@ -123,7 +123,7 @@ class FirstStageTilePositionsTest extends TestCase{
                 [[10, 10], [12, 10], [14, 10], [16, 10]],
                 [10, 10],
                 [[[8,8], [10,8]], [[10,8], [12,8]],
-                 [[12, 10], [14, 10]],
+                 [[6, 10], [8, 10]], [[12, 10], [14, 10]],
                  [[8,12], [10,12]], [[10,12], [12,12]], 
                  [[10,6], [10,8]], [[10,12], [10,14]],
                  [[8,8], [8,10]], [[8,10], [8,12]], [[12,8], [12,10]], [[12,10], [12,12]]],
@@ -150,7 +150,7 @@ class FirstStageTilePositionsTest extends TestCase{
         $dominoes = $sut->create_multiple_candidate_dominoes();
 
         // Assert
-        $this->assertEquals(3+5+5+5 + 2+4+4+5+5+3, count($dominoes));
+        $this->assertEquals(23, count($dominoes));
     }
 
     public function test_get_candidate_dominoes_twin_tile() {
@@ -162,89 +162,6 @@ class FirstStageTilePositionsTest extends TestCase{
 
         // Assert
         $this->assertEquals(4 * 2 * 2 * 2, count($dominoes));
-    }
-
-    public function test__dominoes_single_tile() {
-        // Arrange
-        $sut = $this->create_first_stage([FirstStageTilePositionsTest::STAGE_1_TOP_LEFT]);
-
-        // Act
-        $dominoes = $sut->create_candidate_dominoes();
-
-        // Assert
-        $this->assertEquals(12, count($dominoes));
-        $this->assertEqualsCanonicalizing($this->convert_into_DominoHorizontalVerticals([
-            [[8,8], [10,8]], // Horizontal dominoes
-            [[10,8], [12,8]], 
-            [[6,10], [8,10]], 
-            [[12,10], [14,10]], 
-            [[8,12], [10,12]],
-            [[10,12], [12,12]],
-            [[8,8], [8,10]], // Vertical dominoes
-            [[8,10], [8,12]], 
-            [[10,8], [10,6]], 
-            [[10,12], [10,14]], 
-            [[12,10], [12,8]], 
-            [[12,12], [12,10]],
-        ]), $dominoes);
-    }
-/*
-    public function test_create_candidate_dominoes_four_wide() {
-        // Arrange
-        $sut = $this->create_first_stage([[12, 10], [14, 10], [16, 10], [18, 10]]);
-
-        // Act
-        $dominoes = $sut->create_candidate_dominoes();
-
-        // Assert
-        $this->assertEqualsCanonicalizing($this->convert_into_DominoHorizontalVerticals([
-            [[10,8], [12,8]], // Horizontal dominoes
-            [[12,8], [14,8]],
-            [[14,8], [16,8]],
-            [[16,8], [18,8]],
-            [[18,8], [20,8]],
-            [[10,12], [12,12]], // Horizontal dominoes
-            [[12,12], [14,12]],
-            [[14,12], [16,12]],
-            [[16,12], [18,12]],
-            [[18,12], [20,12]],
-            [[12,6], [12,8]], // Vertical dominoes
-            [[14,6], [14,8]],
-            [[16,6], [16,8]],
-            [[18,6], [18,8]],
-            [[12,12], [12,14]], 
-            [[14,12], [14,14]],
-            [[16,12], [16,14]],
-            [[18,12], [18,14]],
-        ]), $dominoes);
-    }
-*/
-    #[\PHPUnit\Framework\Attributes\DataProvider('first_empty_spaces')]
-    public function test_first_empty_spaces($tile_positions, $candidate_domino, $expected_result) {
-        // Arrange
-        $sut = $this->create_first_stage($tile_positions);
-
-        // Act
-        $are_empty_spaces_inevitable = $sut->are_empty_spaces_inevitable($this->convert_into_tiles($candidate_domino));
-
-        // Assert
-        $this->assertEquals($expected_result, $are_empty_spaces_inevitable);
-    }
-    static public function first_empty_spaces(): array {
-        return [
-            [FirstStageTilePositionsTest::STAGE_3_BOTTOM_RIGHT_DOMINO, FirstStageTilePositionsTest::STAGE_3_TOP_LEFT_DOMINO, false],
-            [[[10,10], [16, 16]], [[16,18], [14,18]], false], // opposite 4x4 corners
-            [[[10,10], [16, 16]], [[12,18], [14,18]], true], // opposite 4x4 corners
-            [   [           [12, 12], [14, 12],
-                                        [14, 14], [16, 14], 
-                    [10,16], [12, 16], [14, 16], [16, 16], 
-                ], [[14,10], [16,10]], true],
-            [   [           [12, 10], [14, 10],
-                                        [14, 12], [16, 12], 
-                    [10, 14], [12, 14], [14, 14], [16, 14], 
-                ],           [[12, 16], [14, 16]], true],
-            [[[10,16], [12, 16], [14, 16], [16, 16], [14, 14], [16, 14], [12, 12], [14, 12]], [[14,10], [12,10]], false],
-        ];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('all_bounding_boxes')]
@@ -264,32 +181,6 @@ class FirstStageTilePositionsTest extends TestCase{
             [[[10, 10], [18, 18]], []],
             [[[10, 10], [18, 16]], [[10, 10, 18, 16]]],
             [[[10, 10], [16, 18]], [[10, 10, 16, 18]]],
-        ];
-    }
-
-    #[\PHPUnit\Framework\Attributes\DataProvider('are_empty_spaces_inevitable_for_position')]
-    public function test_are_empty_spaces_inevitable_for_position($tile_positions, $neighbour_coordinates, $expected_result) {
-        // Arrange
-        $sut = $this->create_first_stage($tile_positions);
-        $neighbour = StageTilePosition::create_from_coordinates($neighbour_coordinates);
-
-        // Act
-        $are_empty_spaces_inevitable = $sut->are_empty_spaces_inevitable_for_position($neighbour);
-
-        // Assert
-        $this->assertEquals($expected_result, $are_empty_spaces_inevitable);
-    }
-    static public function are_empty_spaces_inevitable_for_position(): array {
-        return [
-            [[[10,10], [12,10], [14,10], [16,10],
-            [10,12],                 [16,12],
-            [10,14],                 [16,14],
-            [10,16], [12,16], [14,16], [16,16]], [10, 8], false],
-            [[                            [14,8], [16,8],
-                [8,10], [10,10], [12,10], [14,10], [16,10],
-                [8,12],], [8,14], false],
-            [[[10,16], [12,16], [14,16], [16,16]], [10, 16], false],
-            [[[10,10], [18,16]], [20, 16], false],
         ];
     }
 

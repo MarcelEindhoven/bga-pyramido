@@ -47,7 +47,6 @@ class StageTilePositions
         foreach($tile_positions as $tile_position) {
             $tile = StageTilePosition::create_from_position($tile_position);
             $this->tile_positions[$tile->key()] = $tile;
-            $this->occupied_positions[$tile->key()] = $tile;
         }
         return $this;
     }
@@ -219,6 +218,7 @@ class BoundedStageTilePositions extends StageTilePositions {
         $object = new BoundedStageTilePositions($tile_positions);
         $object->set_bounding_box_first_stage($bounding_box_first_stage);
         $object->set_stage($stage);
+        $object->occupied_positions = $object->tile_positions;
         $object->create_border_positions();
         return $object;
     }
