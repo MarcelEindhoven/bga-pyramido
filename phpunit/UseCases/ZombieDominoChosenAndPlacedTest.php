@@ -51,7 +51,7 @@ class ZombieDominoChosenAndPlacedTest extends TestCase{
         $this->sut->set_update_domino($this->mock_update_domino);
 
         $this->sut->set_player_id($this->player_id);
-        $this->current_data['candidate_positions'] = Domain\Pyramid::get_adjacent_positions_first_stage_initial();
+        $this->current_data['candidate_positions'] = Domain\Pyramid::create([])->get_candidate_positions();
     }
 
     public function test_execute_choose_zero_rotation() {
@@ -69,8 +69,8 @@ class ZombieDominoChosenAndPlacedTest extends TestCase{
         $initial_right = ['stage' => 1, 'horizontal' => 12, 'vertical' => 10, 'rotation' => 0];
         $initial_left = ['stage' => 1, 'horizontal' => 10, 'vertical' => 10, 'rotation' => 0];
         $pyramid = Domain\Pyramid::create([$initial_right, $initial_left]);
-        $this->current_data['candidate_positions'] = $pyramid->get_adjacent_positions_first_stage();
-        $this->expected_domino_specification = ['stage' => 4, 'horizontal' => 14, 'vertical' => 10, 'rotation' => 0, ];
+        $this->current_data['candidate_positions'] = $pyramid->get_candidate_positions();
+        $this->expected_domino_specification = ['stage' => 4, 'horizontal' => 10, 'vertical' => 12, 'rotation' => 0, ];
         $this->arrange();
 
         $this->mock_update_domino->expects($this->exactly(1))->method('move')->with($this->quarry_index, $this->player_id, $this->expected_domino_specification);
