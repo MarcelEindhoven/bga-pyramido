@@ -40,6 +40,7 @@ define(['dojo/_base/declare'], (declare) => {
                             <div id="resurfacing-${player_id}" style = "display: inline-block; width: 160px ; height: 240px"></div>
                         </div>
                         <div id="pyramid-${player_id}" style = "display: inline-block; position: relative; width: 80px ; height: 80px"></div>
+                        <div><small>.</small></div>
                     </div>
                 `);
 

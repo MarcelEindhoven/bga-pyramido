@@ -365,13 +365,16 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
             this.notifqueue.setSynchronous( 'domino_placed', 1000 );
 
             dojo.subscribe( 'score_details', this, "notify_score_details" );
-            this.notifqueue.setSynchronous( 'score_details', 10000 );
+            this.notifqueue.setSynchronous( 'score_details', 1000 );
+
+            dojo.subscribe( 'least_stage_score', this, "notify_least_stage_score" );
+            this.notifqueue.setSynchronous( 'least_stage_score', 25000 );
 
             dojo.subscribe( 'marker_placed', this, "notify_marker_placed" );
             this.notifqueue.setSynchronous( 'marker_placed', 300 );
 
             dojo.subscribe( 'return_all_markers', this, "notify_return_all_markers" );
-            this.notifqueue.setSynchronous( 'return_all_markers', 300 );
+            this.notifqueue.setSynchronous( 'return_all_markers', 1000 );
 
             dojo.subscribe( 'tiles_new_stage', this, "notify_tiles_new_stage" );
             this.notifqueue.setSynchronous( 'tiles_new_stage', 300 );
@@ -393,6 +396,12 @@ function (dojo, declare, market, canvas, dominoes, tiles, markers, resurfacings,
 
             dojo.subscribe( 'zombieTurn', this, "notify_zombieTurn" );
             this.notifqueue.setSynchronous( 'zombieTurn', 3 );
+        },
+
+        notify_least_stage_score: function( notif )
+        {
+            console.log( 'notify_least_stage_score' );
+            console.log( notif );
         },
 
         notify_score_details: function( notif )

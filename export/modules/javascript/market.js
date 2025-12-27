@@ -102,7 +102,7 @@ define(['dojo/_base/declare'], (declare) => {
         },
         setup_market_structure() {
             this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
-                <div>
+                <div style="justify-content:center;">
                     <table style="justify-content:center;">
                         <tr>
                             <table>
@@ -114,6 +114,12 @@ define(['dojo/_base/declare'], (declare) => {
                             <table>
                                 <tr><td>....................</td><td>........................................</td><td>..............Quarry..............</td><td>..........................................................</td></tr>
                                 <tr id="quarry"><td class=".tile"><div style="display: inline-block" ></div></td></tr>
+                            </table>
+                        </tr>
+                        <tr style="background-color:powderblue;">
+                            <table>
+                                <tr><td>........................................</td><td>........................................</td><td>......................................</td><td>........................................</td></tr>
+                                <tr id="next"></tr>
                             </table>
                         </tr>
                     </table>
