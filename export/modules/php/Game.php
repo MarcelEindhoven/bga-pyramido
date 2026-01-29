@@ -221,9 +221,6 @@ class Game extends \Table
      * Game state actions
      */
     public function stAfterDominoPlaced(): void {
-        // Retrieve the active player ID.
-        $player_id = (int)$this->getActivePlayerId();
-
         $this->actions->stAfterDominoPlaced();
     }
 
@@ -291,17 +288,14 @@ class Game extends \Table
      * The action method of state `nextPlayer` is called everytime the current game state is set to `nextPlayer`.
      */
     public function stNextPlayer(): void {
-        // Retrieve the active player ID.
-        $player_id = (int)$this->getActivePlayerId();
-
         // Give some extra time to the active player when he completed an action
-        $this->giveExtraTime($player_id);
+        $this->giveExtraTime((int)$this->getActivePlayerId());
         
         $this->activeNextPlayer();
 
         $this->initialise();
 
-        $this->actions->stNextPlayer($this->getActivePlayerId());
+        $this->actions->stNextPlayer((int)$this->getActivePlayerId());
     }
 
     /**
