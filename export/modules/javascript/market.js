@@ -102,27 +102,17 @@ define(['dojo/_base/declare'], (declare) => {
         },
         setup_market_structure() {
             this.document.getElementById('game_play_area').insertAdjacentHTML('beforeend', `
-                <div style="justify-content:center;">
-                    <table style="justify-content:center;">
-                        <tr>
+                <div style="justify-content:center;" class ="market_area">
                             <table>
                                 <tr><td>........................................</td><td>..........................Quarry..</td><td>replenishments..............</td><td>........................................</td></tr>
                                 <tr id="next"></tr>
                             </table>
-                        </tr>
-                        <tr style="background-color:powderblue;">
+                </div>
+                <div style="justify-content:center;" class ="market_area">
                             <table>
-                                <tr><td>....................</td><td>........................................</td><td>..............Quarry..............</td><td>..........................................................</td></tr>
-                                <tr id="quarry"><td class=".tile"><div style="display: inline-block" ></div></td></tr>
+                                <tr><td>........................................</td><td>..............Quarry..............</td><td>......................................</td></tr>
+                                <tr id="quarry"></tr>
                             </table>
-                        </tr>
-                        <tr style="background-color:powderblue;">
-                            <table>
-                                <tr><td>........................................</td><td>........................................</td><td>......................................</td><td>........................................</td></tr>
-                                <tr id="next"></tr>
-                            </table>
-                        </tr>
-                    </table>
                 </div>
             `);
             this.game.addTooltip('next', _('Dominoes to replenish quarry'), '');

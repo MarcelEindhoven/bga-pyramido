@@ -65,6 +65,15 @@
         background-repeat: none;
     }
 */
+
+body{ margin:0 auto; }
+.market_area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
 .tile {
     background-image: url('img/dominoesx80.png');
     width: 80px;
