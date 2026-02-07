@@ -75,14 +75,19 @@ body{ margin:0 auto; }
     margin-bottom: 10px;
 }
 .tile {
-    background-image: url('img/dominoesx80.png');
-    width: 80px;
-    height: 80px;
+    background-image: url('img/dominoesx100.png');
+    width: 100px;
+    height: 100px;
 }
 .shadow {
-  width: 80px;
-  height: 80px;
+    width: 100px;
+    height: 100px;
     box-shadow: 3px 3px 2px;
+}
+.domino100 {
+    background-image: url('img/dominoesx100.png');
+    width: 200px;
+    height: 100px;
 }
 .domino80 {
     background-image: url('img/dominoesx80.png');
@@ -109,10 +114,10 @@ body{ margin:0 auto; }
     width: 40px;
     height: 40px;
 }
-.resurfacing80 {
-    background-image: url('img/resurfacesx80.png');
-    width: 80px;
-    height: 80px;
+.resurfacing100 {
+    background-image: url('img/resurfacesx100.png');
+    width: 100px;
+    height: 100px;
 }
 .resurfacing60 {
     background-image: url('img/resurfacesx60.png');
@@ -152,7 +157,7 @@ body{ margin:0 auto; }
     height: 80px;
 }
 .selectable {
-    border: 10px solid yellow;
+    border: 4px solid yellow;
 }
 /*
 .selectable {

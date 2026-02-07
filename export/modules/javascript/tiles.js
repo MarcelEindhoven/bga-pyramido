@@ -28,7 +28,7 @@ define(['dojo/_base/declare'], (declare) => {
         create_from(specification) {
             class Tile {
                 TILES_PER_ROW = 20;
-                PIXELS_PER_TILE = 80;
+                PIXELS_PER_TILE = 100;
                 constructor(dependencies) {
                     this.clone(dependencies);
                 }

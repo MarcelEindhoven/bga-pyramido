@@ -11,6 +11,12 @@ See: http://en.doc.boardgamearena.com/Game_art:_img_directory for more details.
 The GitHub archive does not contain any original art.
 
 Image processing is done with the image magic program.
+magick montage markers\*.png -geometry 100x100 -tile x1 markers.png
+magick  -fuzz 0% markers.png -transparent white markersx100.png
+
+magick montage dominoes\*.png -rotate 90 -geometry 200x100 -tile 10x dominoesx100.png
+magick montage resurfaces\*.png -geometry 100x100 -tile 2x resurfacesx100.png
+
 magick montage markers\*.png -geometry 80x80 -tile x1 markers.png
 magick  -fuzz 0% markers.png -transparent white markersx80.png
 

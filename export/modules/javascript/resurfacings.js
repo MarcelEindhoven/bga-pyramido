@@ -28,7 +28,7 @@ define(['dojo/_base/declare'], (declare) => {
         create_from(specification) {
             class Resurfacing {
                 TILES_PER_ROW = 2;
-                DEFAULT_PIXELS_PER_TILE = 80;
+                DEFAULT_PIXELS_PER_TILE = 100;
                 SIZE_TILE_IN_COORDINATES = 2;
                 constructor(dependencies) {
                     this.clone(dependencies);

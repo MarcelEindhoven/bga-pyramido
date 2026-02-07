@@ -10,7 +10,7 @@ define(['dojo/_base/declare'], (declare) => {
         /**
          * Use case creation:
          */
-        DEFAULT_PIXELS_PER_TILE: 80,
+        DEFAULT_PIXELS_PER_TILE: 100,
 
         constructor(dependencies) {
             this.clone(dependencies);

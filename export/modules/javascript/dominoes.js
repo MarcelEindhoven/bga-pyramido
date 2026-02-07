@@ -28,7 +28,7 @@ define(['dojo/_base/declare'], (declare) => {
         create_domino_from(specification) {
             class Domino {
                 DOMINOES_PER_ROW = 10;
-                DEFAULT_PIXELS_PER_TILE = 80;
+                DEFAULT_PIXELS_PER_TILE = 100;
                 constructor(dependencies) {
                     this.clone(dependencies);
                     this.pixels_per_tile = this.DEFAULT_PIXELS_PER_TILE;
