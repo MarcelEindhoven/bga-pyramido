@@ -356,7 +356,7 @@ class Game extends \Table
         $this->trace('setupNewGame');
         $this->trace(phpversion());
 
-        NewGame\NewGame::create($this->decks)->set_number_zombieplayers($this->tableOptions->get(100))->setup($players);
+        NewGame\NewGame::create($this->decks)->set_number_zombieplayers(0)->setup($players);
 
         // Set the colors of the players with HTML color code. The default below is red/green/blue/orange/brown. The
         // number of colors defined here must correspond to the maximum number of players allowed for the gams.

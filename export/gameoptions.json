@@ -1,22 +1,2 @@
 {
-    "100": {
-        "name": "Zombie",
-        "values": {
-            "0": {
-                "name": "No Zombie players"
-            },
-            "1": {
-                "name": "1 Zombie player",
-                "firstgameonly": true
-            },
-            "2": {
-                "name": "2 Zombie players"
-            },
-            "3": {
-                "name": "3 Zombie players",
-                "nobeginner": false
-            }
-        },
-        "default": 1
-    }
 }
